@@ -1,4 +1,6 @@
 
 const AppButton = () =>{
-    return <button></button>
+    return <button>Click me</button>
 };
+
+export default AppButton;

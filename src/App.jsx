@@ -1,7 +1,12 @@
 import React from 'react';
+import Viewprofile from './components/Viewprofile/index.jsx';
 
 function App() {
-  return <h1>Hello world.</h1>;
+  return (
+      <div>
+          <Viewprofile />
+      </div>
+  );
 }
 
 export default App;
