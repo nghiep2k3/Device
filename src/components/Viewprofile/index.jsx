@@ -4,6 +4,7 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
+    AppstoreOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import React, { useState } from 'react';
@@ -11,6 +12,15 @@ import './file.css';
 import { Descriptions } from 'antd';
 import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
+
+function ListName(props) {
+    return(
+        <div>
+            <label htmlFor="">{props.title}</label>
+            <div style={{ fontWeight: 'bold' }}>{props.name}</div>
+        </div>
+    );
+}
 
 function ListUser() {
     return (
@@ -24,42 +34,36 @@ function ListUser() {
                     </Space>
                 </div>
 
-                <div className='SetInfo'> 
+                <div className='SetInfo'>
                     <div className='M100'>
                         <div>
-                            <label htmlFor="">Name</label>
-                            <div style={{fontWeight: 'bold'}}>Ha Nguyen</div>
+                            <ListName name="Nguyễn Nghiệp" title="Name"/>
                         </div>
 
                         <div style={{
                             margin: '40px 0'
                         }}>
-                            <label htmlFor="">Phone Number</label>
-                            <div style={{fontWeight: 'bold'}}>0378936624</div>
+                            <ListName name="0378936624" title="Phone Number"/>
                         </div>
 
                         <div>
-                            <label htmlFor="">Address</label>
-                            <div style={{fontWeight: 'bold'}}>Duyên Hải - Hưng Hà - Thái Bình</div>
+                            <ListName name="Duyên Hải - Hưng Hà - Thái Bình" title="Address"/>
                         </div>
                     </div>
 
                     <div>
                         <div>
-                            <label htmlFor="">Email</label>
-                            <div style={{fontWeight: 'bold'}}>nguyennghiep1320@gmail.com</div>
+                            <ListName name="nguyennghiep1320@gmail.com" title="Email"/>
                         </div>
 
                         <div style={{
                             margin: '40px 0'
                         }}>
-                            <label htmlFor="">DoB</label>
-                            <div style={{fontWeight: 'bold'}}>24/11/2003</div>
+                            <ListName name="24/11/2003" title="DoB"/>
                         </div>
 
                         <div>
-                            <label htmlFor="">Role</label>
-                            <div style={{fontWeight: 'bold'}}>Admin</div>
+                            <ListName name="Admin" title="Role"/>
                         </div>
                     </div>
 
@@ -67,7 +71,7 @@ function ListUser() {
             </div>
 
             <div className='ButtonUpdate'>
-                <Button type="primary" style={{marginRight: '20px'}}>Update Profile</Button>
+                <Button type="primary" style={{ marginRight: '20px' }}>Update Profile</Button>
                 <Button>Change Password</Button>
             </div>
         </div>
@@ -104,7 +108,8 @@ const Viewprofile = () => {
                         },
                         {
                             key: '2',
-                            icon: <UserOutlined />,
+                            icon: <AppstoreOutlined />,
+                            
                             label: 'Device',
                         },
 
@@ -117,7 +122,9 @@ const Viewprofile = () => {
                     style={{
                         padding: '0',
                         display: 'flex',
+                        alignItems: 'center',
                         margin: '0 10px',
+                        lineHeight: '0px',
                         justifyContent: 'space-between',
                         background: colorBgContainer,
                     }}
@@ -130,18 +137,23 @@ const Viewprofile = () => {
                     </div>
 
                     <div style={{
-                            display: 'flex'
-                        }}>
-                        
-                        <div>
-                            <Avatar icon={<UserOutlined />} />
-                            <span style={{fontWeight: 'bold', color: 'black', marginLeft: '10px'}}>
-                                Ha Nguyen
-                            </span>
+                        // display: 'flex'
+                    }}>
+
+                        <div style={{
+                            display: 'inline-flex'
+                    }}> 
+                            <div><Avatar icon={<UserOutlined />} /></div>
+                            <div>
+                                <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
+                                    Ha Nguyen
+                                </div>
+                                <div style={{marginLeft: '10px', marginTop: '22px'}}>Admin</div>
+                            </div>
                         </div>
-                            
+
                     </div>
-                    
+
                 </Header>
                 <Content
                     style={{
@@ -152,7 +164,7 @@ const Viewprofile = () => {
                     }}
                 >
                     <h2>My Profile</h2>
-                    <ListUser/>
+                    <ListUser />
                 </Content>
             </Layout>
         </Layout>
