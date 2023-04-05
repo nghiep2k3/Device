@@ -2,23 +2,47 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     UserOutlined,
-    EyeTwoTone,
-
+    AppstoreOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme, Input, Form, Button,Descriptions } from 'antd';
+import {Outlet, Link } from "react-router-dom";
+import { Layout, Menu, theme,Avatar,Button,Dropdown  } from 'antd';
 import React, { useState } from 'react';
 import '../../../assets/styles/index.css';
 import Change from './ChangePassWord.jsx'
 import ListUser from './Profile.jsx'
+
 const { Header, Sider, Content } = Layout;
 
+const TOKEN = localStorage.getItem('TOKEN');
+const LOGIN = localStorage.getItem('setLoggedIn');
+
+const items = [
+    {
+      key: '1',
+      label: (
+        
+          <Link to="/ListUser">Info</Link>
+       
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <p>Logout</p>
+             
+      ),
+    },
+    
+  ];
 const Menus = () => {
+    console.log(LOGIN)
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     return (
         <Layout className='SetupHeight'>
+
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="logo" />
                 <h1 style={{
@@ -38,7 +62,8 @@ const Menus = () => {
                         },
                         {
                             key: '2',
-                            icon: <UserOutlined />,
+                            icon: <AppstoreOutlined />,
+                            
                             label: 'Device',
                         },
 
@@ -51,7 +76,9 @@ const Menus = () => {
                     style={{
                         padding: '0',
                         display: 'flex',
+                        alignItems: 'center',
                         margin: '0 10px',
+                        lineHeight: '0px',
                         justifyContent: 'space-between',
                         background: colorBgContainer,
                     }}
@@ -64,29 +91,46 @@ const Menus = () => {
                     </div>
 
                     <div style={{
-                            display: 'flex'
-                        }}>
                         
-                        <div>
-                            <span style={{fontWeight: 'bold', color: 'black', marginLeft: '10px'}}>
-                                Ha Nguyen
-                            </span>
+                    }}>
+                        
+                        
+                        <Dropdown
+                            menu={{
+                                items,
+                            }}
+                            placement="bottom"
+                            arrow
+                            >
+                            <div style={{
+                            display: 'inline-flex'
+                    }}> 
+                            <div><Avatar icon={<UserOutlined />} /></div>
+                            <div>
+                                <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
+                                    Ha Nguyen
+                                </div>
+                                <div style={{marginLeft: '10px', marginTop: '22px'}}>Admin</div>
+                            </div>
                         </div>
-                            
+                        </Dropdown>
+                        
+                        
+
                     </div>
-                    
+
                 </Header>
                 <Content
                     style={{
                         margin: '24px 16px',
                         padding: 24,
                         minHeight: 280,
-                        
+                        background: colorBgContainer,
                     }}
                 >
-                    
-                    <Change/>
+                    <Outlet/>
                 </Content>
+                
             </Layout>
         </Layout>
     );

@@ -1,14 +1,7 @@
-import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, theme,Descriptions } from 'antd';
-import React, { useState } from 'react';
+import { UserOutlined,} from '@ant-design/icons';
+import React from 'react';
 import '../../../assets/styles/index.css';
-
+import { Link } from "react-router-dom";
 import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 
@@ -70,7 +63,7 @@ function ListUser() {
 
             <div className='ButtonUpdate'>
                 <Button type="primary" style={{marginRight: '20px'}}>Update Profile</Button>
-                <Button>Change Password</Button>
+                <Button><Link to="/ChangePassWord">Change PassWord</Link></Button>
             </div>
         </div>
         </div>

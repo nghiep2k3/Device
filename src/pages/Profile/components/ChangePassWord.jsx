@@ -1,12 +1,6 @@
-import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UserOutlined,
-    EyeTwoTone,
-
-} from '@ant-design/icons';
-import { Layout, Menu, theme, Input, Form, Button,Descriptions } from 'antd';
-import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import { Input, Form, Button } from 'antd';
+import React from 'react';
 import '../../../assets/styles/index.css';
 
 
@@ -48,10 +42,16 @@ function Change() {
             label="New Password"
             name="new_password"
             labelCol={{ span: 24 }}
-            rules={[{ required: true, message: 'Please input your new password!' }]}
+            rules={[    
+                { required: true, message: 'Please input your new password!' },    
+                { max: 6, message: 'Password must not exceed 6 characters!' },    
+                { pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{1,}$/, 
+                message: 'Password must contain at least one uppercase letter, one number, and one special character!' }
+            ]}
             >
             <Input.Password/>
             </Form.Item>
+
 
             <Form.Item
             label="Confirm New Password"
@@ -77,7 +77,7 @@ function Change() {
                 Save
             </Button>
             <Button style={{ marginLeft: 8 }}>
-                Cancel
+                <Link to="/ListUser">Cancel</Link>
             </Button>
             </Form.Item>
         </Form>

@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useState } from 'react';
 import Menus from '../Profile/components/menu.jsx'
+import { Outlet, Link } from "react-router-dom";
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -14,27 +15,25 @@ const Login = () => {
       password: values.password,
     };
 
-    axiosInstance('/auth/local', data)
+    axiosInstance.post('/auth/local', data)
       .then((response) => {
         const { jwt } = response;
-        if (jwt == null) {
-          console.log(response);
-          setErrorMessage('Sai tài khoản hoặc mật khẩu');
-          message.error('Sai tài khoản hoặc mật khẩu');
-          
-        } else {
+        if (jwt != null) {
           key.push(jwt);
           console.log("complete");
           message.success('Đăng nhập thành công');
           setIsLoggedIn(true);
           console.log(key);
-        }
+          localStorage.setItem('setLoggedIn', 'true');
+          localStorage.setItem('TOKEN', key);
+        } 
       })
       .catch((error) => {
         console.log(error);
         setErrorMessage('Lỗi kết nối đến máy chủ');
         message.error('Lỗi kết nối đến máy chủ');
         setIsLoggedIn(true);
+        localStorage.setItem('setLoggedIn', 'false');
       });
   };
 
