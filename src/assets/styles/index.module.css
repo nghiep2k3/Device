@@ -1,0 +1,31 @@
+.inputc{
+    width: 90% !important;
+    height: 40px;
+}
+.lic{
+    list-style: none;
+    padding-top: 20px;
+}
+.deletec{
+    margin-left: 40px;
+}
+.iconc{
+    width: 15px;
+    height: 15px;
+}
+.container{
+    border-radius: 10px;
+    border: 2px solid gray;
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    
+}
+.left{
+    margin-left: 20px;
+    border-right: 2px solid gray;
+}
+.right{
+    padding-left: 20px;
+    
+}

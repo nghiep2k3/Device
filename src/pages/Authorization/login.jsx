@@ -2,8 +2,8 @@ import { axiosInstance } from '../../shared/services/http-client';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useState } from 'react';
-import Menus from '../Profile/components/menu.jsx'
-import { Outlet, Link } from "react-router-dom";
+import Menus from '../Profile/menu.jsx'
+
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);

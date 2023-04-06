@@ -7,9 +7,7 @@ import {
 import {Outlet, Link } from "react-router-dom";
 import { Layout, Menu, theme,Avatar,Button,Dropdown  } from 'antd';
 import React, { useState } from 'react';
-import '../../../assets/styles/index.css';
-import Change from './ChangePassWord.jsx'
-import ListUser from './Profile.jsx'
+import '../../assets/styles/index.css';
 
 const { Header, Sider, Content } = Layout;
 
@@ -57,14 +55,14 @@ const Menus = () => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label: 'User',
+                            label:  <Link to="/Create">User</Link>,
                             
                         },
                         {
                             key: '2',
                             icon: <AppstoreOutlined />,
                             
-                            label: 'Device',
+                            label: <Link to="/Edit">Device</Link>,
                         },
 
                     ]}
