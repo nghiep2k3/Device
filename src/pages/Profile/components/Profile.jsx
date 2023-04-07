@@ -62,7 +62,7 @@ function ListUser() {
             </div>
 
             <div className='ButtonUpdate'>
-                <Button type="primary" style={{marginRight: '20px'}}><Link to="/Update">Update Profile</Link></Button>
+                <Button type="primary" style={{marginRight: '20px'}}><Link to="/UserUpdate">Update Profile</Link></Button>
                 <Button><Link to="/ChangePassWord">Change PassWord</Link></Button>
             </div>
         </div>

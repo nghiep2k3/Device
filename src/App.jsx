@@ -3,11 +3,13 @@ import ReactDOM from "react-dom/client"
 import './assets/styles/index.css';
 import Login from './pages/Authorization/login.jsx';
 import Change from './pages/Profile/components/ChangePassWord.jsx';
-import Update from './pages/Profile/components/Update.jsx';
+import UserUpdate from './pages/Profile/components/Update.jsx';
 import Menus from './pages/Profile/menu.jsx';
 import ListUser from './pages/Profile/components/Profile.jsx';
+import Details from './pages/Profile/User/Detail.jsx';
 import Edit from './pages/Profile/User/Edit.jsx';
 import Create from './pages/Profile/User/Create.jsx';
+import UserManager from './pages/Profile/User/UserManager.jsx';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -18,7 +20,9 @@ export default function App() {
           <Route path="ChangePassWord" element={<Change />} />
           <Route path="Menu" element={<Menus />} />
           <Route path="ListUser" element={<ListUser />} />
-          <Route path="Update" element={<Update />} />
+          <Route path="UserUpdate" element={<UserUpdate />} />
+          <Route path="UserManager" element={<UserManager />} />
+          <Route path="Details" element={<Details />} />
           <Route path="Create" element={<Create />} />
           <Route path="Edit" element={<Edit />} />
         </Route>

@@ -10,12 +10,10 @@ import React, { useState } from 'react';
 import '../../assets/styles/index.css';
 const { Header, Sider, Content } = Layout;
 
-const TOKEN = localStorage.getItem('TOKEN');
-const LOGIN = localStorage.getItem('setLoggedIn');
+
 
 
 const Menus = ({ onLogout }) => {
-    console.log(TOKEN)
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
@@ -54,7 +52,7 @@ const Menus = ({ onLogout }) => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label:  <Link to="/Create">User</Link>,
+                            label:  <Link to="/UserManager">User</Link>,
                             
                         },
                         {

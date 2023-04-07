@@ -220,7 +220,7 @@ const Create = () => {
                 Save
             </Button>
             <Button style={{ marginLeft: 8 }}>
-                <Link to="/ListUser">Cancel</Link>
+                <Link to="/UserManager">Cancel</Link>
             </Button>
             </Form.Item>
         </Form>
