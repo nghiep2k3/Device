@@ -7,6 +7,7 @@ import icon from '../../../assets/images/delete.png'
 
 const Create = () => {
     const [checkedItems, setCheckedItems] = useState([]);
+    const [form] = Form.useForm();
 
     const handleCheckboxChange = (event) => {
     const itemName = event.target.name;
@@ -30,17 +31,19 @@ const Create = () => {
   };
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        const formValues = { ...values, checkedItems };
+        console.log('Received values of form: ', formValues);
       };
     return (
         <div>
-            <h2 className='tittle'>All user > Add new user</h2>
+            <h2 className={styles.tittle}>All user > Add new user</h2>
         
         <div>
         
             <Form
                 name="create_form"
                 onFinish={onFinish}
+                form={form}
             > 
             <Row>
             <Col span={8}>
@@ -157,10 +160,10 @@ const Create = () => {
             <div className={styles.container}>
             <Row>
                 <Col span={12}>
-                <Form.Item>
+                
                     <div>
                     <div className={styles.left}>
-                        <Input className={styles.inputc} placeholder="Search for devices ..."/>
+                        <input className={styles.inputc} placeholder="Search for devices ..."/>
                         <ul>
                         <li className={styles.lic}>
                             <label>
@@ -196,9 +199,10 @@ const Create = () => {
                     </div>
                     </div>
                     
-                </Form.Item>
+                
                 </Col>
                 <Col span={12}>
+                
                 <div className={styles.right}>
                     <h2> Select devices({checkedItems.length})</h2>
                     <ul>

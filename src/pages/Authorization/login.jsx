@@ -8,7 +8,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const key = [];
-
+  
   const onFinish = (values) => {
     const data = {
       identifier: values.username,
@@ -22,33 +22,32 @@ const Login = () => {
           key.push(jwt);
           console.log("complete");
           message.success('Đăng nhập thành công');
+          localStorage.setItem('setIsLoggedIn', true)
           setIsLoggedIn(true);
-          console.log(key);
-          localStorage.setItem('setLoggedIn', 'true');
           localStorage.setItem('TOKEN', key);
         } 
       })
       .catch((error) => {
         console.log(error);
-        setErrorMessage('Lỗi kết nối đến máy chủ');
-        message.error('Lỗi kết nối đến máy chủ');
-        setIsLoggedIn(true);
-        localStorage.setItem('setLoggedIn', 'false');
+        setErrorMessage('Đăng nhập thất bại');
+        message.error('Đăng nhập thất bại');
+        setIsLoggedIn(false);
+        
       });
   };
 
-  const onLogout = () => {
+   const onLogout = () => {
     console.log("log out");
+    localStorage.setItem('setLoggedIn', 'false');
     setIsLoggedIn(false);
-    console.log(key);
+    
   };
 
   return (
     <div>
       {isLoggedIn ? (
         <div>
-            <Button onClick={onLogout}>Logout</Button>
-            <Menus/>
+            <Menus onLogout={onLogout}/>
         </div>
                
       ) : (

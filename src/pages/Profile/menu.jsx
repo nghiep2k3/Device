@@ -8,36 +8,35 @@ import {Outlet, Link } from "react-router-dom";
 import { Layout, Menu, theme,Avatar,Button,Dropdown  } from 'antd';
 import React, { useState } from 'react';
 import '../../assets/styles/index.css';
-
 const { Header, Sider, Content } = Layout;
 
 const TOKEN = localStorage.getItem('TOKEN');
 const LOGIN = localStorage.getItem('setLoggedIn');
 
-const items = [
-    {
-      key: '1',
-      label: (
-        
-          <Link to="/ListUser">Info</Link>
-       
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <p>Logout</p>
-             
-      ),
-    },
-    
-  ];
-const Menus = () => {
-    console.log(LOGIN)
+
+const Menus = ({ onLogout }) => {
+    console.log(TOKEN)
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+    const items = [
+        {
+          key: '1',
+          label: (
+            
+              <Link to="/ListUser">Info</Link>
+           
+          ),
+        },
+        {
+          key: '2',
+          label: (
+            <p  onClick={onLogout}>Logout</p>   
+          ),
+        },
+        
+      ];
     return (
         <Layout className='SetupHeight'>
 
@@ -112,9 +111,6 @@ const Menus = () => {
                             </div>
                         </div>
                         </Dropdown>
-                        
-                        
-
                     </div>
 
                 </Header>
