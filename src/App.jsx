@@ -1,7 +1,29 @@
 import React from 'react';
+import ReactDOM from "react-dom/client"
+import './assets/styles/index.css';
+import Login from './pages/Authorization/login.jsx';
+import Change from './pages/Profile/components/ChangePassWord.jsx';
+import Menus from './pages/Profile/menu.jsx';
+import ListUser from './pages/Profile/components/Profile.jsx';
+import Edit from './pages/Profile/User/Edit.jsx';
+import Create from './pages/Profile/User/Create.jsx';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
-  return <h1>Hello world.</h1>;
+export default function App() {
+  return (
+    <BrowserRouter>
+     <Routes>
+        <Route path="/" element={<Login />}>
+          <Route path="ChangePassWord" element={<Change />} />
+          <Route path="Menu" element={<Menus />} />
+          <Route path="ListUser" element={<ListUser />} />
+          <Route path="Create" element={<Create />} />
+          <Route path="Edit" element={<Edit />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
