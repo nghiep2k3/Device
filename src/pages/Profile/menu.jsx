@@ -59,7 +59,7 @@ const Menus = ({ onLogout }) => {
                             key: '2',
                             icon: <AppstoreOutlined />,
                             
-                            label: <Link to="/Edit">Device</Link>,
+                            label: <p>Device</p>,
                         },
 
                     ]}

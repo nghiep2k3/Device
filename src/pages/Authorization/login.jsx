@@ -7,7 +7,7 @@ import Menus from '../Profile/menu.jsx'
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const TOKEN = localStorage.getItem('TOKEN');
+  
   const key = [];
   
   const onFinish = (values) => {
@@ -15,11 +15,7 @@ const Login = () => {
       identifier: values.username,
       password: values.password,
     };
-    axiosInstance.get('/users/me',data)
-    .then((res)=>{
-      console.log(TOKEN)
-      console.log(res)
-    })
+  
     axiosInstance.post('/auth/local', data)
       .then((response) => {
         const { jwt } = response;
@@ -29,7 +25,7 @@ const Login = () => {
           message.success('Đăng nhập thành công');
           localStorage.setItem('setIsLoggedIn', true)
           setIsLoggedIn(true);
-          localStorage.setItem('TOKEN', key);
+          localStorage.setItem('ACCESS_TOKEN', key);
         } 
       })
       .catch((error) => {
