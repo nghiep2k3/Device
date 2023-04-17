@@ -17,6 +17,7 @@ function Change() {
             .then((response) => {
             if (response != null) {
                 window.location.reload();
+                localStorage.removeItem('ACCESS_TOKEN');
                 message.success('correct');
             } 
         })
