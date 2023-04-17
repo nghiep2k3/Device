@@ -9,10 +9,8 @@ import { axiosInstance } from '../../../shared/services/http-client';
 import { useState,useEffect } from 'react';
 
 
-
 function ListUser() {
     const [data, setData] = useState('');
-
     const TOKEN = localStorage.getItem('TOKEN');
 
     axiosInstance.get('/users/me')

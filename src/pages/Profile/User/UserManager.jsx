@@ -12,10 +12,12 @@ import {
     DeleteOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Link } from "react-router-dom";
-import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag } from 'antd';
+import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select } from 'antd';
 import { axiosInstance } from '../../../shared/services/http-client';
+import debounce from "lodash/debounce";
+
 
 
 function Status() {
@@ -150,7 +152,7 @@ const columns = [
         title: 'Name',
         dataIndex: 'username',
         key: 'username',
-        // render: (text) => <a>{text}</a>,
+        
     },
     {
         title: 'Email',
@@ -167,24 +169,7 @@ const columns = [
         key: 'blocked',
         dataIndex: 'blocked',
         render: (_, { blocked }) => (
-            // <>
-            //     {blocked.map((tag) => {
-            //         let color = tag.length > 5 ? 'geekblue' : 'green';
-            //         if (tag === 'loser') {
-            //             color = 'volcano';
-            //         }
-
-            //         return (
-            //             <Tag color={color} key={tag}>
-            //                 {tag.toUpperCase()}
-            //             </Tag>
-            //         );
-            //     })}
-
-            // </>
-
             <>
-
                 {blocked ? (
                     // Nếu blocked là true, không in ra gì cả
                     <Tag color='volcano'>Offline</Tag>
@@ -311,7 +296,26 @@ const UserManager = () => {
     const { Search } = Input;
     const onSearch = (value) => console.log(value);
 
+    const [searchEmail, setSearchEmail] = useState('username');
+    const [searchResults, setSearchResults] = useState('');
 
+    useEffect(() => {
+        axiosInstance.get(`/users`)
+        .then((res) => {
+            setSearchResults(res);
+    })
+    }, [])
+
+    const handleSearchInputChange = debounce(async (event) => {
+        const { value } = event.target;
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
+        .then((res) => {
+            setSearchResults(res);
+        })
+    }, 500);
+
+    
+    
     const items = [
         {
             label: <a href="https://www.antgroup.com">Email</a>,
@@ -324,12 +328,14 @@ const UserManager = () => {
     ];
 
 
-    const [data2, setData2] = useState('');
-    const TOKEN = localStorage.getItem('TOKEN');
-    axiosInstance.get('/users')
-        .then((res) => {
-            setData2(res);
-        })
+
+
+    // const [data2, setData2] = useState('');
+    // const TOKEN = localStorage.getItem('TOKEN');
+    // axiosInstance.get('/users')
+    //     .then((res) => {
+    //         setData2(res);
+    //     })
 
     return (
         <div>
@@ -359,19 +365,27 @@ const UserManager = () => {
                         width: 'max-content',
                         borderRadius: '10px'
                     }}>
-                        <div><Dropdown
-                            menu={{
-                                items,
-                            }}
-                            trigger={['click']}
-                        >
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Space>
-                                    Name
-                                    <DownOutlined />
-                                </Space>
-                            </a>
-                        </Dropdown></div>
+                        <div>
+                            <Select
+                                        defaultValue="Name"
+                                        style={{
+                                            width: 120,
+                                        }}
+                                        onChange={(e)=>{
+                                            
+                                            setSearchEmail(e)
+                                        }}
+                                        options={[
+                                            {
+                                                value: 'email',
+                                                label: 'Email',
+                                            }, {
+                                                value: 'username',
+                                                label: 'Name',
+                                            },
+                                        ]}
+                            />
+                        </div>
 
                         <div>
                             <Search
@@ -379,6 +393,7 @@ const UserManager = () => {
                                 allowClear
                                 bordered={false}
                                 onSearch={onSearch}
+                                onChange={handleSearchInputChange}
                                 style={{
                                     width: 200,
                                     marginLeft: '20px'
@@ -393,7 +408,7 @@ const UserManager = () => {
                 </div>
             </div>
            
-            <Table columns={columns} dataSource={data2} />
+            <Table columns={columns} dataSource={searchResults} />
         </div>
     )
 }
