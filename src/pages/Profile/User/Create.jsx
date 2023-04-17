@@ -6,6 +6,7 @@ import { axiosInstance } from '../../../shared/services/http-client.js';
 const Create = () => {
     const [checkedList, setCheckedList] = useState([]);
     const [dob, setDob] = useState(null);
+    const [search, setSearch] = useState('');
     const [deviceNames, setDeviceNames] = useState([]);
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -15,11 +16,13 @@ const Create = () => {
     const handleDelete = (record) => {
         setCheckedList(checkedList.filter((item) => item.value !== record.value));
       };
-     
+      const handleSearch = (event) => {
+        setSearch(event.target.value);
+      };
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const response = await axiosInstance.get('/devices');
+        const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
         if (response.data) {
           setDeviceNames(response.data);
         }
@@ -28,7 +31,8 @@ const Create = () => {
       }
     };
     fetchDevices();
-  }, []);
+  }, [search]);
+
     const plainOptions = deviceNames.map((device) => ({
         label: device.attributes.code,
         value: device,
@@ -51,7 +55,7 @@ const Create = () => {
             gender: formValues.Gender,
             password: formValues.Password,
             role: parseFloat(formValues.Role),
-            confirmed: bool,
+            blocked: bool,
             createdAt: currentTime,
             devices: valueList
           };
@@ -177,8 +181,9 @@ const Create = () => {
                         rules={[{ required: true, message: 'Please input your Role!' }]}
                     >
                     <Select className={styles.inputc} size='large' placeholder="Select owner Role">
-                        <Select.Option value="1">Admin</Select.Option>
-                        <Select.Option value="2">User</Select.Option>
+                        <Select.Option value="1">User</Select.Option>
+                        <Select.Option value="2">Public</Select.Option>
+                        <Select.Option value="3">Admin</Select.Option>
                     </Select>
                 </Form.Item>
             </Col>
@@ -190,8 +195,8 @@ const Create = () => {
                         rules={[{ required: true, message: 'Please input your Status!' }]}
                     >
                     <Select className={styles.inputc} size='large' placeholder="Select owner Role">
-                        <Select.Option value="true">Active</Select.Option>
-                        <Select.Option value="false">Locker</Select.Option>
+                        <Select.Option value="false">Active</Select.Option>
+                        <Select.Option value="true">Blocked</Select.Option>
                     </Select>
                 </Form.Item>
             </Col>
@@ -203,7 +208,11 @@ const Create = () => {
                 
                     <div>
                     <div className={styles.left}>
-                        <input className={styles.inputc} placeholder="Search for devices ..."/>
+                        <input 
+                            className={styles.inputc}   
+                            placeholder="Search for devices ..."
+                            value={search}
+                            onChange={handleSearch}/>
                         <List
                             dataSource={plainOptions}
                             renderItem={(item) => (

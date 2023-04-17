@@ -1,47 +1,88 @@
-import { Link } from "react-router-dom";
-import { Input, Form, Button, Col, Row,Select ,DatePicker } from 'antd';
-import React , {useState} from 'react';
+import { Link ,useNavigate  } from "react-router-dom";
+import { Input, Form, Button, Col, Row,Select ,DatePicker,message,Checkbox,List, Table,Space } from 'antd';
+import React , {useState,useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
-import icon from '../../../assets/images/delete.png'
-
-
+import { axiosInstance } from '../../../shared/services/http-client.js';
 const Create = () => {
-    const [checkedItems, setCheckedItems] = useState([]);
+    const [checkedList, setCheckedList] = useState([]);
+    const [dob, setDob] = useState(null);
+    const [search, setSearch] = useState('');
+    const [deviceNames, setDeviceNames] = useState([]);
     const [form] = Form.useForm();
-  const handleCheckboxChange = (event) => {
-    const itemName = event.target.name;
-
-    setCheckedItems((prevCheckedItems) => {
-      
-      if (prevCheckedItems.includes(itemName)) {
-        return prevCheckedItems.filter((checkedItem) => checkedItem !== itemName);
+    const navigate = useNavigate();
+    const handleDobChange = (value) => {
+        setDob(value);
       }
-      
-      else {
-        return [...prevCheckedItems, itemName];
-      }
-    });
-  };
-
-  const handleDeleteButtonClick = (itemName) => {
-    setCheckedItems((prevCheckedItems) =>
-      prevCheckedItems.filter((checkedItem) => checkedItem !== itemName)
-    );
-  };
-
-    const onFinish = (values) => {
-        const formValues = { ...values, checkedItems };
-        console.log('Received values of form: ', formValues);
+    const handleDelete = (record) => {
+        setCheckedList(checkedList.filter((item) => item.value !== record.value));
       };
+      const handleSearch = (event) => {
+        setSearch(event.target.value);
+      };
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
+        if (response.data) {
+          setDeviceNames(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDevices();
+  }, [search]);
+
+    const plainOptions = deviceNames.map((device) => ({
+        label: device.attributes.code,
+        value: device,
+    }));
+    const valueList = checkedList.map((item) => item.value);
+    const onFinish = (values) => {
+        const moment = require('moment');
+        
+        const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
+        console.log(formValues.Role)   
+        let isFalse = (formValues.Status === "false"); // kiểm tra chuỗi có giống "false" hay không
+        let bool = isFalse ? true : false;
+        const data = {
+            username: formValues.Username,
+            email: formValues.Email,
+            fullname: formValues.Name,
+            dob: formValues.DOB,
+            phoneNumber: formValues.Phone_number,
+            gender: formValues.Gender,
+            password: formValues.Password,
+            role: parseFloat(formValues.Role),
+            blocked: bool,
+            createdAt: currentTime,
+            devices: valueList
+          };
+        //   axiosInstance.post('/users', data)
+        //   .then((response) => {
+        //   if (response != null) {
+            
+        //       message.success('correct');
+        //       navigate('/UserManager');
+        //   } 
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         message.error('error');
+        //     });
+                
+            };
     return (
         <div>
-            <h2 className={styles.tittle}>All user > Minh Quang Tran</h2>
+            <h2 className={styles.tittle}>All user > Add new user</h2>
         
         <div>
         
             <Form
                 name="create_form"
                 onFinish={onFinish}
+                form={form}
             > 
             <Row>
             <Col span={8}>
@@ -51,7 +92,7 @@ const Create = () => {
                     labelCol={{ span: 24 }}
                     rules={[{ required: true, message: 'Please input your name!' }]}
                 >
-                <Input className={styles.inputc} defaultValue="Minh Quang Tran" />
+                <Input className={styles.inputc} placeholder="Enter owner name" />
             </Form.Item>
             </Col>
             <Col span={8}>
@@ -62,17 +103,17 @@ const Create = () => {
                         rules={[    { required: true, message: 'Please input your Email!' },
                                     { type: 'email',message: 'Please enter a valid email address',},]}
                     >
-                    <Input className={styles.inputc} defaultValue="abc.ab@gmail.com"/>
+                    <Input className={styles.inputc} placeholder="Enter owner email"/>
                 </Form.Item>
             </Col>
             <Col span={8}>
                 <Form.Item
                         label="Username"
-                        name="Username *"
+                        name="Username"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Username !' }]}
                     >
-                    <Input className={styles.inputc} defaultValue="super.admin" />
+                    <Input className={styles.inputc} placeholder="Enter owner username" />
                 </Form.Item>
             </Col>
             </Row>
@@ -84,13 +125,13 @@ const Create = () => {
                     labelCol={{ span: 24 }}
                     rules={[{ required: true, message: 'Please input your Password!' }]}
                 >
-                <Input.Password className={styles.inputc} defaultValue="Enter owner password" />
+                <Input.Password className={styles.inputc} placeholder="Enter owner password" />
             </Form.Item>
             </Col>
             <Col span={8}>
                 <Form.Item
                         label="Phone number"
-                        name="Phone number"
+                        name="Phone_number"
                         labelCol={{ span: 24 }}
                         rules={[
                             { required: true, message: 'Please input your Phone number!' },
@@ -98,7 +139,7 @@ const Create = () => {
                             {max: 10,message: 'Please enter no more than 10 digits',},
                         ]}
                     >
-                    <Input className={styles.inputc} defaultValue="0912 234 456"/>
+                    <Input className={styles.inputc} placeholder="Enter owner phone number"/>
                 </Form.Item>
             </Col>
             <Col span={8}>
@@ -108,9 +149,9 @@ const Create = () => {
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Gender !' }]}
                     >
-                    <Select className={styles.inputc} size='large' defaultValue="Male">
-                        <Select.Option value="Male">Male</Select.Option>
-                        <Select.Option value="Female">Female</Select.Option>
+                    <Select className={styles.inputc} size='large' placeholder="Select owner gender">
+                        <Select.Option value="male">Male</Select.Option>
+                        <Select.Option value="female">Female</Select.Option>
                         <Select.Option value="None">None</Select.Option>
                     </Select>
                 </Form.Item>
@@ -122,21 +163,27 @@ const Create = () => {
                     label="DOB"
                     name="DOB"
                     labelCol={{ span: 24 }}
+                    
                     rules={[{ required: true, message: 'Please input your DOB!' }]}
                 >
-                <DatePicker className={styles.inputc} placeholder="Select a date"/>
+                <DatePicker 
+                    className={styles.inputc} 
+                    value={dob}
+                    onChange={handleDobChange} 
+                    placeholder="Select a date"/>
                 </Form.Item>
             </Col>
             <Col span={8}>
                 <Form.Item
                         label="Role"
-                        name="Role "
+                        name="Role"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Role!' }]}
                     >
-                    <Select className={styles.inputc} size='large' defaultValue="Admin">
-                        <Select.Option value="Admin">Admin</Select.Option>
-                        <Select.Option value="User">User</Select.Option>
+                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
+                        <Select.Option value="1">User</Select.Option>
+                        <Select.Option value="2">Public</Select.Option>
+                        <Select.Option value="3">Admin</Select.Option>
                     </Select>
                 </Form.Item>
             </Col>
@@ -147,9 +194,9 @@ const Create = () => {
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Status!' }]}
                     >
-                    <Select className={styles.inputc} size='large' defaultValue="Active">
-                        <Select.Option value="Active">Active</Select.Option>
-                        <Select.Option value="Locker">Locker</Select.Option>
+                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
+                        <Select.Option value="false">Active</Select.Option>
+                        <Select.Option value="true">Blocked</Select.Option>
                     </Select>
                 </Form.Item>
             </Col>
@@ -158,57 +205,62 @@ const Create = () => {
             <div className={styles.container}>
             <Row>
                 <Col span={12}>
-                      <div>
+                
+                    <div>
                     <div className={styles.left}>
-                        <Input className={styles.inputc} placeholder="Search for devices ..."/>
-                        <ul>
-                        <li className={styles.lic}>
-                            <label>
-                            <input type="checkbox" name="Garage ABC" checked={checkedItems.includes('Garage ABC')} onChange={handleCheckboxChange} />
-                            Garage ABC
-                            </label>
-                        </li>
-                        <li className={styles.lic}>
-                            <label>
-                            <input type="checkbox" name="TLS" checked={checkedItems.includes('TLS')}onChange={handleCheckboxChange}/>
-                            TLS
-                            </label>
-                        </li>
-                        <li className={styles.lic}>
-                            <label>
-                            <input type="checkbox" name="AHC" checked={checkedItems.includes('AHC')} onChange={handleCheckboxChange}/>
-                            AHC
-                            </label>
-                        </li>
-                        <li className={styles.lic}>
-                            <label>
-                            <input type="checkbox" name="CB Garage" checked={checkedItems.includes('CB Garage')} onChange={handleCheckboxChange}/>
-                            CB Garage
-                            </label>
-                        </li>
-                        <li className={styles.lic}>
-                            <label>
-                            <input type="checkbox" name="UCQ" checked={checkedItems.includes('UCQ')} onChange={handleCheckboxChange}/>
-                            UCQ
-                            </label>
-                        </li>
-                        </ul>
+                        <input 
+                            className={styles.inputc}   
+                            placeholder="Search for devices ..."
+                            value={search}
+                            onChange={handleSearch}/>
+                        <List
+                            dataSource={plainOptions}
+                            renderItem={(item) => (
+                                <List.Item>
+                                <Checkbox
+                                    value={item.value}
+                                    checked={checkedList.some((o) => o.value === item.value)}
+                                    onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setCheckedList([...checkedList, item]);
+                                    } else {
+                                        setCheckedList(checkedList.filter((o) => o.value !== item.value));
+                                    }
+                                    }}
+                                >
+                                    {item.label}
+                                </Checkbox>
+                                </List.Item>
+                            )}
+                            />
                     </div>
                     </div>
+                    
+                
                 </Col>
                 <Col span={12}>
+                
                 <div className={styles.right}>
-                    <h2> Select devices({checkedItems.length})</h2>
-                    <ul>
-                    {checkedItems.map((checkedItem) => (
-                        <li className={styles.lic} key={checkedItem}>
-                        {checkedItem}
-                        <button className={styles.deletec} onClick={() => handleDeleteButtonClick(checkedItem)}>
-                            <img src={icon} className={styles.iconc} alt="" />
-                        </button>
-                        </li>
-                    ))}
-                    </ul>                  
+                    <h2> Select devices()</h2>
+                    <Table
+                    dataSource={checkedList}
+                    columns={[
+                        {
+                        dataIndex: 'label',
+                        key: 'label',
+                        },
+                        {
+                       
+                        key: 'action',
+                        render: (text, record) => (
+                            <Space size="middle">
+                            <a onClick={() => handleDelete(record)}>Delete</a>
+                            </Space>
+                        ),
+                        },
+                    ]}
+                    />
+
                 </div>
                 </Col>
             </Row>

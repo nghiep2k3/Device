@@ -11,10 +11,9 @@ import {
     EditOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag } from 'antd';
+import { Space, Button, Dropdown, Input, message, Table, Tag,Layout, Menu, theme } from 'antd';
 
 
 function Status() {

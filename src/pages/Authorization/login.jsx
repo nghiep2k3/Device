@@ -15,7 +15,7 @@ const Login = () => {
       identifier: values.username,
       password: values.password,
     };
-  
+    console.log(data)
     axiosInstance.post('/auth/local', data)
       .then((response) => {
         const { jwt } = response;
@@ -32,6 +32,7 @@ const Login = () => {
         console.log(error);
         setErrorMessage('Đăng nhập thất bại');
         message.error('Đăng nhập thất bại');
+        localStorage.removeItem('ACCESS_TOKEN');
         setIsLoggedIn(false);
         
       });
