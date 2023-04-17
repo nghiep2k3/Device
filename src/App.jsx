@@ -12,25 +12,28 @@ import Create from './pages/Profile/User/Create.jsx';
 import UserManager from './pages/Profile/User/UserManager.jsx';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ListName from './components/Viewprofile/ListName/ListName';
-
+import router from './Router';
+import { RouterProvider } from 'react-router-dom';
 
 export default function App() {
 
   return (
-    <BrowserRouter>
-     <Routes>
-        <Route path="/" element={<Login />}>
-          <Route path="ChangePassWord" element={<Change />} />
-          <Route path="Menu" element={<Menus />} />
-          <Route path="ListUser" element={<ListUser />} />
-          <Route path="UserUpdate" element={<UserUpdate />} />
-          <Route path="UserManager" element={<UserManager />} />
-          <Route path="Details" element={<Details />} />
-          <Route path="Create" element={<Create />} />
-          <Route path="Edit" element={<Edit />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter>
+    //  <Routes>
+    //     <Route path="/" element={<Login />}>
+    //       <Route path="ChangePassWord" element={<Change />} />
+    //       <Route path="Menu" element={<Menus />} />
+    //       <Route path="ListUser" element={<ListUser />} />
+    //       <Route path="UserUpdate" element={<UserUpdate />} />
+    //       <Route path="UserManager" element={<UserManager />} />
+    //       <Route path="Details" element={<Details />} />
+    //       <Route path="Create" element={<Create />} />
+    //       <Route path="Edit" element={<Edit />} />
+    //     </Route>
+    //   </Routes>
+    // </BrowserRouter>
+
+    <RouterProvider router={router}></RouterProvider>
 
     
   );
