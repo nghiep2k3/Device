@@ -5,6 +5,7 @@ import styles from '../../../assets/styles/index.module.css';
 import { axiosInstance } from '../../../shared/services/http-client.js';
 const Create = () => {
     const [checkedList, setCheckedList] = useState([]);
+    const [hasUserInput, setHasUserInput] = useState(false);
     const [dob, setDob] = useState(null);
     const [search, setSearch] = useState('');
     const [deviceNames, setDeviceNames] = useState([]);
@@ -18,21 +19,26 @@ const Create = () => {
       };
       const handleSearch = (event) => {
         setSearch(event.target.value);
+        setHasUserInput(true);
       };
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
-        if (response.data) {
-          setDeviceNames(response.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchDevices();
-  }, [search]);
-
+      useEffect(() => {
+        if (!hasUserInput) return;
+      
+        const fetchDevices = async () => {
+          try {
+            const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
+            if (response.data) {
+              setDeviceNames(response.data);
+            }
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setHasUserInput(false);
+          }
+        };
+        fetchDevices();
+      }, [search, hasUserInput]);
+      
     const plainOptions = deviceNames.map((device) => ({
         label: device.attributes.code,
         value: device,

@@ -1,15 +1,25 @@
 import { axiosInstance } from '../../shared/services/http-client';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import Menus from '../Profile/menu.jsx'
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
   const key = [];
   
+  useEffect(() => {
+    const accessToken = localStorage.getItem('ACCESS_TOKEN');
+    if (accessToken) {
+      setIsLoggedIn(true);
+      setLoading(false);
+    } else {
+      setIsLoggedIn(false);
+      setLoading(false);
+    }
+  }, []);
   const onFinish = (values) => {
     const data = {
       identifier: values.username,
@@ -46,14 +56,12 @@ const Login = () => {
     
   };
 
-  return (
-    <div>
-      {isLoggedIn ? (
-        <div>
-            <Menus onLogout={onLogout}/>
-        </div>
-               
-      ) : (
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+    if (!isLoggedIn) {
+      return (
         <div className="container">
           <h3>Login</h3>
           <Form name="normal_login" className="login-form" onFinish={onFinish}>
@@ -81,8 +89,13 @@ const Login = () => {
             </Form.Item>
           </Form>
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+
+    return (
+      <div>
+        <Menus onLogout={onLogout}/>
+      </div>
+    );
 };
 export default Login;

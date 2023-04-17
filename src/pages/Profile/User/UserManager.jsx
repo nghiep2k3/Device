@@ -100,7 +100,7 @@ const columns = [
 
                 {blocked ? (
                     // Nếu blocked là true, không in ra gì cả
-                    <Tag color='volcano'>Offline</Tag>
+                    <Tag color='volcano'>Blocked</Tag>
                 ) : (
                     // Nếu blocked là false, in ra "active"
 
