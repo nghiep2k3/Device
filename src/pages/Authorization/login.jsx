@@ -32,7 +32,7 @@ const Login = () => {
         console.log(error);
         setErrorMessage('Đăng nhập thất bại');
         message.error('Đăng nhập thất bại');
-        localStorage.removeItem('ACCESS_TOKEN');
+        
         setIsLoggedIn(false);
         
       });
@@ -41,6 +41,7 @@ const Login = () => {
    const onLogout = () => {
     console.log("log out");
     localStorage.setItem('setLoggedIn', 'false');
+    localStorage.removeItem('ACCESS_TOKEN');
     setIsLoggedIn(false);
     
   };

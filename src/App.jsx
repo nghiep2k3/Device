@@ -24,7 +24,7 @@ export default function App() {
           <Route path="UserManager" element={<UserManager />} />
           <Route path="Details" element={<Details />} />
           <Route path="Create" element={<Create />} />
-          <Route path="Edit" element={<Edit />} />
+          <Route path="Edit/:id" element={<Edit />} />
         </Route>
       </Routes>
     </BrowserRouter>

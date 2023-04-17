@@ -13,7 +13,8 @@ import {
 } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Space, Button, Dropdown, Input, message, Table, Tag,Layout, Menu, theme } from 'antd';
+import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag } from 'antd';
+import { axiosInstance } from '../../../shared/services/http-client';
 
 
 function Status() {
@@ -65,32 +66,103 @@ function Status() {
 }
 
 
-function SearchName() {
+
+
+const columns = [
+    {
+        title: '#',
+        dataIndex: 'id',
+        key: 'id',
+    },
+    {
+        title: 'Name',
+        dataIndex: 'username',
+        key: 'username',
+        
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+    },
+    {
+        title: 'Phone_Number',
+        dataIndex: 'phoneNumber',
+        key: 'phoneNumber',
+    },
+    {
+        title: 'Status',
+        key: 'blocked',
+        dataIndex: 'blocked',
+        render: (_, { blocked }) => (
+         
+            <>
+
+                {blocked ? (
+                    // Nếu blocked là true, không in ra gì cả
+                    <Tag color='volcano'>Offline</Tag>
+                ) : (
+                    // Nếu blocked là false, in ra "active"
+
+                    <Tag color='geekblue'>Active</Tag>
+                )}
+            </>
+        ),
+    },
+    {
+        title: 'Action',
+        key: 'action',
+        render: (_, record) => (
+            <Space size="middle">
+                
+                <Link to="/Details"><EyeOutlined /></Link>
+                <Link to={`/Edit/${record.id}`}><EditOutlined /></Link>
+                <DeleteOutlined />
+            </Space>
+        ),
+    },
+];
+
+
+const UserManager = () => {
+
     const { Search } = Input;
     const onSearch = (value) => console.log(value);
 
 
     const items = [
         {
-            label: <a href="https://www.antgroup.com">1st menu item</a>,
+            label: <a href="https://www.antgroup.com">Email</a>,
             key: '0',
         },
         {
-            label: <a href="https://www.aliyun.com">2nd menu item</a>,
+            label: <a href="https://www.aliyun.com">Phone number</a>,
             key: '1',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: '3rd menu item',
-            key: '3',
-        },
+        }
     ];
+
+
+    const [data2, setData2] = useState('');
+    axiosInstance.get('/users')
+        .then((res) => {
+            setData2(res);
+        })
 
     return (
         <div>
-            
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <div><h2>All Users</h2></div>
+                <div>
+                    <Button type="primary" >
+                        <Link to="/Create">Add User</Link>
+                    </Button>
+                </div>
+            </div>
+
             <div>
                 <div style={{
                     display: 'flex',
@@ -112,7 +184,7 @@ function SearchName() {
                         >
                             <a onClick={(e) => e.preventDefault()}>
                                 <Space>
-                                    Click me
+                                    Name
                                     <DownOutlined />
                                 </Space>
                             </a>
@@ -134,111 +206,13 @@ function SearchName() {
 
                     <div style={{ marginLeft: '50px' }}>
                         <Status></Status>
-                    </div>
+                    </div>        
                 </div>
             </div>
+           
+            <Table columns={columns} dataSource={data2} />
         </div>
-
-
     )
 }
-
-const columns = [
-    {
-        title: '#',
-        dataIndex: 'index',
-        key: 'index',
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Email',
-        dataIndex: 'Email',
-        key: 'Email',
-    },
-    {
-        title: 'Phone_Number',
-        dataIndex: 'Phone_Number',
-        key: 'Phone_Number',
-    },
-    {
-        title: 'Status',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <Link to="/Details"><EyeOutlined /></Link>
-                <Link to="/Edit"><EditOutlined /></Link>
-                <DeleteOutlined />
-            </Space>
-        ),
-    },
-];
-const data = [
-    {
-        index: '1',
-        key: '1',
-        name: 'John Brown',
-        Email: 'nguyennghiep1320@gmail.com',
-        Phone_Number: '0378936624',
-        tags: ['Active'],
-    },
-    {
-        index: '1',
-        key: '2',
-        name: 'Jim Green',
-        Email: 'nguyennghiep1320@gmail.com',
-        Phone_Number: '0378936624',
-        tags: ['Active'],
-    },
-    {
-        index: '1',
-        key: '3',
-        name: 'Joe Black',
-        Email: 'nguyennghiep1320@gmail.com',
-        Phone_Number: '0378936624',
-        tags: ['Active'],
-    },
-];
-const UserManager = () => {
-    return(
-        <div>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-        }}>
-            <div><h2>All Users</h2></div>
-            <div>
-                <Button type="primary" >
-                    <Link to="/Create">Add User</Link>
-                </Button>
-            </div>
-        </div>
-        <Table columns={columns} dataSource={data} />
-        </div>)}
 
 export default UserManager;

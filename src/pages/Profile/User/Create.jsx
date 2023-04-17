@@ -45,7 +45,7 @@ const Create = () => {
         const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
         console.log(formValues.Role)   
         let isFalse = (formValues.Status === "false"); // kiểm tra chuỗi có giống "false" hay không
-        let bool = isFalse ? true : false;
+        let bool = isFalse ? false : true;
         const data = {
             username: formValues.Username,
             email: formValues.Email,

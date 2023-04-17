@@ -1,4 +1,4 @@
-import { Link ,useNavigate  } from "react-router-dom";
+import { Link ,useNavigate,useParams   } from "react-router-dom";
 import { Input, Form, Button, Col, Row,Select ,DatePicker,message,Checkbox,List, Table,Space } from 'antd';
 import React , {useState,useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
@@ -8,8 +8,10 @@ const Create = () => {
     const [dob, setDob] = useState(null);
     const [search, setSearch] = useState('');
     const [deviceNames, setDeviceNames] = useState([]);
+    const [userProfile, setUserProfile] = useState([]);
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const userId  = useParams();
     const handleDobChange = (value) => {
         setDob(value);
       }
@@ -19,24 +21,19 @@ const Create = () => {
       const handleSearch = (event) => {
         setSearch(event.target.value);
       };
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
-        if (response.data) {
-          setDeviceNames(response.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchDevices();
-  }, [search]);
-
-    const plainOptions = deviceNames.map((device) => ({
-        label: device.attributes.code,
-        value: device,
-    }));
+      axiosInstance.get(`/users/${userId.id}`)
+      .then((response) => {
+            setUserProfile(response)
+        })
+        .catch((error) => {
+            console.log(error);
+            message.error('error');
+        });
+        console.log(userProfile)
+    // const plainOptions = deviceNames.map((device) => ({
+    //     label: device.attributes.code,
+    //     value: device,
+    // }));
     const valueList = checkedList.map((item) => item.value);
     const onFinish = (values) => {
         const moment = require('moment');
@@ -44,7 +41,7 @@ const Create = () => {
         const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
         const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
         console.log(formValues.Role)   
-        let isFalse = (formValues.Status === "false"); // kiểm tra chuỗi có giống "false" hay không
+        let isFalse = (formValues.Status === "false"); 
         let bool = isFalse ? true : false;
         const data = {
             username: formValues.Username,
@@ -59,23 +56,23 @@ const Create = () => {
             createdAt: currentTime,
             devices: valueList
           };
-        //   axiosInstance.post('/users', data)
-        //   .then((response) => {
-        //   if (response != null) {
+          axiosInstance.post(`/users/${userId.id}`, data)
+          .then((response) => {
+          if (response != null) {
             
-        //       message.success('correct');
-        //       navigate('/UserManager');
-        //   } 
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //         message.error('error');
-        //     });
+              message.success('correct');
+              navigate('/UserManager');
+          } 
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error('error');
+            });
                 
             };
     return (
         <div>
-            <h2 className={styles.tittle}>All user > Add new user</h2>
+            <h2 className={styles.tittle}>All user  {userProfile.username}</h2>
         
         <div>
         
@@ -89,10 +86,12 @@ const Create = () => {
                 <Form.Item
                     label="Name"
                     name="Name"
+                    
                     labelCol={{ span: 24 }}
                     rules={[{ required: true, message: 'Please input your name!' }]}
                 >
-                <Input className={styles.inputc} placeholder="Enter owner name" />
+                <Input className={styles.inputc} defaultValue={userProfile.username}  />
+                <p>{userProfile.username} </p>
             </Form.Item>
             </Col>
             <Col span={8}>
@@ -103,7 +102,7 @@ const Create = () => {
                         rules={[    { required: true, message: 'Please input your Email!' },
                                     { type: 'email',message: 'Please enter a valid email address',},]}
                     >
-                    <Input className={styles.inputc} placeholder="Enter owner email"/>
+                    <Input className={styles.inputc} placeholder={userProfile.email}/>
                 </Form.Item>
             </Col>
             <Col span={8}>
