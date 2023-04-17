@@ -11,17 +11,36 @@ import {
     EditOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Link } from "react-router-dom";
-import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag } from 'antd';
+import {Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select,Modal  } from 'antd';
 import { axiosInstance } from '../../../shared/services/http-client';
+import debounce from "lodash/debounce";
 
 
+const deleteUser = (userId) => {
+    if (window.confirm("Do you want to delete this user?")) {
+      axiosInstance
+        .delete(`/users/${userId}`)
+        .then((res) => {
+            console.log(res)
+            message.success('delete complete');
+          window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err)
+            message.error('có lỗi');
+        });
+    }
+  };
+  
+  
 function Status() {
     const handleMenuClick = (e) => {
         message.info('Click on menu item.');
         console.log('click', e);
     };
+    
     const items = [
         {
             label: '1st menu item',
@@ -95,9 +114,7 @@ const columns = [
         key: 'blocked',
         dataIndex: 'blocked',
         render: (_, { blocked }) => (
-         
             <>
-
                 {blocked ? (
                     // Nếu blocked là true, không in ra gì cả
                     <Tag color='volcano'>Blocked</Tag>
@@ -114,10 +131,9 @@ const columns = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                
                 <Link to="/Details"><EyeOutlined /></Link>
                 <Link to={`/Edit/${record.id}`}><EditOutlined /></Link>
-                <DeleteOutlined />
+                <DeleteOutlined onClick={() => deleteUser(record.id)} />
             </Space>
         ),
     },
@@ -126,10 +142,36 @@ const columns = [
 
 const UserManager = () => {
 
+
     const { Search } = Input;
-    const onSearch = (value) => console.log(value);
+    const onSearch = (value) => {
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
+        .then((res) => {
+            setSearchResults(res);
+        })
+    };
 
+    const [searchEmail, setSearchEmail] = useState('username');
+    const [searchResults, setSearchResults] = useState('');
+    const [searchTerm, setSearchTerm] = useState("");
 
+    useEffect(() => {
+        axiosInstance.get(`/users`)
+        .then((res) => {
+            setSearchResults(res);
+    })
+    }, [])
+
+    const handleSearchInputChange = debounce(async (event) => {
+        const { value } = event.target;
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
+        .then((res) => {
+            setSearchResults(res);
+        })
+    }, 3000);
+
+    
+    
     const items = [
         {
             label: <a href="https://www.antgroup.com">Email</a>,
@@ -142,11 +184,6 @@ const UserManager = () => {
     ];
 
 
-    const [data2, setData2] = useState('');
-    axiosInstance.get('/users')
-        .then((res) => {
-            setData2(res);
-        })
 
     return (
         <div>
@@ -176,19 +213,27 @@ const UserManager = () => {
                         width: 'max-content',
                         borderRadius: '10px'
                     }}>
-                        <div><Dropdown
-                            menu={{
-                                items,
-                            }}
-                            trigger={['click']}
-                        >
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Space>
-                                    Name
-                                    <DownOutlined />
-                                </Space>
-                            </a>
-                        </Dropdown></div>
+                        <div>
+                            <Select
+                                        defaultValue="Name"
+                                        style={{
+                                            width: 120,
+                                        }}
+                                        onChange={(e)=>{
+                                            
+                                            setSearchEmail(e)
+                                        }}
+                                        options={[
+                                            {
+                                                value: 'email',
+                                                label: 'Email',
+                                            }, {
+                                                value: 'username',
+                                                label: 'Name',
+                                            },
+                                        ]}
+                            />
+                        </div>
 
                         <div>
                             <Search
@@ -196,6 +241,7 @@ const UserManager = () => {
                                 allowClear
                                 bordered={false}
                                 onSearch={onSearch}
+                                onChange={handleSearchInputChange}
                                 style={{
                                     width: 200,
                                     marginLeft: '20px'
@@ -210,7 +256,7 @@ const UserManager = () => {
                 </div>
             </div>
            
-            <Table columns={columns} dataSource={data2} />
+            <Table columns={columns} dataSource={searchResults} />
         </div>
     )
 }

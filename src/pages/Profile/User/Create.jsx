@@ -26,7 +26,7 @@ const Create = () => {
       
         const fetchDevices = async () => {
           try {
-            const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
+            const response = await axiosInstance.get(`/devices?filters[code][$contains]=${search}`);
             if (response.data) {
               setDeviceNames(response.data);
             }
@@ -129,7 +129,12 @@ const Create = () => {
                     label="Password"
                     name="Password"
                     labelCol={{ span: 24 }}
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                    rules={[    
+                        { required: true, message: 'Please input your new password!' },    
+                        { max: 8, message: 'Password must not exceed 8 characters!' },    
+                        { pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{1,}$/, 
+                        message: 'Password must contain at least one uppercase letter, one number, and one special character!' }
+                    ]}
                 >
                 <Input.Password className={styles.inputc} placeholder="Enter owner password" />
             </Form.Item>
@@ -213,12 +218,14 @@ const Create = () => {
                 <Col span={12}>
                 
                     <div>
+                    
                     <div className={styles.left}>
                         <input 
                             className={styles.inputc}   
                             placeholder="Search for devices ..."
                             value={search}
                             onChange={handleSearch}/>
+                        <div className={styles.box}>
                         <List
                             dataSource={plainOptions}
                             renderItem={(item) => (
@@ -239,6 +246,7 @@ const Create = () => {
                                 </List.Item>
                             )}
                             />
+                        </div>
                     </div>
                     </div>
                     
@@ -248,6 +256,7 @@ const Create = () => {
                 
                 <div className={styles.right}>
                     <h2> Select devices()</h2>
+                    <div className={styles.box}>
                     <Table
                     dataSource={checkedList}
                     columns={[
@@ -266,7 +275,7 @@ const Create = () => {
                         },
                     ]}
                     />
-
+                </div>
                 </div>
                 </Col>
             </Row>

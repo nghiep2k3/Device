@@ -72,14 +72,7 @@ function UserUpdate() {
             
             <Form.Item name={['user', 'Role']} label="Role"><Input /></Form.Item>
 
-            {/* <Form.Item
-            wrapperCol={{
-                ...layout.wrapperCol,
-                offset: 8,
-            }}
-            >
             
-            </Form.Item> */}
             <div>
                 <Button type="primary" style={{marginRight: '20px'}}>Update Profile</Button>
                 <Button><Link to="/ListUser">Cancel</Link></Button>

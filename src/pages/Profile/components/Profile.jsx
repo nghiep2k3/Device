@@ -5,7 +5,26 @@ import { Link } from "react-router-dom";
 import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 
+import { axiosInstance } from '../../../shared/services/http-client';
+import { useState,useEffect } from 'react';
+
+function ListName(props) {
+    return(
+        <div>
+            <label htmlFor="">{props.title}</label>
+            <div style={{ fontWeight: 'bold' }}>{props.name}</div>
+        </div>
+    );
+}
+
 function ListUser() {
+    const [data, setData] = useState('');
+
+    axiosInstance.get('/users/me')
+    .then((res)=>{
+        setData(res);   
+    })
+
     return (
         <div>
             <h2 className='tittle'>My Profile</h2>
@@ -19,42 +38,36 @@ function ListUser() {
                     </Space>
                 </div>
 
-                <div className='SetInfo'> 
+                <div className='SetInfo'>
                     <div className='M100'>
                         <div>
-                            <label htmlFor="">Name</label>
-                            <div style={{fontWeight: 'bold'}}>Ha Nguyen</div>
+                            <ListName name={data.username} title="Name"/>
                         </div>
 
                         <div style={{
                             margin: '40px 0'
                         }}>
-                            <label htmlFor="">Phone Number</label>
-                            <div style={{fontWeight: 'bold'}}>0378936624</div>
+                            <ListName name={data.phoneNumber} title="Phone Number"/>
                         </div>
 
                         <div>
-                            <label htmlFor="">Address</label>
-                            <div style={{fontWeight: 'bold'}}>Duyên Hải - Hưng Hà - Thái Bình</div>
+                            <ListName name={data.provider} title="Address"/>
                         </div>
                     </div>
 
                     <div>
                         <div>
-                            <label htmlFor="">Email</label>
-                            <div style={{fontWeight: 'bold'}}>nguyennghiep1320@gmail.com</div>
+                            <ListName name={data.email} title="Email"/>
                         </div>
 
                         <div style={{
                             margin: '40px 0'
                         }}>
-                            <label htmlFor="">DoB</label>
-                            <div style={{fontWeight: 'bold'}}>24/11/2003</div>
+                            <ListName name={data.dob} title="DoB"/>
                         </div>
 
                         <div>
-                            <label htmlFor="">Role</label>
-                            <div style={{fontWeight: 'bold'}}>Admin</div>
+                            <ListName name={"Admin"} title="Role"/>
                         </div>
                     </div>
 

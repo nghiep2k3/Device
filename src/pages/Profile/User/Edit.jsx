@@ -55,7 +55,7 @@ const Create = () => {
     
       const fetchDevices = async () => {
         try {
-          const response = await axiosInstance.get(`/devices?filters[name][$contains]=${search}`);
+          const response = await axiosInstance.get(`/devices?filters[code][$contains]=${search}`);
           if (response.data) {
             setDeviceNames(response.data);
           }
@@ -86,6 +86,7 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
+  
   const onFinish = values => {
     const moment = require('moment');
 
@@ -159,6 +160,7 @@ const Create = () => {
                 <Input
                   className={styles.inputc}
                   defaultValue={userProfile?.email}
+                  disabled
                 />
               </Form.Item>
             </Col>
@@ -301,6 +303,7 @@ const Create = () => {
                             placeholder="Search for devices ..."
                             value={search}
                             onChange={handleSearch}/>
+                           <div className={styles.box}>
                         <List
                             dataSource={plainOptions}
                             renderItem={(item) => (
@@ -321,6 +324,7 @@ const Create = () => {
                                 </List.Item>
                             )}
                             />
+                            </div>
                     </div>
                     </div>
                     
@@ -330,6 +334,7 @@ const Create = () => {
                 
                 <div className={styles.right}>
                     <h2> Select devices()</h2>
+                    <div className={styles.box}>
                     <Table
                     dataSource={checkedList}
                     columns={[
@@ -348,7 +353,7 @@ const Create = () => {
                         },
                     ]}
                     />
-
+                </div>
                 </div>
                 </Col>
             </Row>
