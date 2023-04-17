@@ -103,7 +103,7 @@ const Menus = ({ onLogout }) => {
                             <div><Avatar icon={<UserOutlined />} /></div>
                             <div>
                                 <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
-                                    Ha Nguyen
+                                    Nghiep Nguyen
                                 </div>
                                 <div style={{marginLeft: '10px', marginTop: '22px'}}>Admin</div>
                             </div>

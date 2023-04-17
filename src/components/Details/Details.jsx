@@ -15,6 +15,7 @@ import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 import ListName from '../Viewprofile/ListName/ListName';
 
+
 function InfoUser() {
     return (
         <div>

@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useState } from 'react';
 import Menus from '../Profile/menu.jsx'
+import ListName from '../../components/Viewprofile/ListName/ListName';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -15,11 +16,9 @@ const Login = () => {
       identifier: values.username,
       password: values.password,
     };
-    axiosInstance.get('/users/me',data)
-    .then((res)=>{
-      console.log(TOKEN)
-      console.log(res)
-    })
+
+    
+
     axiosInstance.post('/auth/local', data)
       .then((response) => {
         const { jwt } = response;
