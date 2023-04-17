@@ -294,10 +294,16 @@ const UserManager = () => {
     // }
 
     const { Search } = Input;
-    const onSearch = (value) => console.log(value);
+    const onSearch = (value) => {
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
+        .then((res) => {
+            setSearchResults(res);
+        })
+    };
 
     const [searchEmail, setSearchEmail] = useState('username');
     const [searchResults, setSearchResults] = useState('');
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         axiosInstance.get(`/users`)
@@ -312,7 +318,7 @@ const UserManager = () => {
         .then((res) => {
             setSearchResults(res);
         })
-    }, 500);
+    }, 3000);
 
     
     
