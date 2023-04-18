@@ -6,7 +6,9 @@ import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 import ListName from '../../../components/Viewprofile/ListName/ListName';
 import { axiosInstance } from '../../../shared/services/http-client';
+
 import { useState,useEffect } from 'react';
+
 
 
 function ListUser() {
@@ -17,9 +19,6 @@ function ListUser() {
     .then((res)=>{
         setData(res);   
     })
-
-
-
 
     return (
         <div>

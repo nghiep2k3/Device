@@ -9,6 +9,7 @@ import UserUpdate from "./pages/Profile/components/Update";
 import UserManager from "./pages/Profile/User/UserManager";
 import Details from "./pages/Profile/User/Detail";
 import Create from "./pages/Profile/User/Create";
+import Edit from "./pages/Profile/User/Edit";
   const router = createBrowserRouter([
     {
       path: "/",
@@ -41,8 +42,9 @@ import Create from "./pages/Profile/User/Create";
         element:<Create />,
       },
       {
-        path: '/Edit',
-        element:<h2>Edit</h2>,
+        
+        path: '/Edit/:id',
+        element:<Edit />,
       }
     ]
     }

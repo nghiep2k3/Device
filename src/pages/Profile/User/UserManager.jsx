@@ -11,20 +11,36 @@ import {
     EditOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
 import React, { useState, useEffect  } from 'react';
 import { Link } from "react-router-dom";
-import { Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select } from 'antd';
 import { axiosInstance } from '../../../shared/services/http-client';
+import {Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select,Modal  } from 'antd';
 import debounce from "lodash/debounce";
 
 
-
+const deleteUser = (userId) => {
+    if (window.confirm("Do you want to delete this user?")) {
+      axiosInstance
+        .delete(`/users/${userId}`)
+        .then((res) => {
+            console.log(res)
+            message.success('delete complete');
+          window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err)
+            message.error('có lỗi');
+        });
+    }
+  };
+  
+  
 function Status() {
     const handleMenuClick = (e) => {
         message.info('Click on menu item.');
         console.log('click', e);
     };
+    
     const items = [
         {
             label: '1st menu item',
@@ -69,77 +85,6 @@ function Status() {
 }
 
 
-// function SearchName() {
-//     const { Search } = Input;
-//     const onSearch = (value) => console.log(value);
-
-
-//     const items = [
-//         {
-//             label: <a href="https://www.antgroup.com">Email</a>,
-//             key: '0',
-//         },
-//         {
-//             label: <a href="https://www.aliyun.com">Phone number</a>,
-//             key: '1',
-//         }
-//     ];
-
-//     return (
-//         <div>
-
-//             <div>
-//                 <div style={{
-//                     display: 'flex',
-//                     alignItems: 'center',
-
-//                 }}>
-//                     <div style={{
-//                         display: 'flex',
-//                         alignItems: 'center',
-//                         border: '2px solid black',
-//                         width: 'max-content',
-//                         borderRadius: '10px'
-//                     }}>
-//                         <div><Dropdown
-//                             menu={{
-//                                 items,
-//                             }}
-//                             trigger={['click']}
-//                         >
-//                             <a onClick={(e) => e.preventDefault()}>
-//                                 <Space>
-//                                     Name
-//                                     <DownOutlined />
-//                                 </Space>
-//                             </a>
-//                         </Dropdown></div>
-
-//                         <div>
-//                             <Search
-//                                 placeholder="Search"
-//                                 allowClear
-//                                 bordered={false}
-//                                 onSearch={onSearch}
-//                                 style={{
-//                                     width: 200,
-//                                     marginLeft: '20px'
-//                                 }}
-//                             />
-//                         </div>
-//                     </div>
-
-//                     {/* <div style={{ marginLeft: '50px' }}>
-//                         <Status></Status>
-//                     </div> */}
-//                 </div>
-//             </div>
-//         </div>
-
-
-//     )
-// }
-
 
 
 const columns = [
@@ -172,7 +117,7 @@ const columns = [
             <>
                 {blocked ? (
                     // Nếu blocked là true, không in ra gì cả
-                    <Tag color='volcano'>Offline</Tag>
+                    <Tag color='volcano'>Blocked</Tag>
                 ) : (
                     // Nếu blocked là false, in ra "active"
 
@@ -187,111 +132,16 @@ const columns = [
         render: (_, record) => (
             <Space size="middle">
                 <Link to="/Details"><EyeOutlined /></Link>
-                <Link to="/Edit"><EditOutlined /></Link>
-                <DeleteOutlined />
+                <Link to={`/Edit/${record.id}`}><EditOutlined /></Link>
+                <DeleteOutlined onClick={() => deleteUser(record.id)} />
             </Space>
         ),
     },
 ];
-// const data = [
-//     {
-//         index: '1',
-//         key: '1',
-//         name: 'John Brown',
-//         Email: 'nguyennghiep1320@gmail.com',
-//         Phone_Number: '0378936624',
-//         tags: ['Active'],
-//     },
-//     {
-//         index: '1',
-//         key: '2',
-//         name: 'Jim Green',
-//         Email: 'nguyennghiep1320@gmail.com',
-//         Phone_Number: '0378936624',
-//         tags: ['Active'],
-//     },
-//     {
-//         index: '1',
-//         key: '3',
-//         name: 'Joe Black',
-//         Email: 'nguyennghiep1320@gmail.com',
-//         Phone_Number: '0378936624',
-//         tags: ['Active'],
-//     },
-// ];
 
 
 const UserManager = () => {
 
-
-    // function SearchName() {
-    //     const { Search } = Input;
-    //     const onSearch = (value) => console.log(value);
-
-
-    //     const items = [
-    //         {
-    //             label: <a href="https://www.antgroup.com">Email</a>,
-    //             key: '0',
-    //         },
-    //         {
-    //             label: <a href="https://www.aliyun.com">Phone number</a>,
-    //             key: '1',
-    //         }
-    //     ];
-
-    //     return (
-    //         <div>
-
-    //             <div>
-    //                 <div style={{
-    //                     display: 'flex',
-    //                     alignItems: 'center',
-
-    //                 }}>
-    //                     <div style={{
-    //                         display: 'flex',
-    //                         alignItems: 'center',
-    //                         border: '2px solid black',
-    //                         width: 'max-content',
-    //                         borderRadius: '10px'
-    //                     }}>
-    //                         <div><Dropdown
-    //                             menu={{
-    //                                 items,
-    //                             }}
-    //                             trigger={['click']}
-    //                         >
-    //                             <a onClick={(e) => e.preventDefault()}>
-    //                                 <Space>
-    //                                     Name
-    //                                     <DownOutlined />
-    //                                 </Space>
-    //                             </a>
-    //                         </Dropdown></div>
-
-    //                         <div>
-    //                             <Search
-    //                                 placeholder="Search"
-    //                                 allowClear
-    //                                 bordered={false}
-    //                                 onSearch={onSearch}
-    //                                 style={{
-    //                                     width: 200,
-    //                                     marginLeft: '20px'
-    //                                 }}
-    //                             />
-    //                         </div>
-    //                     </div>
-
-
-    //                 </div>
-    //             </div>
-    //         </div>
-
-
-    //     )
-    // }
 
     const { Search } = Input;
     const onSearch = (value) => {
@@ -334,14 +184,6 @@ const UserManager = () => {
     ];
 
 
-
-
-    // const [data2, setData2] = useState('');
-    // const TOKEN = localStorage.getItem('TOKEN');
-    // axiosInstance.get('/users')
-    //     .then((res) => {
-    //         setData2(res);
-    //     })
 
     return (
         <div>

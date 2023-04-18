@@ -9,7 +9,7 @@
     border: solid black 2px;
   }
   .SetupHeight{
-    height: 110vh;
+    height: 140vh;
 }
 
 .ViewUser{
@@ -94,8 +94,7 @@
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  /* margin-top: 50px; */
-  /* margin: 50px 20px 50px 20px; */
+  
 }
 
 
