@@ -8,11 +8,11 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import React, { useState } from 'react';
-import './update.css';
+import '../../../assets/styles/index.css';
 import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 import {  Form, Input, InputNumber,DatePicker } from 'antd';
-
+import { Link } from "react-router-dom";
 
 
 
@@ -29,20 +29,17 @@ function UserUpdate() {
         console.log(values);
       };
     return (
-        <div className='container'>
-            <div className='ViewUser1'>
-                <div className='SetupUser1'>
-                    <div>
-                        <Space direction="vertical" size={16}>
-                            <Space wrap size={16}>
-                                <Avatar size={200} icon={<UserOutlined />} />
-                            </Space>
-                        </Space>
-                    </div>
-                    
-                </div>
-
             
+            <div className='ViewUser1'>
+            <div className='SetupUser1'>
+                <div>
+                    <Space direction="vertical" size={16}>
+                        <Space wrap size={16}>
+                            <Avatar size={200} icon={<UserOutlined />} />
+                        </Space>
+                    </Space>
+                </div>
+            <div className='setup'>
             <Form
                     {...layout}
                 name="nest-messages"
@@ -75,18 +72,19 @@ function UserUpdate() {
             
             <Form.Item name={['user', 'Role']} label="Role"><Input /></Form.Item>
 
-            </Form>
-        </div>
-        
-
-            <div className='ButtonUpdate1'>
-                <Button type="primary" style={{ marginRight: '20px' }}>Save</Button>
+            
+            <div>
+                <Button type="primary" style={{marginRight: '20px'}}>Update Profile</Button>
                 <Button><Link to="/ListUser">Cancel</Link></Button>
             </div>
-
+            </Form>
+            
+            </div>
+           
+        </div>
         </div>               
             );
     }
 
 
-export default Update;
+export default UserUpdate;

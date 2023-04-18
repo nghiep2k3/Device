@@ -1,13 +1,31 @@
 import { Link } from "react-router-dom";
-import { Input, Form, Button } from 'antd';
-import React from 'react';
+import { Input, Form, Button,message } from 'antd';
+import React,{ useState }  from 'react';
 import '../../../assets/styles/index.css';
-
+import { axiosInstance } from '../../../shared/services/http-client';
 
 
 function Change() {
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        
+        const data = {
+            currentPassword: values.current_password,
+            password: values.new_password,
+            passwordConfirmation: values.confirm_password,
+          };
+          axiosInstance.post('/auth/change-password', data)
+            .then((response) => {
+            if (response != null) {
+                window.location.reload();
+                localStorage.removeItem('ACCESS_TOKEN');
+                message.success('correct');
+            } 
+        })
+        .catch((error) => {
+            console.log(error);    
+            message.error('Current Password Incorrect');
+        });
+        
       };
     return (
         <div>

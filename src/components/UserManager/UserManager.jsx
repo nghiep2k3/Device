@@ -68,7 +68,7 @@ function Status() {
 
 function SearchName() {
     const { Search } = Input;
-    const onSearch = (value) => console.log(value);
+    // const onSearch = (value) => console.log(value);
 
 
     const items = [
@@ -140,7 +140,7 @@ function SearchName() {
         </div>
 
 
-    )
+    );
 }
 
 const columns = [
@@ -321,7 +321,7 @@ const UserManager = () => {
                         </div>
                     </div>
 
-                    <SearchName />
+                    <SearchName></SearchName>
                     <App></App>
 
                 </Content>

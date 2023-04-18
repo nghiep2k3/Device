@@ -1,19 +1,33 @@
 import { axiosInstance } from '../../shared/services/http-client';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import Menus from '../Profile/menu.jsx'
+import ListName from '../../components/Viewprofile/ListName/ListName';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
   const key = [];
   
+  useEffect(() => {
+    const accessToken = localStorage.getItem('ACCESS_TOKEN');
+    if (accessToken) {
+      setIsLoggedIn(true);
+      setLoading(false);
+    } else {
+      setIsLoggedIn(false);
+      setLoading(false);
+    }
+  }, []);
   const onFinish = (values) => {
     const data = {
       identifier: values.username,
       password: values.password,
     };
+
+    
 
     axiosInstance.post('/auth/local', data)
       .then((response) => {
@@ -24,13 +38,14 @@ const Login = () => {
           message.success('Đăng nhập thành công');
           localStorage.setItem('setIsLoggedIn', true)
           setIsLoggedIn(true);
-          localStorage.setItem('TOKEN', key);
+          localStorage.setItem('ACCESS_TOKEN', key);
         } 
       })
       .catch((error) => {
         console.log(error);
         setErrorMessage('Đăng nhập thất bại');
         message.error('Đăng nhập thất bại');
+        
         setIsLoggedIn(false);
         
       });
@@ -39,18 +54,17 @@ const Login = () => {
    const onLogout = () => {
     console.log("log out");
     localStorage.setItem('setLoggedIn', 'false');
+    localStorage.removeItem('ACCESS_TOKEN');
     setIsLoggedIn(false);
     
   };
 
-  return (
-    <div>
-      {isLoggedIn ? (
-        <div>
-            <Menus onLogout={onLogout}/>
-        </div>
-               
-      ) : (
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+    if (!isLoggedIn) {
+      return (
         <div className="container">
           <h3>Login</h3>
           <Form name="normal_login" className="login-form" onFinish={onFinish}>
@@ -78,8 +92,13 @@ const Login = () => {
             </Form.Item>
           </Form>
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+
+    return (
+      <div>
+        <Menus onLogout={onLogout}/>
+      </div>
+    );
 };
 export default Login;
