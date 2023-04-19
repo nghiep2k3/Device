@@ -104,7 +104,7 @@ const Create = () => {
       password: formValues.Password,
       role: parseFloat(formValues.Role),
       blocked: bool,
-      createdAt: currentTime,
+      updatedAt: currentTime,
       devices: valueList,
     };
     axiosInstance

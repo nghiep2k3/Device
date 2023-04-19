@@ -6,8 +6,9 @@ import {
 } from '@ant-design/icons';
 import {Outlet, Link } from "react-router-dom";
 import { Layout, Menu, theme,Avatar,Button,Dropdown  } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/styles/index.css';
+import { axiosInstance } from '../../shared/services/http-client';
 const { Header, Sider, Content } = Layout;
 
 
@@ -15,6 +16,15 @@ const { Header, Sider, Content } = Layout;
 
 const Menus = ({ onLogout }) => {
     const [collapsed, setCollapsed] = useState(false);
+    const TOKEN = localStorage.getItem('TOKEN');
+    
+    const [data, setData] = useState('');
+    useEffect(() => {
+        axiosInstance.get('/users/me?populate=role')
+            .then((res)=>{
+                setData(res);   
+            })
+    }, []);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -59,7 +69,7 @@ const Menus = ({ onLogout }) => {
                             key: '2',
                             icon: <AppstoreOutlined />,
                             
-                            label: <p>Device</p>,
+                            label:  <Link to="#">Device</Link>,
                         },
 
                     ]}
@@ -103,9 +113,13 @@ const Menus = ({ onLogout }) => {
                             <div><Avatar icon={<UserOutlined />} /></div>
                             <div>
                                 <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
-                                    Ha Nguyen
+                                    {data.fullname}
+                                    {/* Nguyen Nghiep */}
                                 </div>
-                                <div style={{marginLeft: '10px', marginTop: '22px'}}>Admin</div>
+                                <div style={{marginLeft: '10px', marginTop: '22px'}}>
+                                    {data.role?.name}
+                                    {/* Admin */}
+                                </div>
                             </div>
                         </div>
                         </Dropdown>

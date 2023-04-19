@@ -4,8 +4,8 @@ import '../../../assets/styles/index.css';
 import { Link } from "react-router-dom";
 import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
-
 import { axiosInstance } from '../../../shared/services/http-client';
+
 import { useState,useEffect } from 'react';
 
 function ListName(props) {
@@ -17,13 +17,16 @@ function ListName(props) {
     );
 }
 
-function ListUser() {
-    const [data, setData] = useState('');
 
-    axiosInstance.get('/users/me')
-    .then((res)=>{
-        setData(res);   
-    })
+function ListUser() {
+    
+    const [data, setData] = useState('');
+    useEffect(() => {
+        axiosInstance.get('/users/me?populate=role')
+            .then((res)=>{
+                setData(res);   
+            })
+    }, []);
 
     return (
         <div>
@@ -41,7 +44,7 @@ function ListUser() {
                 <div className='SetInfo'>
                     <div className='M100'>
                         <div>
-                            <ListName name={data.username} title="Name"/>
+                            <ListName name={data.fullname} title="Name"/>
                         </div>
 
                         <div style={{
@@ -75,7 +78,7 @@ function ListUser() {
             </div>
 
             <div className='ButtonUpdate'>
-                <Button type="primary" style={{marginRight: '20px'}}><Link to="/UserUpdate">Update Profile</Link></Button>
+                <Button type="primary" style={{marginRight: '20px'}}><Link to={`/UserUpdate/${data.id}`}>Update Profile</Link></Button>
                 <Button><Link to="/ChangePassWord">Change PassWord</Link></Button>
             </div>
         </div>
