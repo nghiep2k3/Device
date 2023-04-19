@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import {Outlet, Link } from "react-router-dom";
 import { Layout, Menu, theme,Avatar,Button,Dropdown  } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/styles/index.css';
 import { axiosInstance } from '../../shared/services/http-client';
 const { Header, Sider, Content } = Layout;
@@ -16,12 +16,15 @@ const { Header, Sider, Content } = Layout;
 
 const Menus = ({ onLogout }) => {
     const [collapsed, setCollapsed] = useState(false);
-    const [data, setData] = useState('');
     const TOKEN = localStorage.getItem('TOKEN');
-    axiosInstance.get('/users/me?populate=role')
-    .then((res)=>{
-        setData(res);   
-})
+    
+    const [data, setData] = useState('');
+    useEffect(() => {
+        axiosInstance.get('/users/me?populate=role')
+            .then((res)=>{
+                setData(res);   
+            })
+    }, []);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -111,8 +114,12 @@ const Menus = ({ onLogout }) => {
                             <div>
                                 <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
                                     {data.username}
+                                    {/* Nguyen Nghiep */}
                                 </div>
-                                <div style={{marginLeft: '10px', marginTop: '22px'}}>{data.role?.name}</div>
+                                <div style={{marginLeft: '10px', marginTop: '22px'}}>
+                                    {data.role?.name}
+                                    {/* Admin */}
+                                </div>
                             </div>
                         </div>
                         </Dropdown>
