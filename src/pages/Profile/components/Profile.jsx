@@ -12,13 +12,15 @@ import { useState,useEffect } from 'react';
 
 
 function ListUser() {
-    const [data, setData] = useState('');
     const TOKEN = localStorage.getItem('TOKEN');
 
-    axiosInstance.get('/users/me')
-    .then((res)=>{
-        setData(res);   
-    })
+    const [data, setData] = useState('');
+    useEffect(() => {
+        axiosInstance.get('/users/me?populate=role')
+            .then((res)=>{
+                setData(res);   
+            })
+    }, []);
 
     return (
         <div>
