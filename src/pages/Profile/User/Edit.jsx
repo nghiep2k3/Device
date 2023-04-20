@@ -12,6 +12,7 @@ import {
   List,
   Table,
   Space,
+  Divider
 } from 'antd';
 import React, { useState, useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
@@ -40,7 +41,7 @@ const Create = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}`);
+        const response = await axiosInstance.get(`/users/${userId.id}?populate=role`);
         if (response) {
           setUserProfile(response);
         }
@@ -71,13 +72,13 @@ const Create = () => {
     
   useEffect(() => {
     form.setFieldsValue({
-      Name: userProfile?.username,
+      Username: userProfile?.username,
       Email: userProfile?.email,
-      Username:userProfile?.fullname,
+      Name:userProfile?.fullname,
       Phone_number:userProfile?.phoneNumber,
       Gender:userProfile?.gender,
       DOB:moment(userProfile?.dob),
-      Status:userProfile?.confirmed ? "Blocked" : "Active",
+      Status:userProfile?.blocked ? "Blocked" : "Active",
     });
   }, [form, userProfile]);
 
@@ -92,19 +93,19 @@ const Create = () => {
 
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-    console.log(formValues.Role);
+    
     let isFalse = formValues.Status === 'false';
     let bool = isFalse ? false : true;
     const data = {
       username: formValues.Username,
-      fullname: formValues.name,
+      fullname: formValues.Name,
       dob: formValues.DOB,
       phoneNumber: formValues.Phone_number,
       gender: formValues.Gender,
       password: formValues.Password,
       role: parseFloat(formValues.Role),
       blocked: bool,
-      createdAt: currentTime,
+      updatedAt: currentTime,
       devices: valueList,
     };
     axiosInstance
@@ -263,7 +264,7 @@ const Create = () => {
                 <Select
                   className={styles.inputc}
                   size="large"
-                  placeholder="Select owner Role"
+                  defaultValue={userProfile?.role.id}
                 >
                   <Select.Option value="1">User</Select.Option>
                   <Select.Option value="2">Public</Select.Option>
@@ -333,7 +334,7 @@ const Create = () => {
                 <Col span={12}>
                 
                 <div className={styles.right}>
-                    <h2> Select devices()</h2>
+                    <h2> Select devices({checkedList.length})</h2>
                     <div className={styles.box}>
                     <Table
                     dataSource={checkedList}
@@ -358,12 +359,12 @@ const Create = () => {
                 </Col>
             </Row>
             </div>
-
+          <Divider style={{ background: 'gray' }}/>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" className={styles.button} style={{background: '#8767E1'}} htmlType="submit">
               Save
             </Button>
-            <Button style={{ marginLeft: 8 }}>
+            <Button className={styles.button} style={{ marginLeft: 8 }}>
               <Link to="/UserManager">Cancel</Link>
             </Button>
           </Form.Item>

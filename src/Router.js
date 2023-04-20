@@ -26,7 +26,7 @@ import Edit from "./pages/Profile/User/Edit";
         element:<ListUser />,
       },
       {
-        path: '/UserUpdate',
+        path: '/UserUpdate/:id',
         element:<UserUpdate />,
       },
       {
@@ -34,7 +34,7 @@ import Edit from "./pages/Profile/User/Edit";
         element:<UserManager />,
       },
       {
-        path: '/Details',
+        path: '/Details/:id',
         element:<Details />,
       },
       {

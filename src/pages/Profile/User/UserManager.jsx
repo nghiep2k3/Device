@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from '../../../shared/services/http-client';
 import {Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select,Modal  } from 'antd';
 import debounce from "lodash/debounce";
+import styles from '../../../assets/styles/index.module.css';
 
 
 const deleteUser = (userId) => {
@@ -25,7 +26,7 @@ const deleteUser = (userId) => {
         .then((res) => {
             console.log(res)
             message.success('delete complete');
-          window.location.reload();
+            window.location.reload();
         })
         .catch((err) => {
             console.log(err)
@@ -131,7 +132,7 @@ const columns = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                <Link to="/Details"><EyeOutlined /></Link>
+                <Link to={`/Details/${record.id}`}><EyeOutlined /></Link>
                 <Link to={`/Edit/${record.id}`}><EditOutlined /></Link>
                 <DeleteOutlined onClick={() => deleteUser(record.id)} />
             </Space>
@@ -153,7 +154,7 @@ const UserManager = () => {
 
     const [searchEmail, setSearchEmail] = useState('username');
     const [searchResults, setSearchResults] = useState('');
-    const [searchTerm, setSearchTerm] = useState("");
+    
 
     useEffect(() => {
         axiosInstance.get(`/users`)
@@ -171,30 +172,20 @@ const UserManager = () => {
     }, 3000);
 
     
-    
-    const items = [
-        {
-            label: <a href="https://www.antgroup.com">Email</a>,
-            key: '0',
-        },
-        {
-            label: <a href="https://www.aliyun.com">Phone number</a>,
-            key: '1',
-        }
-    ];
-
 
 
     return (
         <div>
+            <div className={styles.form}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <div><h2>All Users</h2></div>
+                <div><h2 className={styles.tittle}>All Users</h2></div>
+                
                 <div>
-                    <Button type="primary" >
+                    <Button className={styles.button} style={{background: '#8767E1'}} type="primary" >
                         <Link to="/Create">Add User</Link>
                     </Button>
                 </div>
@@ -257,6 +248,7 @@ const UserManager = () => {
             </div>
            
             <Table columns={columns} dataSource={searchResults} />
+            </div>
         </div>
     )
 }
