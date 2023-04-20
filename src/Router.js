@@ -34,7 +34,7 @@ import Edit from "./pages/Profile/User/Edit";
         element:<UserManager />,
       },
       {
-        path: '/Details',
+        path: '/Details/:id',
         element:<Details />,
       },
       {

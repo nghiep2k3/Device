@@ -8,7 +8,7 @@ import {
 import styles from '../../../assets/styles/index.module.css';
 import React, { useState,useEffect } from 'react';
 import '../../../assets/styles/index.css';
-import { Avatar, Space, Layout, Menu, theme,Form, Input, InputNumber,DatePicker ,Col,Row,message} from 'antd';
+import { Avatar, Space, Layout, Menu, theme,Form, Input, Divider,DatePicker ,Col,Row,message} from 'antd';
 import { Button } from 'antd';
 
 import { Link ,useParams,useNavigate} from "react-router-dom";
@@ -181,9 +181,10 @@ function UserUpdate() {
 
             
             <div>
+            <Divider style={{ background: 'gray' }}/>
             <Form.Item>
-                <Button type="primary" style={{marginRight: '20px'}} htmlType="submit">Update Profile</Button>
-                <Button><Link to="/ListUser">Cancel</Link></Button>
+                <Button className={styles.button} type="primary" style={{marginRight: '20px',background: '#8767E1' }}  htmlType="submit">Update Profile</Button>
+                <Button className={styles.button}><Link to="/ListUser">Cancel</Link></Button>
             
             </Form.Item>
             </div>
