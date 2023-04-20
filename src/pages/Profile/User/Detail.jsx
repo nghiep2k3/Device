@@ -47,7 +47,7 @@ function Details() {
     return (
         <div>
             <div>
-                <h2 className={styles.tittle}>All user > {userProfile?.fullname}</h2>
+                <h2 className={styles.tittle}>All user &gt; {userProfile?.fullname}</h2>
             </div>
         <div className={styles.form}>
             <Form
