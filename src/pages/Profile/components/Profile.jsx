@@ -6,8 +6,9 @@ import { Avatar, Space } from 'antd';
 import { Button } from 'antd';
 import ListName from '../../../components/Viewprofile/ListName/ListName';
 import { axiosInstance } from '../../../shared/services/http-client';
-
+import styles from '../../../assets/styles/index.module.css';
 import { useState,useEffect } from 'react';
+
 
 
 
@@ -38,7 +39,7 @@ function ListUser() {
                 <div className='SetInfo'>
                     <div className='M100'>
                         <div>
-                            <ListName name={data.username} title="Name"/>
+                            <ListName name={data.fullname} title="Name"/>
                         </div>
 
                         <div style={{
@@ -72,8 +73,8 @@ function ListUser() {
             </div>
 
             <div className='ButtonUpdate'>
-                <Button type="primary" style={{marginRight: '20px'}}><Link to="/UserUpdate">Update Profile</Link></Button>
-                <Button><Link to="/ChangePassWord">Change PassWord</Link></Button>
+                <Button className={styles.button} type="primary" style={{marginRight: '20px',background: '#8767E1'}}><Link to={`/UserUpdate/${data.id}`}>Update Profile</Link></Button>
+                <Button className={styles.button}><Link to="/ChangePassWord">Change PassWord</Link></Button>
             </div>
         </div>
         </div>

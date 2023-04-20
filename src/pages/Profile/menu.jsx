@@ -113,12 +113,12 @@ const Menus = ({ onLogout }) => {
                             <div><Avatar icon={<UserOutlined />} /></div>
                             <div>
                                 <div style={{ fontWeight: 'bold', color: 'black', marginLeft: '10px', marginTop: '4px' }}>
-                                    {data.username}
-                                    {/* Nguyen Nghiep */}
+                                    {data.fullname}
+                                    
                                 </div>
                                 <div style={{marginLeft: '10px', marginTop: '22px'}}>
                                     {data.role?.name}
-                                    {/* Admin */}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,6 @@ const Menus = ({ onLogout }) => {
                         margin: '24px 16px',
                         padding: 24,
                         minHeight: 280,
-                        background: colorBgContainer,
                     }}
                 >
                     <Outlet/>

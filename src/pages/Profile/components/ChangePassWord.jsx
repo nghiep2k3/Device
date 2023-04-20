@@ -3,7 +3,7 @@ import { Input, Form, Button,message } from 'antd';
 import React,{ useState }  from 'react';
 import '../../../assets/styles/index.css';
 import { axiosInstance } from '../../../shared/services/http-client';
-
+import styles from '../../../assets/styles/index.module.css';
 
 function Change() {
     const onFinish = (values) => {
@@ -89,12 +89,12 @@ function Change() {
             >
             <Input.Password />
             </Form.Item>
-
+           
             <Form.Item >
-            <Button type="primary" htmlType="submit" >
+            <Button className={styles.button} style={{background: '#8767E1'}} type="primary" htmlType="submit" >
                 Save
             </Button>
-            <Button style={{ marginLeft: 8 }}>
+            <Button  className={styles.button} style={{ marginLeft: 8 }}>
                 <Link to="/ListUser">Cancel</Link>
             </Button>
             </Form.Item>

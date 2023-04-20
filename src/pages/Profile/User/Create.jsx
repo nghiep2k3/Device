@@ -1,5 +1,5 @@
 import { Link ,useNavigate  } from "react-router-dom";
-import { Input, Form, Button, Col, Row,Select ,DatePicker,message,Checkbox,List, Table,Space } from 'antd';
+import { Input, Form, Button, Col, Row,Select ,DatePicker,message,Checkbox,List, Table,Space ,Divider} from 'antd';
 import React , {useState,useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
 import { axiosInstance } from '../../../shared/services/http-client.js';
@@ -84,7 +84,7 @@ const Create = () => {
             <h2 className={styles.tittle}>All user > Add new user</h2>
         
         <div>
-        
+            <div className={styles.form}>
             <Form
                 name="create_form"
                 onFinish={onFinish}
@@ -255,7 +255,7 @@ const Create = () => {
                 <Col span={12}>
                 
                 <div className={styles.right}>
-                    <h2> Select devices()</h2>
+                    <h2> Select devices({checkedList.length})</h2>
                     <div className={styles.box}>
                     <Table
                     dataSource={checkedList}
@@ -281,16 +281,17 @@ const Create = () => {
             </Row>
             </div>
             
-
+            <Divider style={{ background: 'gray' }}/>
             <Form.Item >
-            <Button type="primary" htmlType="submit" >
+            <Button type="primary" className={styles.button} style={{background: '#8767E1'}}  htmlType="submit" >
                 Save
             </Button>
-            <Button style={{ marginLeft: 8 }}>
+            <Button className={styles.button} style={{ marginLeft: 8 }}>
                 <Link to="/UserManager">Cancel</Link>
             </Button>
             </Form.Item>
         </Form>
+        </div>
     </div>
     </div>
     );
