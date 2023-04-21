@@ -1,0 +1,61 @@
+.inputc{
+    width: 90% !important;
+    height: 40px;
+}
+.inputp{
+    width: 100% !important;
+    height: 40px;
+}
+.lic{
+    list-style: none;
+    padding-top: 20px;
+}
+.deletec{
+    margin-left: 40px;
+}
+.iconc{
+    width: 15px;
+    height: 15px;
+}
+.container{
+    border-radius: 10px;
+    border: 2px solid gray;
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    
+}
+.left{
+    margin-left: 20px;
+    border-right: 2px solid gray;  
+}
+.left2{
+    margin-left: 20px;
+    font-size: 20px;
+    height: 200px;
+}
+.box{
+    max-height: 250px;
+    overflow: auto;
+}
+.right{
+    padding-left: 20px;
+    
+}
+.tittle{
+    font-size: 40px;
+}
+.detail{
+    font-size: 20px;
+}
+.form{
+    align-items: center;
+    padding: 16px;
+    gap: 24px;
+    background: #FFFFFF;
+    border-radius: 16px;
+}
+.button{
+    height: 48px;
+    font-size: 16px;
+}

@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
+import ReactDOM from "react-dom/client"
+import './assets/styles/index.css';
 
-function App() {
-  return <h1>Hello world.</h1>;
+import router from './Router';
+import { RouterProvider } from 'react-router-dom';
+
+export default function App() {
+
+  return (
+    <RouterProvider router={router}></RouterProvider>
+
+  );
 }
 
-export default App;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
