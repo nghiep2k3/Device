@@ -44,28 +44,16 @@ function Status() {
     
     const items = [
         {
-            label: '1st menu item',
+            label: 'Active',
             key: '1',
             icon: <UserOutlined />,
         },
         {
-            label: '2nd menu item',
+            label: 'Blocked',
             key: '2',
             icon: <UserOutlined />,
         },
-        {
-            label: '3rd menu item',
-            key: '3',
-            icon: <UserOutlined />,
-            danger: true,
-        },
-        {
-            label: '4rd menu item',
-            key: '4',
-            icon: <UserOutlined />,
-            danger: true,
-            disabled: true,
-        },
+        
     ];
     const menuProps = {
         items,

@@ -70,7 +70,7 @@
     font-size: 40px;
 }
 .detail{
-    font-size: 20px;
+    font-size: 20px !important;
 }
 .form{
     align-items: center;
