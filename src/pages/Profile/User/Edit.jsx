@@ -41,10 +41,24 @@ const Create = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}?populate=role`);
+        const response = await axiosInstance.get(`/users/${userId.id}?populate=role,devices`);
         if (response) {
           setUserProfile(response);
+          const newCheckedList = response.devices.map(device => {
+            // Tạo bản sao của đối tượng device và xóa trường id
+            const value = { ...device };
+            delete value.id;
           
+            // Tạo đối tượng mới chỉ với các thuộc tính cần thiết
+            return {
+              label: device.code,
+              value: {
+                id:device.id,
+                attributes:value,
+              }
+            };
+          });
+          setCheckedList(newCheckedList);
         }
       } catch (error) {
         console.error(error);
@@ -97,7 +111,7 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
-  
+  console.log(checkedList)
   const onFinish = values => {
     const moment = require('moment');
 
@@ -324,6 +338,7 @@ const Create = () => {
                                     } else {
                                         setCheckedList(checkedList.filter((o) => o.value !== item.value));
                                     }
+                                    console.log(checkedList);
                                     }}
                                 >
                                     {item.label}
