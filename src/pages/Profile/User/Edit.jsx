@@ -41,7 +41,7 @@ const Create = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}`);
+        const response = await axiosInstance.get(`/users/${userId.id}?populate=role`);
         if (response) {
           setUserProfile(response);
           
@@ -70,7 +70,15 @@ const Create = () => {
       fetchDevices();
     }, [search, hasUserInput]);
     
-    
+    let roleValue;
+
+    if (userProfile?.role.id === 1) {
+      roleValue = "1";
+    } else if (userProfile?.role.id === 2) {
+      roleValue = "2";
+    } else {
+      roleValue = "3";
+    }  
   useEffect(() => {
     form.setFieldsValue({
       Username: userProfile?.username,
@@ -79,7 +87,8 @@ const Create = () => {
       Phone_number:userProfile?.phoneNumber,
       Gender:userProfile?.gender,
       DOB:moment(userProfile?.dob),
-      Status:userProfile?.blocked ? "Blocked" : "Active",
+      Status:userProfile?.blocked ? "true" : "false",
+      Role:roleValue,
     });
   }, [form, userProfile]);
 
@@ -95,11 +104,12 @@ const Create = () => {
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
     
-    let isFalse = formValues.Status === 'false';
-    let bool = isFalse ? false : true;
+    let isFalse = formValues.Status === 'true';
+    let bool = isFalse ? true : false;
     const data = {
       username: formValues.Username,
       fullname: formValues.Name,
+      email: formValues.Email,
       dob: formValues.DOB,
       phoneNumber: formValues.Phone_number,
       gender: formValues.Gender,
@@ -141,9 +151,7 @@ const Create = () => {
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your name!' }]}
               >
-                <Input 
-                className={styles.inputc}
-                defaultValue={userProfile?.name}/>
+                <Input className={styles.inputc}/>
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -161,8 +169,6 @@ const Create = () => {
               >
                 <Input
                   className={styles.inputc}
-                  defaultValue={userProfile?.email}
-                  disabled
                 />
               </Form.Item>
             </Col>
@@ -265,7 +271,7 @@ const Create = () => {
                 <Select
                   className={styles.inputc}
                   size="large"
-                  defaultValue={userProfile?.role.id}
+                  
                 >
                   <Select.Option value="1">User</Select.Option>
                   <Select.Option value="2">Public</Select.Option>
@@ -285,7 +291,6 @@ const Create = () => {
                 <Select
                   className={styles.inputc}
                   size="large"
-                  placeholder="Select owner Role"
                 >
                   <Select.Option value="false">Active</Select.Option>
                   <Select.Option value="true">Blocked</Select.Option>
