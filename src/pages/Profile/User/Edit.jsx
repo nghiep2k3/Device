@@ -41,9 +41,10 @@ const Create = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}?populate=role`);
+        const response = await axiosInstance.get(`/users/${userId.id}`);
         if (response) {
           setUserProfile(response);
+          
         }
       } catch (error) {
         console.error(error);
