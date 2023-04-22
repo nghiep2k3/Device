@@ -11,79 +11,67 @@ import {
     EditOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { axiosInstance } from '../../../shared/services/http-client';
-import {Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select,Modal  } from 'antd';
+import { Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag, Select, Modal } from 'antd';
 import debounce from "lodash/debounce";
 import styles from '../../../assets/styles/index.module.css';
 
 
 const deleteUser = (userId) => {
     if (window.confirm("Do you want to delete this user?")) {
-      axiosInstance
-        .delete(`/users/${userId}`)
-        .then((res) => {
-            console.log(res)
-            message.success('delete complete');
-            window.location.reload();
-        })
-        .catch((err) => {
-            console.log(err)
-            message.error('có lỗi');
-        });
+        axiosInstance
+            .delete(`/users/${userId}`)
+            .then((res) => {
+                console.log(res)
+                message.success('delete complete');
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err)
+                message.error('có lỗi');
+            });
     }
-  };
-  
-  
-function Status() {
-    const handleMenuClick = (e) => {
-        message.info('Click on menu item.');
-        console.log('click', e);
-    };
-    
-    const items = [
-        {
-            label: '1st menu item',
-            key: '1',
-            icon: <UserOutlined />,
-        },
-        {
-            label: '2nd menu item',
-            key: '2',
-            icon: <UserOutlined />,
-        },
-        {
-            label: '3rd menu item',
-            key: '3',
-            icon: <UserOutlined />,
-            danger: true,
-        },
-        {
-            label: '4rd menu item',
-            key: '4',
-            icon: <UserOutlined />,
-            danger: true,
-            disabled: true,
-        },
-    ];
-    const menuProps = {
-        items,
-        onClick: handleMenuClick,
-    };
-    return (
-        <div>
-            <Dropdown menu={menuProps}>
-                <Button>
-                    <Space style={{ gap: '50px' }}>
-                        Status
-                        <DownOutlined />
-                    </Space>
-                </Button>
-            </Dropdown>
-        </div>
-    )
-}
+};
+
+
+// function Status() {
+
+//     const [Status, setStatus] = useState('true');
+//     const handleSearchStatus = debounce(async (event) => {
+//         const { value } = event.target;
+//         axiosInstance.get(`/users?filters[blocked][$eq]=${value}`)
+//             .then((res) => {
+//                 setSearchResults(res);
+//             })
+//     }, 2000);
+
+
+//     return (
+//         <div>
+//             <Select menu={menuProps}
+//                 defaultValue="Name"
+//                 style={{
+//                     width: 120,
+//                 }}
+//                 onChange={(e) => {
+
+//                     setSearchEmail(e)
+//                 }}
+//                 options={[
+//                     {
+//                         value: 'false',
+//                         label: 'Active',
+//                     }, {
+//                         value: 'true',
+//                         label: 'Inactive',
+//                     },
+//                 ]}
+//             />
+//         </div>
+//     )
+// }
 
 
 
@@ -98,7 +86,7 @@ const columns = [
         title: 'Name',
         dataIndex: 'username',
         key: 'username',
-        
+
     },
     {
         title: 'Email',
@@ -142,112 +130,143 @@ const columns = [
 
 
 const UserManager = () => {
+    const [searchEmail, setSearchEmail] = useState('username');
+    const [searchResults, setSearchResults] = useState('');
+    const [Status, setStatus] = useState('false');
 
 
     const { Search } = Input;
     const onSearch = (value) => {
-        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
-        .then((res) => {
-            setSearchResults(res);
-        })
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}&filters[blocked][$eq]=${Status}`)
+            .then((res) => {
+                setSearchResults(res);
+            })
     };
 
-    const [searchEmail, setSearchEmail] = useState('username');
-    const [searchResults, setSearchResults] = useState('');
-    
+    // /users?filters[username][$contains]=nghiep&filters[blocked][$eq]=false
 
     useEffect(() => {
         axiosInstance.get(`/users`)
-        .then((res) => {
-            setSearchResults(res);
-    })
+            .then((res) => {
+                setSearchResults(res);
+            })
     }, [])
 
     const handleSearchInputChange = debounce(async (event) => {
         const { value } = event.target;
-        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}`)
-        .then((res) => {
-            setSearchResults(res);
-        })
-    }, 3000);
+        axiosInstance.get(`/users?filters[${searchEmail}][$contains]=${value}&filters[blocked][$eq]=${Status}`)
+            .then((res) => {
+                setSearchResults(res);
+            })
+    }, 2000);
 
-    
+    // const handleSearchStatus = debounce(async () => {
+    //     setStatus(!Status);
+    //     console.log(Status);
+
+    //     axiosInstance.get(`/users?filters[blocked][$eq]=${Status}`)
+    //         .then((res) => {
+    //             setSearchResults(res);
+    //         })
+    // }, 1000);
 
 
     return (
         <div>
             <div className={styles.form}>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-                <div><h2 className={styles.tittle}>All Users</h2></div>
-                
-                <div>
-                    <Button className={styles.button} style={{background: '#8767E1'}} type="primary" >
-                        <Link to="/Create">Add User</Link>
-                    </Button>
-                </div>
-            </div>
-
-            <div>
                 <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
                 }}>
+                    <div><h2 className={styles.tittle}>All Users</h2></div>
+
+                    <div>
+                        <Button className={styles.button} style={{ background: '#8767E1' }} type="primary" >
+                            <Link to="/Create">Add User</Link>
+                        </Button>
+                    </div>
+                </div>
+
+                <div>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        border: '2px solid black',
-                        width: 'max-content',
-                        borderRadius: '10px'
+
                     }}>
-                        <div>
-                            <Select
-                                        defaultValue="Name"
-                                        style={{
-                                            width: 120,
-                                        }}
-                                        onChange={(e)=>{
-                                            
-                                            setSearchEmail(e)
-                                        }}
-                                        options={[
-                                            {
-                                                value: 'email',
-                                                label: 'Email',
-                                            }, {
-                                                value: 'username',
-                                                label: 'Name',
-                                            },
-                                        ]}
-                            />
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            border: '2px solid black',
+                            width: 'max-content',
+                            borderRadius: '10px'
+                        }}>
+                            <div>
+                                <Select 
+                                    bordered={false}
+                                    defaultValue="Name"
+                                    style={{
+                                        width: 120,
+                                        border: 'none'
+                                    }}
+                                    onChange={(e) => {
+                                        setSearchEmail(e)
+                                    }}
+                                    options={[
+                                        {
+                                            value: 'email',
+                                            label: 'Email',
+                                        }, {
+                                            value: 'username',
+                                            label: 'Name',
+                                        },
+                                    ]}
+                                />
+                            </div>
+
+                            <div>
+                                <Search
+                                    placeholder="Search"
+                                    allowClear
+                                    bordered={false}
+                                    onSearch={onSearch}
+                                    onChange={handleSearchInputChange}
+                                    style={{
+                                        width: 200,
+                                        marginLeft: '20px'
+                                    }}
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <Search
-                                placeholder="Search"
-                                allowClear
-                                bordered={false}
-                                onSearch={onSearch}
-                                onChange={handleSearchInputChange}
-                                style={{
-                                    width: 200,
-                                    marginLeft: '20px'
-                                }}
-                            />
+                        <div style={{ marginLeft: '50px' }}>
+                            <div>
+                                <Select 
+                                    defaultValue="Status"
+                                    style={{
+                                        width: 120,
+                                    }}
+
+                                    onChange={(e) => {
+                                        console.log(e);
+                                        setStatus(e)
+                                    }}
+                                    options={[
+                                        {
+                                            value: 'false',
+                                            label: 'Active',
+                                        }, {
+                                            value: 'true',
+                                            label: 'Inactive',
+                                        },
+                                    ]}
+                                />
+                            </div>
                         </div>
                     </div>
-
-                    <div style={{ marginLeft: '50px' }}>
-                        <Status></Status>
-                    </div>        
                 </div>
-            </div>
-           
-            <Table columns={columns} dataSource={searchResults} />
+
+                <Table columns={columns} dataSource={searchResults} />
             </div>
         </div>
     )
