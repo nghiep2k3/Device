@@ -127,7 +127,6 @@ const Create = () => {
       dob: formValues.DOB,
       phoneNumber: formValues.Phone_number,
       gender: formValues.Gender,
-      password: formValues.Password,
       role: parseFloat(formValues.Role),
       blocked: bool,
       updatedAt: currentTime,
@@ -150,7 +149,7 @@ const Create = () => {
     <div>
       <h2 className={styles.tittle}>All user {userProfile?.username}</h2>
 
-      <div>
+      <div className={styles.form}>
         <Form
           name="create_form"
           onFinish={onFinish}
@@ -203,21 +202,7 @@ const Create = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={8}>
-              <Form.Item
-                label={<label className={styles.detail}>Password</label>}
-                name="Password"
-                labelCol={{ span: 24 }}
-                rules={[
-                  { required: true, message: 'Please input your Password!' },
-                ]}
-              >
-                <Input.Password
-                  className={styles.inputc}
-                  placeholder="Enter owner password"
-                />
-              </Form.Item>
-            </Col>
+         
             <Col span={8}>
               <Form.Item
                 label={<label className={styles.detail}>Phone number</label>}
@@ -258,8 +243,6 @@ const Create = () => {
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row>
             <Col span={8}>
               <Form.Item
                 label={<label className={styles.detail}>DOB</label>}
@@ -275,6 +258,8 @@ const Create = () => {
                 />
               </Form.Item>
             </Col>
+          </Row>
+          <Row>
             <Col span={8}>
               <Form.Item
                 label={<label className={styles.detail}>Role</label>}

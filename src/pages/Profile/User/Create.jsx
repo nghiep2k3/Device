@@ -232,7 +232,7 @@ const Create = () => {
                                 <List.Item>
                                 <Checkbox
                                     value={item.value}
-                                    checked={checkedList.some((o) => o.value === item.value)}
+                                    checked={checkedList.some((o) => o.value == item.value)}
                                     onChange={(e) => {
                                     if (e.target.checked) {
                                         setCheckedList([...checkedList, item]);

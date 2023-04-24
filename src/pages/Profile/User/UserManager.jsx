@@ -1,12 +1,6 @@
 import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
     UserOutlined,
-    VideoCameraOutlined,
-    AppstoreOutlined,
     DownOutlined,
-    AudioOutlined,
     EyeOutlined,
     EditOutlined,
     DeleteOutlined,
@@ -14,7 +8,7 @@ import {
 import React, { useState, useEffect  } from 'react';
 import { Link } from "react-router-dom";
 import { axiosInstance } from '../../../shared/services/http-client';
-import {Layout, Menu, theme, Avatar, Space, Button, Dropdown, Input, message, Table, Tag,Select,Modal  } from 'antd';
+import { Space, Button, Dropdown, Input, message, Table, Tag,Select  } from 'antd';
 import debounce from "lodash/debounce";
 import styles from '../../../assets/styles/index.module.css';
 
