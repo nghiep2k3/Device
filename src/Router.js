@@ -10,6 +10,8 @@ import UserManager from "./pages/Profile/User/UserManager";
 import Details from "./pages/Profile/User/Detail";
 import Create from "./pages/Profile/User/Create";
 import Edit from "./pages/Profile/User/Edit";
+import DeviceManager from './components/DeviceManager/DeviceManager'
+import CreateDevice from "./components/CreateDevice/CreateDevice";
   const router = createBrowserRouter([
     {
       path: "/",
@@ -45,6 +47,14 @@ import Edit from "./pages/Profile/User/Edit";
         
         path: '/Edit/:id',
         element:<Edit />,
+      },
+      {
+        path: '/DeviceManager',
+        element:<DeviceManager />,
+      },
+      {
+        path: '/CreateDevice',
+        element:<CreateDevice />,
       }
     ]
     }

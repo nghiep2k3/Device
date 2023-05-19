@@ -81,7 +81,7 @@ const Create = () => {
             };
     return (
         <div>
-            <h2 className={styles.tittle}>All user > Add new user</h2>
+            <h2 className={styles.tittle}>All user &gt; Add new user</h2>
         
         <div>
             <div className={styles.form}>
