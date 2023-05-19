@@ -6,7 +6,10 @@
     background-color: rgb(230, 225, 225);
     padding: 80px 80px 80px 80px;
     border-radius: 10px;
-    border: solid black 2px;
+    border: solid rgb(126, 122, 122) 2px;
+    box-shadow: 0px 4px 55px rgba(0, 0, 0, 0.07);
+    border-radius: 16px;
+    width: 30%;
   }
   .SetupHeight{
     height: 140vh;
@@ -17,6 +20,7 @@
     border: 1px solid black;
     border-radius: 10px;
     background-color: white;
+    
 }
 
 .SetupUser{

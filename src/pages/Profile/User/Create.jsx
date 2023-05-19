@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Input, Form, Button, Col, Row, Select, DatePicker, message, Checkbox, List, Table, Space, Divider } from 'antd';
-import React, { useState, useEffect } from 'react';
+import { Link ,useNavigate  } from "react-router-dom";
+import { Input, Form, Button, Col, Row,Select ,DatePicker,message,Checkbox,List, Table,Space ,Divider} from 'antd';
+import React , {useState,useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
 import { axiosInstance } from '../../../shared/services/http-client.js';
 const Create = () => {
@@ -13,32 +13,32 @@ const Create = () => {
     const navigate = useNavigate();
     const handleDobChange = (value) => {
         setDob(value);
-    }
+      }
     const handleDelete = (record) => {
         setCheckedList(checkedList.filter((item) => item.value !== record.value));
-    };
-    const handleSearch = (event) => {
+      };
+      const handleSearch = (event) => {
         setSearch(event.target.value);
         setHasUserInput(true);
-    };
-    useEffect(() => {
+      };
+      useEffect(() => {
         if (!hasUserInput) return;
-
+      
         const fetchDevices = async () => {
-            try {
-                const response = await axiosInstance.get(`/devices?filters[code][$contains]=${search}`);
-                if (response.data) {
-                    setDeviceNames(response.data);
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setHasUserInput(false);
+          try {
+            const response = await axiosInstance.get(`/devices?filters[code][$contains]=${search}`);
+            if (response.data) {
+              setDeviceNames(response.data);
             }
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setHasUserInput(false);
+          }
         };
         fetchDevices();
-    }, [search, hasUserInput]);
-
+      }, [search, hasUserInput]);
+      
     const plainOptions = deviceNames.map((device) => ({
         label: device.attributes.code,
         value: device,
@@ -46,11 +46,10 @@ const Create = () => {
     const valueList = checkedList.map((item) => item.value);
     const onFinish = (values) => {
         const moment = require('moment');
-
+        
         const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
         const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-
-        console.log(formValues)
+        console.log(formValues.Role)   
         let isFalse = (formValues.Status === "false"); // kiểm tra chuỗi có giống "false" hay không
         let bool = isFalse ? false : true;
         const data = {
@@ -65,243 +64,240 @@ const Create = () => {
             blocked: bool,
             createdAt: currentTime,
             devices: valueList
-        };
-
-        axiosInstance.post('/users', data)
-            .then((response) => {
-                if (response != null) {
-
-                    message.success('correct');
-                    navigate('/UserManager');
-                }
+          };
+          axiosInstance.post('/users', data)
+          .then((response) => {
+          if (response != null) {
+            
+              message.success('correct');
+              navigate('/UserManager');
+          } 
             })
             .catch((error) => {
                 console.log(error);
                 message.error('error');
-        });
-
-    };
-
+            });
+                
+            };
     return (
         <div>
             <h2 className={styles.tittle}>All user &gt; Add new user</h2>
-
-            <div>
-                <div className={styles.form}>
-                    <Form
-                        name="create_form"
-                        onFinish={onFinish}
-                        form={form}
+        
+        <div>
+            <div className={styles.form}>
+            <Form
+                name="create_form"
+                onFinish={onFinish}
+                form={form}
+            > 
+            <Row>
+            <Col span={8}>
+                <Form.Item
+                    label={<label className={styles.detail}>Name</label>}
+                    name="Name"
+                    labelCol={{ span: 24 }}
+                    rules={[{ required: true, message: 'Please input your name!' }]}
+                >
+                <Input className={styles.inputc} placeholder="Enter owner name" />
+            </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Email</label>}
+                        name="Email"
+                        labelCol={{ span: 24 }}
+                        rules={[    { required: true, message: 'Please input your Email!' },
+                                    { type: 'email',message: 'Please enter a valid email address',},]}
                     >
-                        <Row>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Name"
-                                    name="Name"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your name!' }]}
+                    <Input className={styles.inputc} placeholder="Enter owner email"/>
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Username</label>}
+                        name="Username"
+                        labelCol={{ span: 24 }}
+                        rules={[{ required: true, message: 'Please input your Username !' }]}
+                    >
+                    <Input className={styles.inputc} placeholder="Enter owner username" />
+                </Form.Item>
+            </Col>
+            </Row>
+            <Row>
+            <Col span={8}>
+                <Form.Item
+                    label={<label className={styles.detail}>Password</label>}
+                    name="Password"
+                    labelCol={{ span: 24 }}
+                    rules={[    
+                        { required: true, message: 'Please input your new password!' },    
+                        { max: 8, message: 'Password must not exceed 8 characters!' },    
+                        { pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{1,}$/, 
+                        message: 'Password must contain at least one uppercase letter, one number, and one special character!' }
+                    ]}
+                >
+                <Input.Password className={styles.inputc} placeholder="Enter owner password" />
+            </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Phone number</label>}
+                        name="Phone_number"
+                        labelCol={{ span: 24 }}
+                        rules={[
+                            { required: true, message: 'Please input your Phone number!' },
+                            { pattern: /^\d+$/, message: 'Please enter numbers only', },
+                            {max: 10,message: 'Please enter no more than 10 digits',},
+                        ]}
+                    >
+                    <Input className={styles.inputc} placeholder="Enter owner phone number"/>
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Gender</label>}
+                        name="Gender"
+                        labelCol={{ span: 24 }}
+                        rules={[{ required: true, message: 'Please input your Gender !' }]}
+                    >
+                    <Select className={styles.inputc} size='large' placeholder="Select owner gender">
+                        <Select.Option value="male">Male</Select.Option>
+                        <Select.Option value="female">Female</Select.Option>
+                        <Select.Option value="None">None</Select.Option>
+                    </Select>
+                </Form.Item>
+            </Col>
+            </Row>
+            <Row>
+            <Col span={8}>
+                <Form.Item
+                    label={<label className={styles.detail}>DOB</label>}
+                    name="DOB"
+                    labelCol={{ span: 24 }}
+                    
+                    rules={[{ required: true, message: 'Please input your DOB!' }]}
+                >
+                <DatePicker 
+                    className={styles.inputc} 
+                    value={dob}
+                    onChange={handleDobChange} 
+                    placeholder="Select a date"/>
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Role</label>}
+                        name="Role"
+                        labelCol={{ span: 24 }}
+                        rules={[{ required: true, message: 'Please input your Role!' }]}
+                    >
+                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
+                        <Select.Option value="1">User</Select.Option>
+                        <Select.Option value="2">Public</Select.Option>
+                        <Select.Option value="3">Admin</Select.Option>
+                    </Select>
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item
+                        label={<label className={styles.detail}>Status</label>}
+                        name="Status"
+                        labelCol={{ span: 24 }}
+                        rules={[{ required: true, message: 'Please input your Status!' }]}
+                    >
+                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
+                        <Select.Option value="false">Active</Select.Option>
+                        <Select.Option value="true">Blocked</Select.Option>
+                    </Select>
+                </Form.Item>
+            </Col>
+            </Row>
+            <Row><label className={styles.detail}>Device</label></Row>
+            <div className={styles.container}>
+            <Row>
+                <Col span={12}>
+                
+                    <div>
+                    
+                    <div className={styles.left}>
+                        <input 
+                            className={styles.inputc}   
+                            placeholder="Search for devices ..."
+                            value={search}
+                            onChange={handleSearch}/>
+                        <div className={styles.box}>
+                        <List
+                            dataSource={plainOptions}
+                            renderItem={(item) => (
+                                <List.Item>
+                                <Checkbox
+                                    value={item.value}
+                                    checked={checkedList.some((o) => o.value == item.value)}
+                                    onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setCheckedList([...checkedList, item]);
+                                    } else {
+                                        setCheckedList(checkedList.filter((o) => o.value !== item.value));
+                                    }
+                                    }}
                                 >
-                                    <Input className={styles.inputc} placeholder="Enter owner name" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Email"
-                                    name="Email"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your Email!' },
-                                    { type: 'email', message: 'Please enter a valid email address', },]}
-                                >
-                                    <Input className={styles.inputc} placeholder="Enter owner email" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Username"
-                                    name="Username"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your Username !' }]}
-                                >
-                                    <Input className={styles.inputc} placeholder="Enter owner username" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Password"
-                                    name="Password"
-                                    labelCol={{ span: 24 }}
-                                    rules={[
-                                        { required: true, message: 'Please input your new password!' },
-                                        { max: 8, message: 'Password must not exceed 8 characters!' },
-                                        {
-                                            pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{1,}$/,
-                                            message: 'Password must contain at least one uppercase letter, one number, and one special character!'
-                                        }
-                                    ]}
-                                >
-                                    <Input.Password className={styles.inputc} placeholder="Enter owner password" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Phone number"
-                                    name="Phone_number"
-                                    labelCol={{ span: 24 }}
-                                    rules={[
-                                        { required: true, message: 'Please input your Phone number!' },
-                                        { pattern: /^\d+$/, message: 'Please enter numbers only', },
-                                        { max: 10, message: 'Please enter no more than 10 digits', },
-                                    ]}
-                                >
-                                    <Input className={styles.inputc} placeholder="Enter owner phone number" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Gender"
-                                    name="Gender"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your Gender !' }]}
-                                >
-                                    <Select className={styles.inputc} size='large' placeholder="Select owner gender">
-                                        <Select.Option value="male">Male</Select.Option>
-                                        <Select.Option value="female">Female</Select.Option>
-                                        <Select.Option value="None">None</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="DOB"
-                                    name="DOB"
-                                    labelCol={{ span: 24 }}
-
-                                    rules={[{ required: true, message: 'Please input your DOB!' }]}
-                                >
-                                    <DatePicker
-                                        className={styles.inputc}
-                                        value={dob}
-                                        onChange={handleDobChange}
-                                        placeholder="Select a date" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Role"
-                                    name="Role"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your Role!' }]}
-                                >
-                                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
-                                        <Select.Option value="1">User</Select.Option>
-                                        <Select.Option value="2">Public</Select.Option>
-                                        <Select.Option value="3">Admin</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    label="Status"
-                                    name="Status"
-                                    labelCol={{ span: 24 }}
-                                    rules={[{ required: true, message: 'Please input your Status!' }]}
-                                >
-                                    <Select className={styles.inputc} size='large' placeholder="Select owner Role">
-                                        <Select.Option value="false">Active</Select.Option>
-                                        <Select.Option value="true">Blocked</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>Device</Row>
-                        <div className={styles.container}>
-                            <Row>
-                                <Col span={12}>
-
-                                    <div>
-
-                                        <div className={styles.left}>
-                                            <input
-                                                className={styles.inputc}
-                                                placeholder="Search for devices ..."
-                                                value={search}
-                                                onChange={handleSearch} />
-                                            <div className={styles.box}>
-                                                <List
-                                                    dataSource={plainOptions}
-                                                    renderItem={(item) => (
-                                                        <List.Item>
-                                                            <Checkbox
-                                                                value={item.value}
-                                                                checked={checkedList.some((o) => o.value === item.value)}
-                                                                onChange={(e) => {
-                                                                    if (e.target.checked) {
-                                                                        setCheckedList([...checkedList, item]);
-                                                                    } else {
-                                                                        setCheckedList(checkedList.filter((o) => o.value !== item.value));
-                                                                    }
-                                                                }}
-                                                            >
-                                                                {item.label}
-                                                            </Checkbox>
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </Col>
-                                <Col span={12}>
-
-                                    <div className={styles.right}>
-                                        <h2> Select devices({checkedList.length})</h2>
-                                        <div className={styles.box}>
-                                            <Table
-                                                dataSource={checkedList}
-                                                columns={[
-                                                    {
-                                                        dataIndex: 'label',
-                                                        key: 'label',
-                                                    },
-                                                    {
-
-                                                        key: 'action',
-                                                        render: (text, record) => (
-                                                            <Space size="middle">
-                                                                <a onClick={() => handleDelete(record)}>Delete</a>
-                                                            </Space>
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
+                                    {item.label}
+                                </Checkbox>
+                                </List.Item>
+                            )}
+                            />
                         </div>
-
-                        <Divider style={{ background: 'gray' }} />
-                        <Form.Item >
-                            <Button type="primary" className={styles.button} style={{ background: '#8767E1' }} htmlType="submit" >
-                                Save
-                            </Button>
-                            <Button className={styles.button} style={{ marginLeft: 8 }}>
-                                <Link to="/UserManager">Cancel</Link>
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                    </div>
+                    </div>
+                    
+                
+                </Col>
+                <Col span={12}>
+                
+                <div className={styles.right}>
+                    <h2> Select devices({checkedList.length})</h2>
+                    <div className={styles.box}>
+                    <Table
+                    dataSource={checkedList}
+                    pagination={{ pageSize: 3 }}
+                    columns={[
+                        {
+                        dataIndex: 'label',
+                        key: 'label',
+                        },
+                        {
+                       
+                        key: 'action',
+                        render: (text, record) => (
+                            <Space size="middle">
+                            <a onClick={() => handleDelete(record)}>Delete</a>
+                            </Space>
+                        ),
+                        },
+                    ]}
+                    />
                 </div>
+                </div>
+                </Col>
+            </Row>
             </div>
+            
+            <Divider style={{ background: 'gray' }}/>
+            <Form.Item >
+            <Button type="primary" className={styles.button} style={{background: '#8767E1'}}  htmlType="submit" >
+                Save
+            </Button>
+            <Button className={styles.button} style={{ marginLeft: 8 }}>
+                <Link to="/UserManager">Cancel</Link>
+            </Button>
+            </Form.Item>
+        </Form>
         </div>
+    </div>
+    </div>
     );
-
-
+            
+        
 }
 
 
