@@ -62,24 +62,26 @@ const CreateDevice = () => {
         // const Username = {data: us}
 
         const data = {
-            name: formValues.Name,
+            data:{
+                name: formValues.Name,
             code: formValues.Code,
             status: formValues.Gender,
             address: formValues.intro,
-            user: {
-                data: {
-                    attributes: {
-                        username: "Nghiep"
-                    }
-                }
+            // user: {
+            //     data: {
+            //         attributes: {
+            //             username: "Nghiep"
+            //         }
+            //     }
+            // }
             }
         };
 
-        const datas = { data: data };
+        // const datas = { data: data };
 
-        console.log(1111, datas);
+        console.log(1111, data);
 
-        axiosInstance.post('/devices', datas)
+        axiosInstance.post('/devices', data)
             .then((response) => {
                 if (response != null) {
                     message.success('correct');

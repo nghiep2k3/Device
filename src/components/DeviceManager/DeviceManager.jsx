@@ -207,7 +207,7 @@ const columns = [
 // ];
 
 const {Content } = Layout;
-const UserManager = () => {
+const DeviceManager = () => {
     const [searchResults, setSearchResults] = useState('');
     const [Status, setStatus] = useState('false');
     const [searchEmail, setSearchEmail] = useState('name');
@@ -358,4 +358,4 @@ const UserManager = () => {
         </Layout>
     );
 };
-export default UserManager;
+export default DeviceManager;
