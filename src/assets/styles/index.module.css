@@ -6,6 +6,30 @@
     width: 100% !important;
     height: 40px;
 }
+.inputf{
+    width: 100% !important;
+    height: 48px;
+    font-size: 22px;
+    padding: 20px;
+}
+.login{
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+}
+.textf{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px !important;
+    line-height: 32px;
+}
+.textl{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    padding-bottom: 20px;
+}
 .lic{
     list-style: none;
     padding-top: 20px;
@@ -46,7 +70,7 @@
     font-size: 40px;
 }
 .detail{
-    font-size: 20px;
+    font-size: 20px !important;
 }
 .form{
     align-items: center;

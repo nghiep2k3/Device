@@ -41,9 +41,24 @@ const Create = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}?populate=role`);
+        const response = await axiosInstance.get(`/users/${userId.id}?populate=role,devices`);
         if (response) {
           setUserProfile(response);
+          const newCheckedList = response.devices.map(device => {
+            // Tạo bản sao của đối tượng device và xóa trường id
+            const value = { ...device };
+            delete value.id;
+          
+            // Tạo đối tượng mới chỉ với các thuộc tính cần thiết
+            return {
+              label: device.code,
+              value: {
+                id:device.id,
+                attributes:value,
+              }
+            };
+          });
+          setCheckedList(newCheckedList);
         }
       } catch (error) {
         console.error(error);
@@ -69,7 +84,15 @@ const Create = () => {
       fetchDevices();
     }, [search, hasUserInput]);
     
-    
+    let roleValue;
+
+    if (userProfile?.role.id === 1) {
+      roleValue = "1";
+    } else if (userProfile?.role.id === 2) {
+      roleValue = "2";
+    } else {
+      roleValue = "3";
+    }  
   useEffect(() => {
     form.setFieldsValue({
       Username: userProfile?.username,
@@ -78,7 +101,8 @@ const Create = () => {
       Phone_number:userProfile?.phoneNumber,
       Gender:userProfile?.gender,
       DOB:moment(userProfile?.dob),
-      Status:userProfile?.blocked ? "Blocked" : "Active",
+      Status:userProfile?.blocked ? "true" : "false",
+      Role:roleValue,
     });
   }, [form, userProfile]);
 
@@ -87,22 +111,22 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
-  
+  console.log(checkedList)
   const onFinish = values => {
     const moment = require('moment');
 
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
     
-    let isFalse = formValues.Status === 'false';
-    let bool = isFalse ? false : true;
+    let isFalse = formValues.Status === 'true';
+    let bool = isFalse ? true : false;
     const data = {
       username: formValues.Username,
       fullname: formValues.Name,
+      email: formValues.Email,
       dob: formValues.DOB,
       phoneNumber: formValues.Phone_number,
       gender: formValues.Gender,
-      password: formValues.Password,
       role: parseFloat(formValues.Role),
       blocked: bool,
       updatedAt: currentTime,
@@ -125,7 +149,7 @@ const Create = () => {
     <div>
       <h2 className={styles.tittle}>All user {userProfile?.username}</h2>
 
-      <div>
+      <div className={styles.form}>
         <Form
           name="create_form"
           onFinish={onFinish}
@@ -135,19 +159,17 @@ const Create = () => {
           <Row>
             <Col span={8}>
               <Form.Item
-                label="Name"
+                label={<label className={styles.detail}>Name</label>}
                 name="Name"
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your name!' }]}
               >
-                <Input 
-                className={styles.inputc}
-                defaultValue={userProfile?.name}/>
+                <Input className={styles.inputc}/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Email"
+                label={<label className={styles.detail}>Email</label>}
                 name="Email"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -160,14 +182,12 @@ const Create = () => {
               >
                 <Input
                   className={styles.inputc}
-                  defaultValue={userProfile?.email}
-                  disabled
                 />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Username"
+                label={<label className={styles.detail}>Usename</label>}
                 name="Username"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -182,24 +202,10 @@ const Create = () => {
             </Col>
           </Row>
           <Row>
+         
             <Col span={8}>
               <Form.Item
-                label="Password"
-                name="Password"
-                labelCol={{ span: 24 }}
-                rules={[
-                  { required: true, message: 'Please input your Password!' },
-                ]}
-              >
-                <Input.Password
-                  className={styles.inputc}
-                  placeholder="Enter owner password"
-                />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Phone number"
+                label={<label className={styles.detail}>Phone number</label>}
                 name="Phone_number"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -219,7 +225,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Gender"
+                label={<label className={styles.detail}>Gender</label>}
                 name="Gender"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -237,11 +243,9 @@ const Create = () => {
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row>
             <Col span={8}>
               <Form.Item
-                label="DOB"
+                label={<label className={styles.detail}>DOB</label>}
                 name="DOB"
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your DOB!' }]}
@@ -254,9 +258,11 @@ const Create = () => {
                 />
               </Form.Item>
             </Col>
+          </Row>
+          <Row>
             <Col span={8}>
               <Form.Item
-                label="Role"
+                label={<label className={styles.detail}>Role</label>}
                 name="Role"
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your Role!' }]}
@@ -264,7 +270,7 @@ const Create = () => {
                 <Select
                   className={styles.inputc}
                   size="large"
-                  defaultValue={userProfile?.role.id}
+                  
                 >
                   <Select.Option value="1">User</Select.Option>
                   <Select.Option value="2">Public</Select.Option>
@@ -274,7 +280,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Status"
+                label={<label className={styles.detail}>Status</label>}
                 name="Status"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -284,7 +290,6 @@ const Create = () => {
                 <Select
                   className={styles.inputc}
                   size="large"
-                  placeholder="Select owner Role"
                 >
                   <Select.Option value="false">Active</Select.Option>
                   <Select.Option value="true">Blocked</Select.Option>
@@ -292,7 +297,7 @@ const Create = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row>Device</Row>
+          <Row><label className={styles.detail}>Device</label></Row>
           <div className={styles.container}>
             <Row>
                 <Col span={12}>
@@ -318,6 +323,7 @@ const Create = () => {
                                     } else {
                                         setCheckedList(checkedList.filter((o) => o.value !== item.value));
                                     }
+                                    console.log(checkedList);
                                     }}
                                 >
                                     {item.label}
@@ -353,6 +359,7 @@ const Create = () => {
                         ),
                         },
                     ]}
+                    pagination={{ pageSize: 3 }}
                     />
                 </div>
                 </div>

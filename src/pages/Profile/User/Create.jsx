@@ -93,7 +93,7 @@ const Create = () => {
             <Row>
             <Col span={8}>
                 <Form.Item
-                    label="Name"
+                    label={<label className={styles.detail}>Name</label>}
                     name="Name"
                     labelCol={{ span: 24 }}
                     rules={[{ required: true, message: 'Please input your name!' }]}
@@ -103,7 +103,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Email"
+                        label={<label className={styles.detail}>Email</label>}
                         name="Email"
                         labelCol={{ span: 24 }}
                         rules={[    { required: true, message: 'Please input your Email!' },
@@ -114,7 +114,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Username"
+                        label={<label className={styles.detail}>Username</label>}
                         name="Username"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Username !' }]}
@@ -126,7 +126,7 @@ const Create = () => {
             <Row>
             <Col span={8}>
                 <Form.Item
-                    label="Password"
+                    label={<label className={styles.detail}>Password</label>}
                     name="Password"
                     labelCol={{ span: 24 }}
                     rules={[    
@@ -141,7 +141,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Phone number"
+                        label={<label className={styles.detail}>Phone number</label>}
                         name="Phone_number"
                         labelCol={{ span: 24 }}
                         rules={[
@@ -155,7 +155,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Gender"
+                        label={<label className={styles.detail}>Gender</label>}
                         name="Gender"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Gender !' }]}
@@ -171,7 +171,7 @@ const Create = () => {
             <Row>
             <Col span={8}>
                 <Form.Item
-                    label="DOB"
+                    label={<label className={styles.detail}>DOB</label>}
                     name="DOB"
                     labelCol={{ span: 24 }}
                     
@@ -186,7 +186,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Role"
+                        label={<label className={styles.detail}>Role</label>}
                         name="Role"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Role!' }]}
@@ -200,7 +200,7 @@ const Create = () => {
             </Col>
             <Col span={8}>
                 <Form.Item
-                        label="Status"
+                        label={<label className={styles.detail}>Status</label>}
                         name="Status"
                         labelCol={{ span: 24 }}
                         rules={[{ required: true, message: 'Please input your Status!' }]}
@@ -212,7 +212,7 @@ const Create = () => {
                 </Form.Item>
             </Col>
             </Row>
-            <Row>Device</Row>
+            <Row><label className={styles.detail}>Device</label></Row>
             <div className={styles.container}>
             <Row>
                 <Col span={12}>
@@ -232,7 +232,7 @@ const Create = () => {
                                 <List.Item>
                                 <Checkbox
                                     value={item.value}
-                                    checked={checkedList.some((o) => o.value === item.value)}
+                                    checked={checkedList.some((o) => o.value == item.value)}
                                     onChange={(e) => {
                                     if (e.target.checked) {
                                         setCheckedList([...checkedList, item]);
@@ -259,6 +259,7 @@ const Create = () => {
                     <div className={styles.box}>
                     <Table
                     dataSource={checkedList}
+                    pagination={{ pageSize: 3 }}
                     columns={[
                         {
                         dataIndex: 'label',

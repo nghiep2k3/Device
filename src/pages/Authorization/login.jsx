@@ -4,7 +4,7 @@ import { Button, Form, Input, message } from 'antd';
 import { useState ,useEffect} from 'react';
 import Menus from '../Profile/menu.jsx'
 import ListName from '../../components/Viewprofile/ListName/ListName';
-
+import styles from '../../assets/styles/index.module.css';
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,8 +26,6 @@ const Login = () => {
       identifier: values.username,
       password: values.password,
     };
-
-    
 
     axiosInstance.post('/auth/local', data)
       .then((response) => {
@@ -66,32 +64,46 @@ const Login = () => {
     if (!isLoggedIn) {
       return (
         <div className="container">
-          <h3>Login</h3>
-          <Form name="normal_login" className="login-form" onFinish={onFinish}>
-            <Form.Item
-              name="username"
-              rules={[{ required: true, message: 'Please input your Username!' }]}
-            >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: 'Please input your Password!' }]}
-            >
-              <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                Log in
-              </Button>
-            </Form.Item>
-          </Form>
+        <div style={{ textAlign: 'center' }}>
+          <h2 className={styles.login}>Welcome</h2>
+          <p className={styles.textl}>Log in to your account</p>
         </div>
+        <Form name="normal_login" className="login-form" onFinish={onFinish}>
+          <Form.Item 
+          label={<label className={styles.textf}>Email</label>}
+          name="username"
+          rules={[{ required: true, message: 'Please input your Email!' }]}
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+        >
+          <Input 
+           
+          className={styles.inputf}
+          placeholder="Username" />
+        </Form.Item>
+          <Form.Item
+            label={<label className={styles.textf}>Password</label>}
+            name="password"
+            rules={[{ required: true, message: 'Please input your Password!' }]}
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+          >
+            <Input
+              
+              className={styles.inputf}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+          <Form.Item>
+            <Button type="primary" htmlType="submit" className={styles.button}  style={{ width: '100%',background: '#8767E1' }}>
+              Log in
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+      
       );
     }
 

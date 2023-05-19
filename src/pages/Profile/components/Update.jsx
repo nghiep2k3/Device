@@ -58,7 +58,7 @@ function UserUpdate() {
       const onFinish = (values) => {
         const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
         const data = {
-            name: formValues.fullname,
+            fullname: formValues.Name,
             dob: formValues.DOB,
             phoneNumber: formValues.Phone_number,
           };
@@ -68,6 +68,7 @@ function UserUpdate() {
             if (response != null) {
               message.success('correct');
               navigate('/ListUser');
+              window.location.reload();
             }
           })
           .catch(error => {
