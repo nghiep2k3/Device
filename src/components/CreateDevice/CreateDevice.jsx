@@ -177,7 +177,7 @@ const CreateDevice = () => {
                                             placeholder="Select owner gender"
                                         >
                                             <Select.Option value="active">active</Select.Option>
-                                            <Select.Option value="InActive">InActive</Select.Option>
+                                            <Select.Option value="inactive">InActive</Select.Option>
                                         </Select>
                                     </Form.Item>
                                 </Col>

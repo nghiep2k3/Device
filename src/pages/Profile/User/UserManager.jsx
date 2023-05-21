@@ -4,6 +4,7 @@ import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
+  SearchOutlined,
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -136,18 +137,37 @@ const columns = [
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
   const [searchResults, setSearchResults] = useState('');
-  const [Status, setStatus] = useState('false');
+  const [Status, setStatus] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
 
   const { Search } = Input;
-  const onSearch = value => {
+  
+  // const onSearch = (value) => {
+  //   axiosInstance
+  //     .get(
+  //       `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$eq]=${Status}`
+  //     )
+  //     .then(res => {
+  //       setSearchResults(res);
+  //     });
+  // };
+
+ 
+
+  useEffect(() => {
+    console.log('123234', searchKeyword)
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value}&filters[blocked][$eq]=${Status}`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}`
       )
       .then(res => {
         setSearchResults(res);
       });
-  };
+  }, [Status,searchKeyword])
+
+  
+  
+  
 
   // /users?filters[username][$contains]=nghiep&filters[blocked][$eq]=false
 
@@ -159,14 +179,19 @@ const UserManager = () => {
 
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
+
+    setSearchKeyword(value.trim());
+    console.log(4444, searchKeyword);
+
+
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value}&filters[blocked][$eq]=${Status}`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}`
       )
       .then(res => {
         setSearchResults(res);
       });
-  }, 2000);
+  }, 500);
 
   // const handleSearchStatus = debounce(async () => {
   //     setStatus(!Status);
@@ -177,6 +202,8 @@ const UserManager = () => {
   //             setSearchResults(res);
   //         })
   // }, 1000);
+
+
 
   return (
     <div>
@@ -214,7 +241,7 @@ const UserManager = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                border: '2px solid black',
+                border: '2px solid #CBCBCB',
                 width: 'max-content',
                 borderRadius: '10px',
               }}
@@ -226,6 +253,8 @@ const UserManager = () => {
                   style={{
                     width: 120,
                     border: 'none',
+                    
+                    
                   }}
                   onChange={e => {
                     setSearchEmail(e);
@@ -243,16 +272,32 @@ const UserManager = () => {
                 />
               </div>
 
+                  <div>|</div>
+
               <div>
                 <Search
                   placeholder="Search"
+                  
                   allowClear
                   bordered={false}
-                  onSearch={onSearch}
+                  onSearch={setSearchKeyword}
                   onChange={handleSearchInputChange}
+                  // enterButton={<button style={{ border: 'none' }}>search</button>}
+                  enterButton={
+                    <Button
+                      type="submit"
+                      style={{
+                        border: 'none',
+                        backgroundColor: '#FFFFFF', // Xóa border của button
+                      }}
+                    >
+                      <SearchOutlined />
+                    </Button>
+                  }
                   style={{
                     width: 200,
                     marginLeft: '20px',
+                    border: 'none'
                   }}
                 />
               </div>
@@ -263,7 +308,7 @@ const UserManager = () => {
                 <Select
                   defaultValue="Status"
                   style={{
-                    width: 120,
+                    width: 180,
                   }}
                   onChange={e => {
                     console.log(e);
@@ -271,13 +316,17 @@ const UserManager = () => {
                   }}
                   options={[
                     {
-                      value: 'false',
+                      value: '0',
                       label: 'Active',
                     },
                     {
-                      value: 'true',
+                      value: '1',
                       label: 'Inactive',
                     },
+                    {
+                      value: '',
+                      label: 'All',
+                    }
                   ]}
                 />
               </div>
