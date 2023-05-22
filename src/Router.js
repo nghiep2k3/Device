@@ -3,7 +3,6 @@ import {
   } from "react-router-dom";
 import Login from "./pages/Authorization/login";
 import Change from "./pages/Profile/components/ChangePassWord";
-import Menus from "./pages/Profile/menu";
 import ListUser from "./pages/Profile/components/Profile";
 import UserUpdate from "./pages/Profile/components/Update";
 import UserManager from "./pages/Profile/User/UserManager";
@@ -19,10 +18,7 @@ import CreateDevice from "./components/CreateDevice/CreateDevice";
       children :[{
         path: '/ChangePassWord',
         element: <Change />,
-      }, {
-        path: '/ChangePassWord',
-        element:<Menus />
-      },
+      }, 
       {
         path: '/ListUser',
         element:<ListUser />,

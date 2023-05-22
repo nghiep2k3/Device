@@ -26,22 +26,6 @@ import {
 import debounce from 'lodash/debounce';
 import styles from '../../../assets/styles/index.module.css';
 
-const deleteUser = userId => {
-  if (window.confirm('Do you want to delete this user?')) {
-    axiosInstance
-      .delete(`/users/${userId}`)
-      .then(res => {
-        console.log(res);
-        message.success('delete complete');
-        window.location.reload();
-      })
-      .catch(err => {
-        console.log(err);
-        message.error('có lỗi');
-      });
-  }
-};
-
 function Status() {
   const handleMenuClick = e => {
     message.info('Click on menu item.');
@@ -78,67 +62,83 @@ function Status() {
   );
 }
 
-const columns = [
-  {
-    title: '#',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'username',
-    key: 'username',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Phone_Number',
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-  },
-  {
-    title: 'Status',
-    key: 'blocked',
-    dataIndex: 'blocked',
-    render: (_, { blocked }) => (
-      <>
-        {blocked ? (
-          // Nếu blocked là true, không in ra gì cả
-          <Tag color="volcano">Blocked</Tag>
-        ) : (
-          // Nếu blocked là false, in ra "active"
-
-          <Tag color="geekblue">Active</Tag>
-        )}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <Link to={`/Details/${record.id}`}>
-          <EyeOutlined />
-        </Link>
-        <Link to={`/Edit/${record.id}`}>
-          <EditOutlined />
-        </Link>
-        <DeleteOutlined onClick={() => deleteUser(record.id)} />
-      </Space>
-    ),
-  },
-];
-
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
   const [searchResults, setSearchResults] = useState('');
   const [Status, setStatus] = useState('false');
 
   const { Search } = Input;
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Phone_Number',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+    {
+      title: 'Status',
+      key: 'blocked',
+      dataIndex: 'blocked',
+      render: (_, { blocked }) => (
+        <>
+          {blocked ? (
+            // Nếu blocked là true, không in ra gì cả
+            <Tag color="volcano">Blocked</Tag>
+          ) : (
+            // Nếu blocked là false, in ra "active"
+
+            <Tag color="geekblue">Active</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Link to={`/Details/${record.id}`}>
+            <EyeOutlined />
+          </Link>
+          <Link to={`/Edit/${record.id}`}>
+            <EditOutlined />
+          </Link>
+          <DeleteOutlined onClick={() => deleteUser(record.id)} />
+        </Space>
+      ),
+    },
+  ];
+  const deleteUser = userId => {
+    if (window.confirm('Do you want to delete this user?')) {
+      axiosInstance
+        .delete(`/users/${userId}`)
+        .then(res => {
+          console.log(res);
+          message.success('delete complete');
+          axiosInstance.get(`/users`).then(res => {
+            setSearchResults(res);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          message.error('có lỗi');
+        });
+    }
+  };
   const onSearch = value => {
     axiosInstance
       .get(
@@ -148,8 +148,6 @@ const UserManager = () => {
         setSearchResults(res);
       });
   };
-
-  // /users?filters[username][$contains]=nghiep&filters[blocked][$eq]=false
 
   useEffect(() => {
     axiosInstance.get(`/users`).then(res => {
@@ -167,16 +165,6 @@ const UserManager = () => {
         setSearchResults(res);
       });
   }, 2000);
-
-  // const handleSearchStatus = debounce(async () => {
-  //     setStatus(!Status);
-  //     console.log(Status);
-
-  //     axiosInstance.get(`/users?filters[blocked][$eq]=${Status}`)
-  //         .then((res) => {
-  //             setSearchResults(res);
-  //         })
-  // }, 1000);
 
   return (
     <div>
