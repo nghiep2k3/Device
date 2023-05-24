@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import '../../../assets/styles/index.css';
 import { Link } from 'react-router-dom';
-import { Avatar, Space } from 'antd';
+import { Avatar, Space, Row, Col } from 'antd';
 import { Button } from 'antd';
 import ListName from '../../../components/Viewprofile/ListName/ListName';
 import { axiosInstance } from '../../../shared/services/http-client';
@@ -11,72 +11,74 @@ import { useState, useEffect } from 'react';
 
 function ListUser() {
   const [avatar, setAvatar] = useState('');
+  const [role, setRole] = useState('');
   const [data, setData] = useState('');
   useEffect(() => {
     axiosInstance.get('/users/me?populate=role,avatar').then(res => {
       setData(res);
       setAvatar(res.avatar.url);
+      setRole(res.role.name);
     });
   }, []);
 
   return (
     <div>
-      <h2 className="tittle">My Profile</h2>
+      <p className="MP">My Profile</p>
       <div className="ViewUser">
         <div className="SetupUser">
-          <div>
-            <Space direction="vertical" size={16}>
-              <Space wrap size={16}>
-                <img
-                  src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                  alt=""
-                  style={{
-                    height: '200px',
-                    width: '200px',
-                    borderRadius: '100px',
-                  }}
-                />
-              </Space>
-            </Space>
-          </div>
-
-          <div className="SetInfo">
-            <div className="M100">
+          <Row span={24}>
+            <Col span={12}>
+              <div className="setupimg">
+                <Space direction="vertical" size={16}>
+                  <Space wrap size={16}>
+                    <img
+                      src={`https://edison-device-api.savvycom.xyz${avatar}`}
+                      alt=""
+                      style={{
+                        height: '200px',
+                        width: '200px',
+                        borderRadius: '100px',
+                      }}
+                    />
+                  </Space>
+                </Space>
+              </div>
+            </Col>
+            <Col span={12}>
               <div>
-                <ListName name={data.fullname} title="Name" />
+                <Row span={24}>
+                  <Col span={12}>
+                    <p className="LB">Name</p>
+                    <p className="IF">{data.fullname}</p>
+                  </Col>
+                  <Col span={12}>
+                    <p className="LB">Email</p>
+                    <p className="IF">{data.email}</p>
+                  </Col>
+                </Row>
+                <Row span={24}>
+                  <Col span={12}>
+                    <p className="LB">Phone Number</p>
+                    <p className="IF">{data.phoneNumber}</p>
+                  </Col>
+                  <Col span={12}>
+                    <p className="LB">DOB</p>
+                    <p className="IF">{data.dob}</p>
+                  </Col>
+                </Row>
+                <Row span={24}>
+                  <Col span={12}>
+                    <p className="LB">Address</p>
+                    <p className="IF">{data.provider}</p>
+                  </Col>
+                  <Col span={12}>
+                    <p className="LB">Role</p>
+                    <p className="IF">{role}</p>
+                  </Col>
+                </Row>
               </div>
-
-              <div
-                style={{
-                  margin: '40px 0',
-                }}
-              >
-                <ListName name={data.phoneNumber} title="Phone Number" />
-              </div>
-
-              <div>
-                <ListName name={data.provider} title="Address" />
-              </div>
-            </div>
-
-            <div>
-              <div>
-                <ListName name={data.email} title="Email" />
-              </div>
-
-              <div
-                style={{
-                  margin: '40px 0',
-                }}
-              >
-                <ListName name={data.dob} title="DoB" />
-              </div>
-
-              <div>
-                <ListName name={'Admin'} title="Role" />
-              </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
 
         <div className="ButtonUpdate">

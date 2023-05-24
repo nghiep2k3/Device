@@ -23,12 +23,10 @@ import {
   message,
 } from 'antd';
 import { Button } from 'antd';
-
+import { CameraOutlined } from '@ant-design/icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../../shared/services/http-client';
 import moment from 'moment';
-
-
 
 function UserUpdate() {
   const [userProfile, setUserProfile] = useState(null);
@@ -75,18 +73,18 @@ function UserUpdate() {
       span: 16,
     },
   };
-  const onChange = async (e) => {
+  const onChange = async e => {
     const file = e.target.files[0];
     const newFileList = [file];
-  
+
     setFileList(newFileList);
-  
+
     const formData = new FormData();
     formData.append('ref', 'plugin::users-permissions.user');
     formData.append('refId', `${userId.id}`);
     formData.append('field', 'avatar');
     formData.append('files', file);
-  
+
     try {
       const response = await axiosInstance.post('/upload', formData, {
         headers: {
@@ -121,128 +119,157 @@ function UserUpdate() {
       });
   };
   return (
-    <div className="ViewUser1">
-      <div className="SetupUser1">
-        <div>
-          <Space direction="vertical" size={16}>
-            <Space wrap size={16}>
-              <label htmlFor="upload-btn" className="upload-container">
-                <input
-                  id="upload-btn"
-                  type="file"
-                  accept="image/*"
-                  onChange={onChange}
-                  fileList={fileList}
-                />
-                <img
-                  src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                  alt=""
-                  className="blurred-image"
-                />
-              </label>
-            </Space>
-          </Space>
-        </div>
-        <div className="setup">
-          <Form
-            name="nest_messages"
-            onFinish={onFinish}
-            style={{
-              maxWidth: 600,
-            }}
-            form={form}
-          >
-            <Row>
-              <Col span={24}>
-                <Form.Item label="Name" name="Name" labelCol={{ span: 24 }}>
-                  <Input
-                    className={styles.inputp}
-                    defaultValue={userProfile?.fullname}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col span={24}>
-                <Form.Item label="Email" name="Email" labelCol={{ span: 24 }}>
-                  <Input
-                    className={styles.inputp}
-                    disabled
-                    defaultValue={userProfile?.email}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item
-                  label="Username"
-                  name="Username"
-                  labelCol={{ span: 24 }}
+    <div>
+      <p className="MP">My Profile</p>
+      <div className="ViewUser1">
+        <div className="SetupUser1">
+          <Row>
+            <Col span={12}>
+              <div className="setupimg">
+                <Space direction="vertical" size={16}>
+                  <Space wrap size={16}>
+                    <label htmlFor="upload-btn" className="upload-container">
+                      <input
+                        id="upload-btn"
+                        type="file"
+                        accept="image/*"
+                        onChange={onChange}
+                        fileList={fileList}
+                      />
+                      <div className="image-wrapper">
+                        <img
+                          src={`https://edison-device-api.savvycom.xyz${avatar}`}
+                          alt=""
+                          className="blurred-image"
+                        />
+                        <span className="camera-icon">
+                          <CameraOutlined style={{ fontSize: '40px' }} />
+                        </span>
+                      </div>
+                    </label>
+                  </Space>
+                </Space>
+              </div>
+            </Col>
+            <Col span={12}>
+              <div>
+                <Form
+                  name="nest_messages"
+                  onFinish={onFinish}
+                  style={{
+                    maxWidth: 600,
+                  }}
+                  form={form}
+                  id="myForm"
                 >
-                  <Input
-                    className={styles.inputp}
-                    disabled
-                    defaultValue={userProfile?.username}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item label="DOB" name="DOB" labelCol={{ span: 24 }}>
-                  <DatePicker
-                    className={styles.inputc}
-                    value={dob}
-                    onChange={handleDobChange}
-                    placeholder="Select a date"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  label="Phone_number"
-                  name="Phone_number"
-                  labelCol={{ span: 24 }}
-                >
-                  <Input
-                    className={styles.inputp}
-                    defaultValue={userProfile?.Phone_number}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Name"
+                        name="Name"
+                        labelCol={{ span: 24 }}
+                      >
+                        <Input
+                          className={styles.inputp}
+                          defaultValue={userProfile?.fullname}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-            <Row>
-              <Col span={24}>
-                <Form.Item label="Role" name="Role" labelCol={{ span: 24 }}>
-                  <Input
-                    className={styles.inputp}
-                    disabled
-                    defaultValue={userProfile?.role.name}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Email"
+                        name="Email"
+                        labelCol={{ span: 24 }}
+                      >
+                        <Input
+                          className={styles.inputp}
+                          disabled
+                          defaultValue={userProfile?.email}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Username"
+                        name="Username"
+                        labelCol={{ span: 24 }}
+                      >
+                        <Input
+                          className={styles.inputp}
+                          disabled
+                          defaultValue={userProfile?.username}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={8}>
+                      <Form.Item label="DOB" name="DOB" labelCol={{ span: 24 }}>
+                        <DatePicker
+                          className={styles.inputc}
+                          value={dob}
+                          onChange={handleDobChange}
+                          placeholder="Select a date"
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item
+                        label="Phone_number"
+                        name="Phone_number"
+                        labelCol={{ span: 24 }}
+                      >
+                        <Input
+                          className={styles.inputp}
+                          defaultValue={userProfile?.Phone_number}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-            <div>
-              <Divider style={{ background: 'gray' }} />
-              <Form.Item>
-                <Button
-                  className={styles.button}
-                  type="primary"
-                  style={{ marginRight: '20px', background: '#8767E1' }}
-                  htmlType="submit"
-                >
-                  Update Profile
-                </Button>
-                <Button className={styles.button}>
-                  <Link to="/ListUser">Cancel</Link>
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Role"
+                        name="Role"
+                        labelCol={{ span: 24 }}
+                      >
+                        <Input
+                          className={styles.inputp}
+                          disabled
+                          defaultValue={userProfile?.role.name}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Divider style={{ background: '#DDE4EE' }} />
+          </Row>
+          <Row justify="start">
+            <Form.Item>
+              <Button
+                className={styles.button}
+                type="primary"
+                style={{ marginRight: '20px', background: '#8767E1' }}
+                htmlType="submit"
+                form="myForm"
+              >
+                Update Profile
+              </Button>
+              <Button className={styles.button}>
+                <Link to="/ListUser">Cancel</Link>
+              </Button>
+            </Form.Item>
+          </Row>
         </div>
       </div>
     </div>

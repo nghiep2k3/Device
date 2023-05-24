@@ -5,9 +5,10 @@ import {
   AppstoreOutlined,
 } from '@ant-design/icons';
 import { Outlet, Link } from 'react-router-dom';
-import { Layout, Menu, theme, Avatar, Button, Dropdown } from 'antd';
+import { Layout, Menu, theme, Button, Dropdown, Row, Col } from 'antd';
 import React, { useState, useEffect } from 'react';
 import '../../assets/styles/index.css';
+import { ReactComponent as UserIcon } from '../../assets/icons/Users.svg';
 import { axiosInstance } from '../../shared/services/http-client';
 const { Header, Sider, Content } = Layout;
 
@@ -37,31 +38,30 @@ const Menus = ({ onLogout }) => {
   ];
   return (
     <Layout className="SetupHeight">
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={collapsed} className="custom-sider">
         <div className="logo" />
         <h1
           style={{
             margin: '20px 20px',
-            color: 'white',
+            color: '#111111',
           }}
         >
           Menu
         </h1>
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           defaultSelectedKeys={['1']}
           items={[
             {
               key: '1',
-              icon: <UserOutlined />,
-              label: <Link to="/UserManager">User</Link>,
+              icon: <UserIcon />,
+              label: <Link to="/UserManager" ><p className="custom">User</p></Link>,
             },
             {
               key: '2',
-              icon: <AppstoreOutlined />,
-
-              label: <Link to="/DeviceManager">Device</Link>,
+              icon: <UserIcon />,
+              label: <Link to="/DeviceManager" ><p className="custom">Device</p></Link>,
             },
           ]}
         />
@@ -73,7 +73,6 @@ const Menus = ({ onLogout }) => {
             padding: '0',
             display: 'flex',
             alignItems: 'center',
-            margin: '0 10px',
             lineHeight: '0px',
             justifyContent: 'space-between',
             background: colorBgContainer,
@@ -89,7 +88,7 @@ const Menus = ({ onLogout }) => {
             )}
           </div>
 
-          <div style={{}}>
+          <div>
             <Dropdown
               menu={{
                 items,
@@ -97,37 +96,26 @@ const Menus = ({ onLogout }) => {
               placement="bottom"
               arrow
             >
-              <div
-                style={{
-                  display: 'inline-flex',
-                }}
-              >
-                <div>
-                  <img
-                    src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                    alt=""
-                    style={{
-                      height: '40px',
-                      width: '40px',
-                      borderRadius: '20px',
-                    }}
-                  />
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontWeight: 'bold',
-                      color: 'black',
-                      marginLeft: '10px',
-                      marginTop: '4px',
-                    }}
-                  >
-                    {data.fullname}
+              <div className="setupimg">
+                <Row span={24}>
+                  <Col span={8}>
+                    <img
+                      src={`https://edison-device-api.savvycom.xyz${avatar}`}
+                      alt=""
+                      style={{
+                        height: '32px',
+                        width: '32px',
+                        borderRadius: '20px',
+                      }}
+                    />
+                  </Col>
+                  <Col span={16}>
+                    <div className="set">
+                  <Row span={24}><p className="NameM">{data.fullname}</p></Row>
+                  <Row span={24}> <p className="RoleM">{data.role?.name}</p></Row>
                   </div>
-                  <div style={{ marginLeft: '10px', marginTop: '22px' }}>
-                    {data.role?.name}
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               </div>
             </Dropdown>
           </div>

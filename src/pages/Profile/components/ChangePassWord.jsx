@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Input, Form, Button,message } from 'antd';
+import { Input, Form, Button,message,Row,Col,Divider } from 'antd';
 import React,{ useState }  from 'react';
 import '../../../assets/styles/index.css';
 import { axiosInstance } from '../../../shared/services/http-client';
@@ -29,35 +29,38 @@ function Change() {
       };
     return (
         <div>
-            <h2 className='tittle'>Change PassWord</h2>
-        
-        <div className='change'>
             
+            
+                <h2 className='tittle'>Change PassWord</h2>
+        <Col span={24}>   
+        <div className='change'>
+        <Row span={24}>
             <Form
                 name="password_form"
                 onFinish={onFinish}
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
             >
+            <Row span={24}></Row>
+            <Row span={24}>
+                <label className='changetext'>Now you can create a new password for your acconut</label>
+            </Row> 
+            <Row span={24}>
+                <label className='changetext'>Current Password</label>
+            </Row>
+        
             <Form.Item
-                label="Now you can create a new password for your acconut"
-                labelCol={{ span: 24 }}
-                style={{
-                    paddingTop: 20,
-                    
-                }}
-            ></Form.Item>  
-            <Form.Item
-                label="Current Password"
                 name="current_password"
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your current password!' }]}
             >
-            <Input.Password />
+            <Input.Password placeholder="Enter current password" className='passInput'/>
             </Form.Item>
-
+            <Row span={24}>
+                <label className='changetext'>New Password</label>
+            </Row>
             <Form.Item
-            label="New Password"
+           
             name="new_password"
             labelCol={{ span: 24 }}
             rules={[    
@@ -67,12 +70,14 @@ function Change() {
                 message: 'Password must contain at least one uppercase letter, one number, and one special character!' }
             ]}
             >
-            <Input.Password/>
+            <Input.Password placeholder="Enter new password" className='passInput'/>
             </Form.Item>
 
-
+            <Row span={24}>
+                <label className='changetext'>Confirm New Password</label>
+            </Row>
             <Form.Item
-            label="Confirm New Password"
+            
             name="confirm_password"
             labelCol={{ span: 24 }}
             rules={[
@@ -87,9 +92,9 @@ function Change() {
                 }),
             ]}
             >
-            <Input.Password />
+            <Input.Password placeholder="Enter confirm password" className='passInput'/>
             </Form.Item>
-           
+            <Divider style={{ background: '#DDE4EE' }} />
             <Form.Item >
             <Button className={styles.button} style={{background: '#8767E1'}} type="primary" htmlType="submit" >
                 Save
@@ -98,8 +103,9 @@ function Change() {
                 <Link to="/ListUser">Cancel</Link>
             </Button>
             </Form.Item>
-        </Form>
+        </Form></Row>
     </div>
+    </Col>
     </div>
     );
             
