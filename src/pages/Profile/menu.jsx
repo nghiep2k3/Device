@@ -96,7 +96,7 @@ const Menus = ({ onLogout }) => {
               placement="bottom"
               arrow
             >
-              <div className="setupimg">
+              <div className="set">
                 <Row span={24}>
                   <Col span={8}>
                     <img

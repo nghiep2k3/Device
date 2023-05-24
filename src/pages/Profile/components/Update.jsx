@@ -164,10 +164,12 @@ function UserUpdate() {
                 >
                   <Row>
                     <Col span={24}>
+                    <label className={styles.labelStyle}>Name</label>
                       <Form.Item
-                        label="Name"
+                        
                         name="Name"
                         labelCol={{ span: 24 }}
+                        
                       >
                         <Input
                           className={styles.inputp}
@@ -179,10 +181,12 @@ function UserUpdate() {
 
                   <Row>
                     <Col span={24}>
+                    <label className={styles.labelStyle}>Email</label>
                       <Form.Item
-                        label="Email"
+                        
                         name="Email"
                         labelCol={{ span: 24 }}
+                      
                       >
                         <Input
                           className={styles.inputp}
@@ -194,10 +198,12 @@ function UserUpdate() {
                   </Row>
                   <Row>
                     <Col span={24}>
+                    <label className={styles.labelStyle}>Username</label>
                       <Form.Item
-                        label="Username"
+                        
                         name="Username"
                         labelCol={{ span: 24 }}
+                        
                       >
                         <Input
                           className={styles.inputp}
@@ -209,18 +215,25 @@ function UserUpdate() {
                   </Row>
                   <Row>
                     <Col span={8}>
-                      <Form.Item label="DOB" name="DOB" labelCol={{ span: 24 }}>
+                    <label className={styles.labelStyle}>DOB</label>
+                      <Form.Item
+                        
+                        name="DOB"
+                        labelCol={{ span: 24 }}
+                        
+                      >
                         <DatePicker
                           className={styles.inputc}
                           value={dob}
+                          style={{ height: '56px' }}
                           onChange={handleDobChange}
                           placeholder="Select a date"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
+                      <label className={styles.labelStyle}>Phone number</label>
                       <Form.Item
-                        label="Phone_number"
                         name="Phone_number"
                         labelCol={{ span: 24 }}
                       >
@@ -234,10 +247,12 @@ function UserUpdate() {
 
                   <Row>
                     <Col span={24}>
+                    <label className={styles.labelStyle}>Role</label>
                       <Form.Item
-                        label="Role"
+                        
                         name="Role"
                         labelCol={{ span: 24 }}
+                        
                       >
                         <Input
                           className={styles.inputp}

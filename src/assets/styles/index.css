@@ -3,14 +3,21 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgb(230, 225, 225);
-  padding: 80px 80px 80px 80px;
-  border-radius: 10px;
-  border: solid rgb(126, 122, 122) 2px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  gap: 64px;
+  width: 488px;
+  height: 488px;
+
+  background: #ffffff;
   box-shadow: 0px 4px 55px rgba(0, 0, 0, 0.07);
   border-radius: 16px;
-  width: 30%;
 }
+
 .SetupHeight {
   height: 140vh;
 }
@@ -52,6 +59,7 @@
 }
 .set {
   padding-top: 10px;
+  padding-right: 20px;
 }
 .SetupUser {
   width: 100%;
@@ -232,3 +240,5 @@
   background-color: rgba(0, 0, 0, 0.5); /* Màu sắc và độ đậm của hiệu ứng tối */
   z-index: 2;
 }
+
+
