@@ -68,7 +68,7 @@ const Login = () => {
   if (!isLoggedIn) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center' }}>
+        <div className={styles.textbox}>
           <h2 className={styles.login}>Welcome</h2>
           <p className={styles.textl}>Log in to your account</p>
         </div>
@@ -76,7 +76,7 @@ const Login = () => {
           <Form.Item
             label={<label className={styles.textf}>Email</label>}
             name="username"
-            rules={[{ required: true, message: 'Please input your Email!' }]}
+            rules={[{ required: true, message: 'Enter email' }]}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
           >
@@ -85,7 +85,7 @@ const Login = () => {
           <Form.Item
             label={<label className={styles.textf}>Password</label>}
             name="password"
-            rules={[{ required: true, message: 'Please input your Password!' }]}
+            rules={[{ required: true, message: 'Enter password' }]}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
           >
@@ -100,10 +100,9 @@ const Login = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className={styles.button}
-              style={{ width: '100%', background: '#8767E1' }}
+              className={styles.buttonf}
             >
-              Log in
+              <p className={styles.buttont}>Log in</p>
             </Button>
           </Form.Item>
         </Form>
