@@ -27,6 +27,8 @@ import {
 import debounce from 'lodash/debounce';
 import styles from '../../../assets/styles/index.module.css';
 
+
+
 function Status() {
   const handleMenuClick = e => {
     message.info('Click on menu item.');
@@ -63,13 +65,33 @@ function Status() {
   );
 }
 
+
+
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
   const [searchResults, setSearchResults] = useState('');
-  const [status, setStatus] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const role = localStorage.getItem('role');
+  const [Status, setStatus] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
+
   const { Search } = Input;
+  const role = localStorage.getItem("role");
+  const deleteUser = userId => {
+    if (window.confirm('Do you want to delete this user?')) {
+      axiosInstance
+        .delete(`/users/${userId}`)
+        .then(res => {
+          console.log(res);
+          message.success('delete complete');
+          axiosInstance.get(`/users`).then(res => {
+            setSearchResults(res);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          message.error('có lỗi');
+        });
+    }
+  };
   const columns = [
     {
       title: '#',
@@ -130,32 +152,34 @@ const UserManager = () => {
       ),
     },
   ];
-  const deleteUser = userId => {
-    if (window.confirm('Do you want to delete this user?')) {
-      axiosInstance
-        .delete(`/users/${userId}`)
-        .then(res => {
-          console.log(res);
-          message.success('delete complete');
-          axiosInstance.get(`/users`).then(res => {
-            setSearchResults(res);
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          message.error('có lỗi');
-        });
-    }
-  };
-  const onSearch = value => {
+  // const onSearch = (value) => {
+  //   axiosInstance
+  //     .get(
+  //       `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$eq]=${Status}`
+  //     )
+  //     .then(res => {
+  //       setSearchResults(res);
+  //     });
+  // };
+
+ 
+
+  useEffect(() => {
+    console.log('123234', searchKeyword)
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${status}`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}`
       )
       .then(res => {
         setSearchResults(res);
       });
-  };
+  }, [Status,searchKeyword])
+
+  
+  
+  
+
+  // /users?filters[username][$contains]=nghiep&filters[blocked][$eq]=false
 
   useEffect(() => {
     axiosInstance.get(`/users`).then(res => {
@@ -169,14 +193,27 @@ const UserManager = () => {
     setSearchKeyword(value.trim());
     console.log(4444, searchKeyword);
 
+
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${status}`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}`
       )
       .then(res => {
         setSearchResults(res);
       });
   }, 500);
+
+  // const handleSearchStatus = debounce(async () => {
+  //     setStatus(!Status);
+  //     console.log(Status);
+
+  //     axiosInstance.get(`/users?filters[blocked][$eq]=${Status}`)
+  //         .then((res) => {
+  //             setSearchResults(res);
+  //         })
+  // }, 1000);
+
+
 
   return (
     <div>
@@ -193,25 +230,13 @@ const UserManager = () => {
           </div>
 
           <div>
-            {role === '3' && (
-              <Button
-                className={styles.button}
-                style={{ background: '#8767E1' }}
-                type="primary"
-              >
-                <Link to="/Create">Add User</Link>
-              </Button>
-            )}
-
-            {role === '1' && (
-              <Button
-                className={styles.button}
-                style={{ background: '#8767E1' }}
-                type="primary"
-              >
-                Add User
-              </Button>
-            )}
+            <Button
+              className={styles.button}
+              style={{ background: '#8767E1' }}
+              type="primary"
+            >
+              <Link to="/Create">Add User</Link>
+            </Button>
           </div>
         </div>
 
@@ -238,6 +263,8 @@ const UserManager = () => {
                   style={{
                     width: 120,
                     border: 'none',
+                    
+                    
                   }}
                   onChange={e => {
                     setSearchEmail(e);
@@ -255,21 +282,23 @@ const UserManager = () => {
                 />
               </div>
 
-              <div>|</div>
+                  <div>|</div>
 
               <div>
                 <Search
                   placeholder="Search"
+                  
                   allowClear
                   bordered={false}
-                  onSearch={onSearch}
+                  onSearch={setSearchKeyword}
                   onChange={handleSearchInputChange}
+                  // enterButton={<button style={{ border: 'none' }}>search</button>}
                   enterButton={
                     <Button
                       type="submit"
                       style={{
                         border: 'none',
-                        backgroundColor: '#FFFFFF',
+                        backgroundColor: '#FFFFFF', // Xóa border của button
                       }}
                     >
                       <SearchOutlined />
@@ -278,7 +307,7 @@ const UserManager = () => {
                   style={{
                     width: 200,
                     marginLeft: '20px',
-                    border: 'none',
+                    border: 'none'
                   }}
                 />
               </div>
@@ -307,7 +336,7 @@ const UserManager = () => {
                     {
                       value: '',
                       label: 'All',
-                    },
+                    }
                   ]}
                 />
               </div>
