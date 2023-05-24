@@ -28,12 +28,15 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../../shared/services/http-client';
 import moment from 'moment';
 
+
+
 function UserUpdate() {
   const [userProfile, setUserProfile] = useState(null);
   const [dob, setDob] = useState(null);
   const [avatar, setAvatar] = useState('');
   const navigate = useNavigate();
   const userId = useParams();
+  const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const handleDobChange = value => {
     setDob(value);
@@ -72,11 +75,30 @@ function UserUpdate() {
       span: 16,
     },
   };
-  const handleUpload = (event) => {
-    const file = event.target.files[0];
-    console.log(file);
-    
+  const onChange = async (e) => {
+    const file = e.target.files[0];
+    const newFileList = [file];
+  
+    setFileList(newFileList);
+  
+    const formData = new FormData();
+    formData.append('ref', 'plugin::users-permissions.user');
+    formData.append('refId', `${userId.id}`);
+    formData.append('field', 'avatar');
+    formData.append('files', file);
+  
+    try {
+      const response = await axiosInstance.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      navigate('/ListUser');
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const onFinish = values => {
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
     const data = {
@@ -105,7 +127,13 @@ function UserUpdate() {
           <Space direction="vertical" size={16}>
             <Space wrap size={16}>
               <label htmlFor="upload-btn" className="upload-container">
-                <input id="upload-btn" type="file" accept="image/*" onChange={handleUpload}/>
+                <input
+                  id="upload-btn"
+                  type="file"
+                  accept="image/*"
+                  onChange={onChange}
+                  fileList={fileList}
+                />
                 <img
                   src={`https://edison-device-api.savvycom.xyz${avatar}`}
                   alt=""
