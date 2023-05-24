@@ -48,10 +48,10 @@ const Menus = ({ onLogout }) => {
     return (
         <Layout className='SetupHeight'>
 
-            <Sider trigger={null} collapsible collapsed={collapsed}>
+            <Sider trigger={null} collapsible collapsed={collapsed} >
                 <div className="logo" />
                 <h1 style={{
-                    margin: '20px 20px',
+                    margin: '10px 10px',
                     color: 'white',
                 }}>Menu</h1>
                 <Menu
@@ -82,7 +82,7 @@ const Menus = ({ onLogout }) => {
                         padding: '0',
                         display: 'flex',
                         alignItems: 'center',
-                        margin: '0 10px',
+                        margin: '0 0px',
                         lineHeight: '0px',
                         justifyContent: 'space-between',
                         background: colorBgContainer,
@@ -128,8 +128,8 @@ const Menus = ({ onLogout }) => {
                 </Header>
                 <Content
                     style={{
-                        margin: '24px 16px',
-                        padding: 24,
+                        margin: '20px 15px',
+                       
                         minHeight: 280,
                     }}
                 >

@@ -113,6 +113,21 @@ import debounce from "lodash/debounce";
 
 //     );
 // }
+const deleteDevice = userId => {
+    if (window.confirm('Do you want to delete this device?')) {
+      axiosInstance
+        .delete(`/devices/${userId}`)
+        .then(res => {
+          console.log(res);
+          message.success('delete complete');
+          window.location.reload();
+        })
+        .catch(err => {
+          console.log(err);
+          message.error('có lỗi');
+        });
+    }
+  };
 
 const columns = [
     {
@@ -167,9 +182,9 @@ const columns = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                <EyeOutlined />
-                <EditOutlined />
-                <DeleteOutlined />
+                 <Link to={`/DetailsDevice/${record.id}`}><EyeOutlined /></Link>
+                <Link to={`/EditDevice/${record.id}`}><EditOutlined /></Link>
+                <DeleteOutlined onClick={() => deleteDevice(record.id)} />
             </Space>
         ),
     },
