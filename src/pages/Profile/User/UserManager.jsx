@@ -66,9 +66,9 @@ function Status() {
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
   const [searchResults, setSearchResults] = useState('');
-  const [Status, setStatus] = useState('')
-  const [searchKeyword, setSearchKeyword] = useState('')
-
+  const [status, setStatus] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const role = localStorage.getItem('role');
   const { Search } = Input;
   const columns = [
     {
@@ -98,11 +98,8 @@ const UserManager = () => {
       render: (_, { blocked }) => (
         <>
           {blocked ? (
-            // Nếu blocked là true, không in ra gì cả
             <Tag color="volcano">Blocked</Tag>
           ) : (
-            // Nếu blocked là false, in ra "active"
-
             <Tag color="geekblue">Active</Tag>
           )}
         </>
@@ -116,10 +113,19 @@ const UserManager = () => {
           <Link to={`/Details/${record.id}`}>
             <EyeOutlined />
           </Link>
-          <Link to={`/Edit/${record.id}`}>
-            <EditOutlined />
-          </Link>
-          <DeleteOutlined onClick={() => deleteUser(record.id)} />
+          {role === '3' && (
+            <Link to={`/Edit/${record.id}`}>
+              <EditOutlined />
+            </Link>
+          )}
+
+          {role === '1' && <EditOutlined />}
+          {role === '3' && (
+            <DeleteOutlined onClick={() => deleteUser(record.id)} />
+          )}
+
+          {role === '1' &&  <DeleteOutlined/>}
+          
         </Space>
       ),
     },
@@ -144,16 +150,12 @@ const UserManager = () => {
   const onSearch = value => {
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${status}`
       )
       .then(res => {
         setSearchResults(res);
       });
-  }, [Status,searchKeyword])
-
-  
-  
-  
+  };
 
   useEffect(() => {
     axiosInstance.get(`/users`).then(res => {
@@ -167,27 +169,14 @@ const UserManager = () => {
     setSearchKeyword(value.trim());
     console.log(4444, searchKeyword);
 
-
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${status}`
       )
       .then(res => {
         setSearchResults(res);
       });
   }, 500);
-
-  // const handleSearchStatus = debounce(async () => {
-  //     setStatus(!Status);
-  //     console.log(Status);
-
-  //     axiosInstance.get(`/users?filters[blocked][$eq]=${Status}`)
-  //         .then((res) => {
-  //             setSearchResults(res);
-  //         })
-  // }, 1000);
-
-
 
   return (
     <div>
@@ -204,13 +193,25 @@ const UserManager = () => {
           </div>
 
           <div>
-            <Button
-              className={styles.button}
-              style={{ background: '#8767E1' }}
-              type="primary"
-            >
-              <Link to="/Create">Add User</Link>
-            </Button>
+            {role === '3' && (
+              <Button
+                className={styles.button}
+                style={{ background: '#8767E1' }}
+                type="primary"
+              >
+                <Link to="/Create">Add User</Link>
+              </Button>
+            )}
+
+            {role === '1' && (
+              <Button
+                className={styles.button}
+                style={{ background: '#8767E1' }}
+                type="primary"
+              >
+                Add User
+              </Button>
+            )}
           </div>
         </div>
 
@@ -237,8 +238,6 @@ const UserManager = () => {
                   style={{
                     width: 120,
                     border: 'none',
-                    
-                    
                   }}
                   onChange={e => {
                     setSearchEmail(e);
@@ -256,23 +255,21 @@ const UserManager = () => {
                 />
               </div>
 
-                  <div>|</div>
+              <div>|</div>
 
               <div>
                 <Search
                   placeholder="Search"
-                  
                   allowClear
                   bordered={false}
-                  onSearch={setSearchKeyword}
+                  onSearch={onSearch}
                   onChange={handleSearchInputChange}
-                  // enterButton={<button style={{ border: 'none' }}>search</button>}
                   enterButton={
                     <Button
                       type="submit"
                       style={{
                         border: 'none',
-                        backgroundColor: '#FFFFFF', // Xóa border của button
+                        backgroundColor: '#FFFFFF',
                       }}
                     >
                       <SearchOutlined />
@@ -281,7 +278,7 @@ const UserManager = () => {
                   style={{
                     width: 200,
                     marginLeft: '20px',
-                    border: 'none'
+                    border: 'none',
                   }}
                 />
               </div>
@@ -310,7 +307,7 @@ const UserManager = () => {
                     {
                       value: '',
                       label: 'All',
-                    }
+                    },
                   ]}
                 />
               </div>

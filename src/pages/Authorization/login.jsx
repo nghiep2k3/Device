@@ -57,6 +57,7 @@ const Login = () => {
     console.log('log out');
     localStorage.setItem('setLoggedIn', 'false');
     localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem('role');
     setIsLoggedIn(false);
   };
 
