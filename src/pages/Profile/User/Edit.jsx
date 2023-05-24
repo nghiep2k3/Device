@@ -12,12 +12,12 @@ import {
   List,
   Table,
   Space,
-  Divider
+  Divider,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
 import { axiosInstance } from '../../../shared/services/http-client.js';
-import moment from "moment";
+import moment from 'moment';
 const Create = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [dob, setDob] = useState(null);
@@ -34,28 +34,30 @@ const Create = () => {
   const handleDelete = record => {
     setCheckedList(checkedList.filter(item => item.value !== record.value));
   };
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     setSearch(event.target.value);
     setHasUserInput(true);
   };
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get(`/users/${userId.id}?populate=role,devices`);
+        const response = await axiosInstance.get(
+          `/users/${userId.id}?populate=role,devices`
+        );
         if (response) {
           setUserProfile(response);
           const newCheckedList = response.devices.map(device => {
             // Tạo bản sao của đối tượng device và xóa trường id
             const value = { ...device };
             delete value.id;
-          
+
             // Tạo đối tượng mới chỉ với các thuộc tính cần thiết
             return {
               label: device.code,
               value: {
-                id:device.id,
-                attributes:value,
-              }
+                id: device.id,
+                attributes: value,
+              },
             };
           });
           setCheckedList(newCheckedList);
@@ -66,43 +68,45 @@ const Create = () => {
     };
     fetchUsers();
   }, [userId]);
-    useEffect(() => {
-      if (!hasUserInput) return;
-    
-      const fetchDevices = async () => {
-        try {
-          const response = await axiosInstance.get(`/devices?filters[code][$contains]=${search}`);
-          if (response.data) {
-            setDeviceNames(response.data);
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setHasUserInput(false);
-        }
-      };
-      fetchDevices();
-    }, [search, hasUserInput]);
-    
-    let roleValue;
+  useEffect(() => {
+    if (!hasUserInput) return;
 
-    if (userProfile?.role.id === 1) {
-      roleValue = "1";
-    } else if (userProfile?.role.id === 2) {
-      roleValue = "2";
-    } else {
-      roleValue = "3";
-    }  
+    const fetchDevices = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/devices?filters[code][$contains]=${search}`
+        );
+        if (response.data) {
+          setDeviceNames(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setHasUserInput(false);
+      }
+    };
+    fetchDevices();
+  }, [search, hasUserInput]);
+
+  let roleValue;
+
+  if (userProfile?.role.id === 1) {
+    roleValue = '1';
+  } else if (userProfile?.role.id === 2) {
+    roleValue = '2';
+  } else {
+    roleValue = '3';
+  }
   useEffect(() => {
     form.setFieldsValue({
       Username: userProfile?.username,
       Email: userProfile?.email,
-      Name:userProfile?.fullname,
-      Phone_number:userProfile?.phoneNumber,
-      Gender:userProfile?.gender,
-      DOB:moment(userProfile?.dob),
-      Status:userProfile?.blocked ? "true" : "false",
-      Role:roleValue,
+      Name: userProfile?.fullname,
+      Phone_number: userProfile?.phoneNumber,
+      Gender: userProfile?.gender,
+      DOB: moment(userProfile?.dob),
+      Status: userProfile?.blocked ? 'true' : 'false',
+      Role: roleValue,
     });
   }, [form, userProfile]);
 
@@ -111,13 +115,13 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
-  console.log(checkedList)
+  console.log(checkedList);
   const onFinish = values => {
     const moment = require('moment');
 
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-    
+
     let isFalse = formValues.Status === 'true';
     let bool = isFalse ? true : false;
     const data = {
@@ -164,7 +168,7 @@ const Create = () => {
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your name!' }]}
               >
-                <Input className={styles.inputc}/>
+                <Input className={styles.inputc} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -180,9 +184,7 @@ const Create = () => {
                   },
                 ]}
               >
-                <Input
-                  className={styles.inputc}
-                />
+                <Input disabled className={styles.inputc} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -196,13 +198,13 @@ const Create = () => {
               >
                 <Input
                   className={styles.inputc}
+                  disabled
                   placeholder="Enter owner username"
                 />
               </Form.Item>
             </Col>
           </Row>
           <Row>
-         
             <Col span={8}>
               <Form.Item
                 label={<label className={styles.detail}>Phone number</label>}
@@ -267,11 +269,7 @@ const Create = () => {
                 labelCol={{ span: 24 }}
                 rules={[{ required: true, message: 'Please input your Role!' }]}
               >
-                <Select
-                  className={styles.inputc}
-                  size="large"
-                  
-                >
+                <Select className={styles.inputc} size="large">
                   <Select.Option value="1">User</Select.Option>
                   <Select.Option value="2">Public</Select.Option>
                   <Select.Option value="3">Admin</Select.Option>
@@ -287,88 +285,94 @@ const Create = () => {
                   { required: true, message: 'Please input your Status!' },
                 ]}
               >
-                <Select
-                  className={styles.inputc}
-                  size="large"
-                >
+                <Select className={styles.inputc} size="large">
                   <Select.Option value="false">Active</Select.Option>
                   <Select.Option value="true">Blocked</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
           </Row>
-          <Row><label className={styles.detail}>Device</label></Row>
+          <Row>
+            <label className={styles.detail}>Device</label>
+          </Row>
           <div className={styles.container}>
             <Row>
-                <Col span={12}>
-                
-                    <div>
-                    <div className={styles.left}>
-                        <input 
-                            className={styles.inputc}   
-                            placeholder="Search for devices ..."
-                            value={search}
-                            onChange={handleSearch}/>
-                           <div className={styles.box}>
-                        <List
-                            dataSource={plainOptions}
-                            renderItem={(item) => (
-                                <List.Item>
-                                <Checkbox
-                                    value={item.value}
-                                    checked={checkedList.some((o) => o.value === item.value)}
-                                    onChange={(e) => {
-                                    if (e.target.checked) {
-                                        setCheckedList([...checkedList, item]);
-                                    } else {
-                                        setCheckedList(checkedList.filter((o) => o.value !== item.value));
-                                    }
-                                    console.log(checkedList);
-                                    }}
-                                >
-                                    {item.label}
-                                </Checkbox>
-                                </List.Item>
-                            )}
-                            />
-                            </div>
-                    </div>
-                    </div>
-                    
-                
-                </Col>
-                <Col span={12}>
-                
-                <div className={styles.right}>
-                    <h2> Select devices({checkedList.length})</h2>
-                    <div className={styles.box}>
-                    <Table
-                    dataSource={checkedList}
-                    columns={[
-                        {
-                        dataIndex: 'label',
-                        key: 'label',
-                        },
-                        {
-                       
-                        key: 'action',
-                        render: (text, record) => (
-                            <Space size="middle">
-                            <a onClick={() => handleDelete(record)}>Delete</a>
-                            </Space>
-                        ),
-                        },
-                    ]}
-                    pagination={{ pageSize: 3 }}
+              <Col span={12}>
+                <div>
+                  <div className={styles.left}>
+                    <input
+                      className={styles.inputc}
+                      placeholder="Search for devices ..."
+                      value={search}
+                      onChange={handleSearch}
                     />
+                    <div className={styles.box}>
+                      <List
+                        dataSource={plainOptions}
+                        renderItem={item => (
+                          <List.Item>
+                            <Checkbox
+                              value={item.value}
+                              checked={checkedList.some(
+                                o => o.value === item.value
+                              )}
+                              onChange={e => {
+                                if (e.target.checked) {
+                                  setCheckedList([...checkedList, item]);
+                                } else {
+                                  setCheckedList(
+                                    checkedList.filter(
+                                      o => o.value !== item.value
+                                    )
+                                  );
+                                }
+                                console.log(checkedList);
+                              }}
+                            >
+                              {item.label}
+                            </Checkbox>
+                          </List.Item>
+                        )}
+                      />
+                    </div>
+                  </div>
                 </div>
+              </Col>
+              <Col span={12}>
+                <div className={styles.right}>
+                  <h2> Select devices({checkedList.length})</h2>
+                  <div className={styles.box}>
+                    <Table
+                      dataSource={checkedList}
+                      columns={[
+                        {
+                          dataIndex: 'label',
+                          key: 'label',
+                        },
+                        {
+                          key: 'action',
+                          render: (text, record) => (
+                            <Space size="middle">
+                              <a onClick={() => handleDelete(record)}>Delete</a>
+                            </Space>
+                          ),
+                        },
+                      ]}
+                      pagination={{ pageSize: 3 }}
+                    />
+                  </div>
                 </div>
-                </Col>
+              </Col>
             </Row>
-            </div>
-          <Divider style={{ background: 'gray' }}/>
+          </div>
+          <Divider style={{ background: 'gray' }} />
           <Form.Item>
-            <Button type="primary" className={styles.button} style={{background: '#8767E1'}} htmlType="submit">
+            <Button
+              type="primary"
+              className={styles.button}
+              style={{ background: '#8767E1' }}
+              htmlType="submit"
+            >
               Save
             </Button>
             <Button className={styles.button} style={{ marginLeft: 8 }}>
