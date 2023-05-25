@@ -16,6 +16,9 @@ const Menus = ({ onLogout }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [data, setData] = useState('');
   const [avatar, setAvatar] = useState('');
+  const url = window.location.href;
+  const deviceId = url.split('/').pop();
+  
   useEffect(() => {
     axiosInstance.get('/users/me?populate=role,avatar').then(res => {
       setData(res);
@@ -51,15 +54,15 @@ const Menus = ({ onLogout }) => {
         <Menu
           theme="light"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={deviceId}
           items={[
             {
-              key: '1',
+              key: 'UserManager',
               icon: <UserIcon />,
               label: <Link to="/UserManager" ><p className="custom">User</p></Link>,
             },
             {
-              key: '2',
+              key: 'DeviceManager',
               icon: <UserIcon />,
               label: <Link to="/DeviceManager" ><p className="custom">Device</p></Link>,
             },

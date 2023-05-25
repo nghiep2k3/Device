@@ -152,7 +152,7 @@ function Details() {
                     </Col>
                 </Row>
                 </div>
-            <Divider style={{ background: 'gray' }}/>
+                <Divider style={{ background: '#DDE4EE' }} />
             <Form.Item>
                 <Button className={styles.button} style={{background: '#8767E1',width:'109px'}}type="primary" htmlType="submit">
                     <Link to={`/Edit/${userProfile?.id}`}>Edit</Link>

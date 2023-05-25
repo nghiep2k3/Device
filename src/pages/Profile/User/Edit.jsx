@@ -18,6 +18,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../../assets/styles/index.module.css';
 import { axiosInstance } from '../../../shared/services/http-client.js';
 import moment from 'moment';
+import { ReactComponent as DeleteIcon } from '../../../assets/icons/Vector.svg';
 const Create = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [dob, setDob] = useState(null);
@@ -39,6 +40,21 @@ const Create = () => {
     setHasUserInput(true);
   };
   useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const response = await axiosInstance.get(`/devices`);
+        if (response.data) {
+          setDeviceNames(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setHasUserInput(false);
+      }
+    };
+    fetchDevices();
+  }, [hasUserInput]);
+  useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get(
@@ -47,11 +63,8 @@ const Create = () => {
         if (response) {
           setUserProfile(response);
           const newCheckedList = response.devices.map(device => {
-            // Tạo bản sao của đối tượng device và xóa trường id
             const value = { ...device };
             delete value.id;
-
-            // Tạo đối tượng mới chỉ với các thuộc tính cần thiết
             return {
               label: device.code,
               value: {
@@ -151,8 +164,10 @@ const Create = () => {
   };
   return (
     <div>
-      <h2 className={styles.tittle}>All user {userProfile?.username}</h2>
-
+      <h2 className={styles.title}>
+        All user{' '}
+        <span className={styles.subtitle}>&gt; {userProfile?.username}</span>
+      </h2>
       <div className={styles.form}>
         <Form
           name="create_form"
@@ -301,7 +316,7 @@ const Create = () => {
                 <div>
                   <div className={styles.left}>
                     <input
-                      className={styles.inputc}
+                      className={styles.inputs}
                       placeholder="Search for devices ..."
                       value={search}
                       onChange={handleSearch}
@@ -353,7 +368,7 @@ const Create = () => {
                           key: 'action',
                           render: (text, record) => (
                             <Space size="middle">
-                              <a onClick={() => handleDelete(record)}>Delete</a>
+                              <a onClick={() => handleDelete(record)}><DeleteIcon/></a>
                             </Space>
                           ),
                         },
@@ -365,7 +380,7 @@ const Create = () => {
               </Col>
             </Row>
           </div>
-          <Divider style={{ background: 'gray' }} />
+          <Divider style={{ background: '#DDE4EE' }} />
           <Form.Item>
             <Button
               type="primary"
