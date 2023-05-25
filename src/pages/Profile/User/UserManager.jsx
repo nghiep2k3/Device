@@ -36,7 +36,7 @@ const UserManager = () => {
         .delete(`/users/${userId}`)
         .then(res => {
           message.success('delete complete');
-          axiosInstance.get(`/users`).then(response => {
+          axiosInstance.get(`/users?populate=avatar`).then(response => {
             setSearchResults(response);
           });
         })
@@ -120,7 +120,7 @@ const UserManager = () => {
   useEffect(() => {
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}?populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar`
       )
       .then(res => {
         setSearchResults(res);
@@ -142,7 +142,7 @@ const UserManager = () => {
 
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}?populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar`
       )
       .then(res => {
         setSearchResults(res);
