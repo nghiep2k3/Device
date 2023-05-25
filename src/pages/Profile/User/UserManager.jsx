@@ -35,10 +35,9 @@ const UserManager = () => {
       axiosInstance
         .delete(`/users/${userId}`)
         .then(res => {
-          console.log(res);
           message.success('delete complete');
-          axiosInstance.get(`/users`).then(res => {
-            setSearchResults(res);
+          axiosInstance.get(`/users`).then(response => {
+            setSearchResults(response);
           });
         })
         .catch(err => {
@@ -116,15 +115,7 @@ const UserManager = () => {
       ),
     },
   ];
-  // const onSearch = (value) => {
-  //   axiosInstance
-  //     .get(
-  //       `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$eq]=${Status}`
-  //     )
-  //     .then(res => {
-  //       setSearchResults(res);
-  //     });
-  // };
+  
 
   useEffect(() => {
     axiosInstance
@@ -136,7 +127,7 @@ const UserManager = () => {
       });
   }, [Status, searchKeyword]);
 
-  // /users?filters[username][$contains]=nghiep&filters[blocked][$eq]=false
+  
 
   useEffect(() => {
     axiosInstance.get(`/users?populate=avatar`).then(res => {
@@ -158,15 +149,6 @@ const UserManager = () => {
       });
   }, 500);
 
-  // const handleSearchStatus = debounce(async () => {
-  //     setStatus(!Status);
-  //     console.log(Status);
-
-  //     axiosInstance.get(`/users?filters[blocked][$eq]=${Status}`)
-  //         .then((res) => {
-  //             setSearchResults(res);
-  //         })
-  // }, 1000);
 
   return (
     <div>
