@@ -112,7 +112,6 @@ const UserManager = () => {
       ),
     },
   ];
-  
 
   useEffect(() => {
     axiosInstance
@@ -123,8 +122,6 @@ const UserManager = () => {
         setSearchResults(res);
       });
   }, [Status, searchKeyword]);
-
-  
 
   useEffect(() => {
     axiosInstance.get(`/users?populate=avatar`).then(res => {
@@ -147,7 +144,6 @@ const UserManager = () => {
       });
   }, 500);
 
-
   return (
     <div>
       <div className={styles.form}>
@@ -163,13 +159,23 @@ const UserManager = () => {
           </div>
 
           <div>
-            <Button
-              className={styles.button}
-              style={{ background: '#8767E1' }}
-              type="primary"
-            >
-              <Link to="/Create">Add User</Link>
-            </Button>
+            {role === '3' && (
+              <Button
+                className={styles.button}
+                style={{ background: '#8767E1' }}
+                type="primary"
+              >
+                <Link to="/Create">Add User</Link>
+              </Button>
+            )}
+
+            {role === '1' && (
+              <Button
+                className={styles.button}
+                style={{ background: '#8767E1' }}
+                type="primary"
+              >Add User</Button>
+            )}
           </div>
         </div>
 

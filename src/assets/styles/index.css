@@ -77,9 +77,10 @@
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 1.1;
-  
   color: #111111;
+  white-space: nowrap;
+  text-overflow: clip;
+  
 }
 .RoleM {
   font-family: 'Poppins';
