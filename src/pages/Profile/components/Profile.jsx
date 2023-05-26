@@ -4,7 +4,6 @@ import '../../../assets/styles/index.css';
 import { Link } from 'react-router-dom';
 import { Avatar, Space, Row, Col } from 'antd';
 import { Button } from 'antd';
-import ListName from '../../../components/Viewprofile/ListName/ListName';
 import { axiosInstance } from '../../../shared/services/http-client';
 import styles from '../../../assets/styles/index.module.css';
 import { useState, useEffect } from 'react';

@@ -125,8 +125,8 @@ const Menus = ({ onLogout }) => {
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
-            padding: 24,
+            margin: '24px 10px',
+            padding: 12,
             minHeight: 280,
           }}
         >
