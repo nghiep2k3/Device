@@ -32,7 +32,7 @@ const Menus = ({ onLogout }) => {
   const items = [
     {
       key: '1',
-      label: <Link to="/ListUser">Info</Link>,
+      label: <Link to="/ListUser">Profile</Link>,
     },
     {
       key: '2',
@@ -114,7 +114,7 @@ const Menus = ({ onLogout }) => {
                   </Col>
                   <Col span={16}>
                     <div className="set">
-                  <Row span={24}><p className="NameM">{data.fullname}</p></Row>
+                  <Row span={24} className="NameM"><p>{data.fullname}</p></Row>
                   <Row span={24}> <p className="RoleM">{data.role?.name}</p></Row>
                   </div>
                   </Col>
