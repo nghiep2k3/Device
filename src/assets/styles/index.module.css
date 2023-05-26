@@ -1,6 +1,33 @@
 .inputc {
   width: 90% !important;
-  height: 40px;
+  height: 56px;
+  background: #fffffe;
+  border: 1px solid #cbcbcb;
+  border-radius: 8px;
+}
+.inputs {
+  width: 90% !important;
+  height: 56px;
+  background: #fffffe;
+  border: 1px solid #cbcbcb;
+  border-radius: 8px;
+}
+.inputs::placeholder {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #111111;
+  padding-left: 20px;
+}
+
+.custom-select .ant-select-selector {
+  height: 56px;
+}
+.custom-select-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
 }
 .inputp {
   display: flex;
@@ -133,14 +160,52 @@
   max-height: 250px;
   overflow: auto;
 }
+.box::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+.box::-webkit-scrollbar-thumb {
+  background-color: #a09c9c;
+}
+
+.box::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
 .right {
   padding-left: 20px;
 }
 .tittle {
-  font-size: 40px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  color: #939393;
+}
+.subtitle {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  color: #111111;
+}
+.check {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #111111;
 }
 .detail {
-  font-size: 20px !important;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px !important;
+  line-height: 24px;
+  color: #939393;
 }
 .form {
   align-items: center;
@@ -176,8 +241,16 @@
   line-height: 24px;
   /* identical to box height, or 150% */
   padding-top: 20px;
-  padding-bottom:10px;
+  padding-bottom: 10px;
   /* Neutral Light/2 */
 
   color: #939393;
+}
+.tittles {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  color: #111111;
 }

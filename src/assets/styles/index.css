@@ -77,15 +77,16 @@
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-
   color: #111111;
+  white-space: nowrap;
+  text-overflow: clip;
+  
 }
 .RoleM {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
-
   color: #cbcbcb;
 }
 .LB {
@@ -240,5 +241,16 @@
   background-color: rgba(0, 0, 0, 0.5); /* Màu sắc và độ đậm của hiệu ứng tối */
   z-index: 2;
 }
-
-
+.ant-select-selector {
+  height: 56px !important;
+  padding-left: 10px;
+}
+.ant-select-selection-item {
+  padding-top: 11px !important;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #2F3A4C;
+}
