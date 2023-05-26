@@ -245,7 +245,7 @@ const DeviceManager = () => {
                   display: 'flex',
                   alignItems: 'center',
                   border: '2px solid #CBCBCB',
-                  width: 'max-content',
+                  width: '394px',
                   borderRadius: '10px',
                 }}
               >

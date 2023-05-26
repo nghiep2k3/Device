@@ -128,7 +128,7 @@ const CreateDevice = () => {
                       name="Code"
                       labelCol={{ span: 24 }}
                       rules={[
-                        { required: true, message: 'Please input your name!' },
+                        { required: true, message: 'Please input your code!', },
                       ]}
                     >
                       <Input
@@ -175,8 +175,8 @@ const CreateDevice = () => {
                 <Row>
                   <Col span={24}>
                     <Form.Item
-                      label={<label className={styles.detail}>Intro</label>}
-                      name="intro"
+                      label={<label className={styles.detail}>Address</label>}
+                      name="Address"
                       labelCol={{ span: 24 }}
                       rules={[
                         { required: true, message: 'Please input Intro' },
