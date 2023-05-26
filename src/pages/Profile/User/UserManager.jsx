@@ -105,7 +105,9 @@ const UserManager = () => {
             </Link>
           )}
 
- 
+          {role === '3' && (
+            <DeleteOutlined onClick={() => deleteUser(record.id)} />
+          )}
 
           {role === '1' && <DeleteOutlined />}
         </Space>
