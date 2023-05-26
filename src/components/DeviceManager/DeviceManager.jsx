@@ -124,13 +124,14 @@ const DeviceManager = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          
+          <Link to={`/DetailsDevice/${record.id}`}>
             <EyeOutlined />
-          
+          </Link>
+
           {role === '3' && (
-            
+            <Link to={`/EditDevice/${record.id}`}>
               <EditOutlined />
-            
+            </Link>
           )}
 
           {role === '1' && <EditOutlined />}
