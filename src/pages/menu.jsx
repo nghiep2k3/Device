@@ -7,9 +7,10 @@ import {
 import { Outlet, Link } from 'react-router-dom';
 import { Layout, Menu, theme, Button, Dropdown, Row, Col } from 'antd';
 import React, { useState, useEffect } from 'react';
-import '../../assets/styles/index.css';
-import { ReactComponent as UserIcon } from '../../assets/icons/Users.svg';
-import { axiosInstance } from '../../shared/services/http-client';
+import '../assets/styles/index.css';
+import { ReactComponent as UserIcon } from '../assets/icons/Users.svg';
+import { axiosInstance } from '../shared/services/http-client';
+import { imgurl } from '../shared/constants/index';
 const { Header, Sider, Content } = Layout;
 
 const Menus = ({ onLogout }) => {
@@ -18,12 +19,14 @@ const Menus = ({ onLogout }) => {
   const [avatar, setAvatar] = useState('');
   const url = window.location.href;
   const deviceId = url.split('/').pop();
-  
+
   useEffect(() => {
     axiosInstance.get('/users/me?populate=role,avatar').then(res => {
+      
       setData(res);
-      setAvatar(res.avatar.url);
+      localStorage.setItem('id', res.id);
       localStorage.setItem('role', res.role.id);
+      setAvatar(res.avatar.url);
     });
   }, []);
   const {
@@ -41,7 +44,12 @@ const Menus = ({ onLogout }) => {
   ];
   return (
     <Layout className="SetupHeight">
-      <Sider trigger={null} collapsible collapsed={collapsed} className="custom-sider">
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        className="custom-sider"
+      >
         <div className="logo" />
         <h1
           style={{
@@ -59,12 +67,20 @@ const Menus = ({ onLogout }) => {
             {
               key: 'UserManager',
               icon: <UserIcon />,
-              label: <Link to="/UserManager" ><p className="custom">User</p></Link>,
+              label: (
+                <Link to="/UserManager">
+                  <p className="custom">User</p>
+                </Link>
+              ),
             },
             {
               key: 'DeviceManager',
               icon: <UserIcon />,
-              label: <Link to="/DeviceManager" ><p className="custom">Device</p></Link>,
+              label: (
+                <Link to="/DeviceManager">
+                  <p className="custom">Device</p>
+                </Link>
+              ),
             },
           ]}
         />
@@ -102,21 +118,38 @@ const Menus = ({ onLogout }) => {
               <div className="set">
                 <Row span={24}>
                   <Col span={8}>
-                    <img
-                      src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                      alt=""
-                      style={{
-                        height: '32px',
-                        width: '32px',
-                        borderRadius: '20px',
-                      }}
-                    />
+                    {avatar ? (
+                      <img
+                        src={`${imgurl}${avatar}`}
+                        alt=""
+                        style={{
+                          height: '32px',
+                          width: '32px',
+                          borderRadius: '20px',
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={`${imgurl}/uploads/avt.png`}
+                        alt=""
+                        style={{
+                          height: '32px',
+                          width: '32px',
+                          borderRadius: '20px',
+                        }}
+                      />
+                    )}
                   </Col>
                   <Col span={16}>
                     <div className="set">
-                  <Row span={24} className="NameM"><p>{data.fullname}</p></Row>
-                  <Row span={24}> <p className="RoleM">{data.role?.name}</p></Row>
-                  </div>
+                      <Row span={24} className="NameM">
+                        <p>{data.fullname}</p>
+                      </Row>
+                      <Row span={24}>
+                        {' '}
+                        <p className="RoleM">{data.role?.name}</p>
+                      </Row>
+                    </div>
                   </Col>
                 </Row>
               </div>

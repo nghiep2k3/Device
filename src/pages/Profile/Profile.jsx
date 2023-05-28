@@ -1,13 +1,13 @@
 import { UserOutlined } from '@ant-design/icons';
 import React from 'react';
-import '../../../assets/styles/index.css';
+import '../../assets/styles/index.css';
 import { Link } from 'react-router-dom';
 import { Avatar, Space, Row, Col } from 'antd';
 import { Button } from 'antd';
-import { axiosInstance } from '../../../shared/services/http-client';
-import styles from '../../../assets/styles/index.module.css';
+import { axiosInstance } from '../../shared/services/http-client';
+import styles from '../../assets/styles/index.module.css';
 import { useState, useEffect } from 'react';
-
+import { imgurl } from '../../shared/constants/index';
 function ListUser() {
   const [avatar, setAvatar] = useState('');
   const [role, setRole] = useState('');
@@ -30,15 +30,28 @@ function ListUser() {
               <div className="setupimg">
                 <Space direction="vertical" size={16}>
                   <Space wrap size={16}>
-                    <img
-                      src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                      alt=""
-                      style={{
-                        height: '200px',
-                        width: '200px',
-                        borderRadius: '100px',
-                      }}
-                    />
+                    {avatar ? (
+                      <img
+                        src={`${imgurl}${avatar}`}
+                        alt=""
+                        style={{
+                          height: '200px',
+                          width: '200px',
+                          borderRadius: '100px',
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={`${imgurl}/uploads/avt.png`}
+                        alt=""
+                        style={{
+                          height: '200px',
+                          width: '200px',
+                          borderRadius: '100px',
+                        }}
+                      />
+                    )}
+                   
                   </Space>
                 </Space>
               </div>

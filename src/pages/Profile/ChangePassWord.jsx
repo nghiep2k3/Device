@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Input, Form, Button,message,Row,Col,Divider } from 'antd';
 import React,{ useState }  from 'react';
-import '../../../assets/styles/index.css';
-import { axiosInstance } from '../../../shared/services/http-client';
-import styles from '../../../assets/styles/index.module.css';
+import '../../assets/styles/index.css';
+import { axiosInstance } from '../../shared/services/http-client';
+import styles from '../../assets/styles/index.module.css';
 
 function Change() {
     const onFinish = (values) => {

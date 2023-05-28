@@ -5,9 +5,10 @@ import {
   UserOutlined,
   AppstoreOutlined,
 } from '@ant-design/icons';
-import styles from '../../../assets/styles/index.module.css';
+import styles from '../../assets/styles/index.module.css';
 import React, { useState, useEffect } from 'react';
-import '../../../assets/styles/index.css';
+import '../../assets/styles/index.css';
+import { imgurl } from '../../shared/constants/index';
 import {
   Avatar,
   Space,
@@ -25,7 +26,7 @@ import {
 import { Button } from 'antd';
 import { CameraOutlined } from '@ant-design/icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { axiosInstance } from '../../../shared/services/http-client';
+import { axiosInstance } from '../../shared/services/http-client';
 import moment from 'moment';
 
 function UserUpdate() {
@@ -137,11 +138,20 @@ function UserUpdate() {
                         fileList={fileList}
                       />
                       <div className="image-wrapper">
-                        <img
-                          src={`https://edison-device-api.savvycom.xyz${avatar}`}
-                          alt=""
-                          className="blurred-image"
-                        />
+                        {avatar ? (
+                          <img
+                            src={`${imgurl}${avatar}`}
+                            alt=""
+                            className="blurred-image"
+                          />
+                        ) : (
+                          <img
+                            src={`${imgurl}/uploads/avt.png`}
+                            alt=""
+                            className="blurred-image"
+                          />
+                        )}
+
                         <span className="camera-icon">
                           <CameraOutlined style={{ fontSize: '40px' }} />
                         </span>
@@ -164,13 +174,8 @@ function UserUpdate() {
                 >
                   <Row>
                     <Col span={24}>
-                    <label className={styles.labelStyle}>Name</label>
-                      <Form.Item
-                        
-                        name="Name"
-                        labelCol={{ span: 24 }}
-                        
-                      >
+                      <label className={styles.labelStyle}>Name</label>
+                      <Form.Item name="Name" labelCol={{ span: 24 }}>
                         <Input
                           className={styles.inputp}
                           defaultValue={userProfile?.fullname}
@@ -181,13 +186,8 @@ function UserUpdate() {
 
                   <Row>
                     <Col span={24}>
-                    <label className={styles.labelStyle}>Email</label>
-                      <Form.Item
-                        
-                        name="Email"
-                        labelCol={{ span: 24 }}
-                      
-                      >
+                      <label className={styles.labelStyle}>Email</label>
+                      <Form.Item name="Email" labelCol={{ span: 24 }}>
                         <Input
                           className={styles.inputp}
                           disabled
@@ -198,13 +198,8 @@ function UserUpdate() {
                   </Row>
                   <Row>
                     <Col span={24}>
-                    <label className={styles.labelStyle}>Username</label>
-                      <Form.Item
-                        
-                        name="Username"
-                        labelCol={{ span: 24 }}
-                        
-                      >
+                      <label className={styles.labelStyle}>Username</label>
+                      <Form.Item name="Username" labelCol={{ span: 24 }}>
                         <Input
                           className={styles.inputp}
                           disabled
@@ -215,13 +210,8 @@ function UserUpdate() {
                   </Row>
                   <Row>
                     <Col span={8}>
-                    <label className={styles.labelStyle}>DOB</label>
-                      <Form.Item
-                        
-                        name="DOB"
-                        labelCol={{ span: 24 }}
-                        
-                      >
+                      <label className={styles.labelStyle}>DOB</label>
+                      <Form.Item name="DOB" labelCol={{ span: 24 }}>
                         <DatePicker
                           className={styles.inputc}
                           value={dob}
@@ -233,10 +223,7 @@ function UserUpdate() {
                     </Col>
                     <Col span={8}>
                       <label className={styles.labelStyle}>Phone number</label>
-                      <Form.Item
-                        name="Phone_number"
-                        labelCol={{ span: 24 }}
-                      >
+                      <Form.Item name="Phone_number" labelCol={{ span: 24 }}>
                         <Input
                           className={styles.inputp}
                           defaultValue={userProfile?.Phone_number}
@@ -247,13 +234,8 @@ function UserUpdate() {
 
                   <Row>
                     <Col span={24}>
-                    <label className={styles.labelStyle}>Role</label>
-                      <Form.Item
-                        
-                        name="Role"
-                        labelCol={{ span: 24 }}
-                        
-                      >
+                      <label className={styles.labelStyle}>Role</label>
+                      <Form.Item name="Role" labelCol={{ span: 24 }}>
                         <Input
                           className={styles.inputp}
                           disabled

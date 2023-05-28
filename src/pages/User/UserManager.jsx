@@ -8,7 +8,8 @@ import {
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../../shared/services/http-client';
+import { imgurl } from '../../shared/constants/index';
+import { axiosInstance } from '../../shared/services/http-client';
 import {
   Space,
   Button,
@@ -20,7 +21,7 @@ import {
   Select,
 } from 'antd';
 import debounce from 'lodash/debounce';
-import styles from '../../../assets/styles/index.module.css';
+import styles from '../../assets/styles/index.module.css';
 
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
@@ -28,16 +29,18 @@ const UserManager = () => {
   const [Status, setStatus] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const { Search } = Input;
-
+  const id = localStorage.getItem('id');
   const role = localStorage.getItem('role');
+  
   const deleteUser = userId => {
     if (window.confirm('Do you want to delete this user?')) {
       axiosInstance
         .delete(`/users/${userId}`)
         .then(res => {
           message.success('delete complete');
-          axiosInstance.get(`/users?populate=avatar`).then(response => {
+          axiosInstance.get(`/users?populate=avatar&filters[id][$ne]=${id}`).then(response => {
             setSearchResults(response);
+           
           });
         })
         .catch(err => {
@@ -58,11 +61,19 @@ const UserManager = () => {
       key: 'username',
       render: (_, record) => (
         <>
-          <img
-            src={`https://edison-device-api.savvycom.xyz${record?.avatar?.url}`}
-            alt={record?.avatar?.url}
-            style={{ width: '32px', height: '32px', borderRadius: '16px' }}
-          />
+          {record?.avatar?.url ? (
+            <img
+              src={`${imgurl}${record.avatar.url}`}
+              alt={record.avatar.url}
+              style={{ width: '32px', height: '32px', borderRadius: '16px' }}
+            />
+          ) : (
+            <img
+              src={`${imgurl}/uploads/avt.png`}
+              alt="Default Avatar"
+              style={{ width: '32px', height: '32px', borderRadius: '16px' }}
+            />
+          )}
           {record.username}
         </>
       ),
@@ -97,20 +108,20 @@ const UserManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/Details/${record.id}`}>
-            <EyeOutlined />
+            <EyeOutlined style={{ color: 'blue' }}/>
           </Link>
           {role === '3' && (
             <Link to={`/Edit/${record.id}`}>
-              <EditOutlined />
+              <EditOutlined style={{ color: 'blue' }}/>
             </Link>
           )}
 
-          {role === '1' && <EditOutlined />}
+          {role === '1' && <EditOutlined style={{ color: 'blue' }}/>}
           {role === '3' && (
-            <DeleteOutlined onClick={() => deleteUser(record.id)} />
+            <DeleteOutlined style={{ color: 'blue' }} onClick={() => deleteUser(record.id)} />
           )}
 
-          {role === '1' && <DeleteOutlined />}
+          {role === '1' && <DeleteOutlined style={{ color: 'blue' }} />}
         </Space>
       ),
     },
@@ -119,7 +130,7 @@ const UserManager = () => {
   useEffect(() => {
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
       )
       .then(res => {
         setSearchResults(res);
@@ -127,7 +138,7 @@ const UserManager = () => {
   }, [Status, searchKeyword]);
 
   useEffect(() => {
-    axiosInstance.get(`/users?populate=avatar`).then(res => {
+    axiosInstance.get(`/users?populate=avatar&filters[id][$ne]=${id}`).then(res => {
       setSearchResults(res);
     });
   }, []);
@@ -139,7 +150,7 @@ const UserManager = () => {
 
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
       )
       .then(res => {
         setSearchResults(res);
@@ -176,7 +187,9 @@ const UserManager = () => {
                 className={styles.button}
                 style={{ background: '#8767E1' }}
                 type="primary"
-              >Add User</Button>
+              >
+                Add User
+              </Button>
             )}
           </div>
         </div>

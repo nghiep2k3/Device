@@ -11,72 +11,61 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-import { axiosInstance } from '../../shared/services/http-client';
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-
-import { Layout, Menu, theme,Divider } from 'antd';
+import { Layout, Menu, theme } from 'antd';
+import React, { useState } from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import {
-  Input,
-  Form,
-  Button,
-  Col,
-  Row,
-  Select,
-  DatePicker,
-  message,
-  Checkbox,
-  List,
-  Table,
+  Avatar,
   Space,
+  Button,
+  Dropdown,
+  Input,
+  message,
+  Table,
+  Tag,
+  Select,
+  Modal,
 } from 'antd';
+import { Form, Col, Row, List, Divider, Option, TextArea } from 'antd';
+
 import styles from '../../assets/styles/index.module.css';
+import { axiosInstance } from '../../shared/services/http-client';
 
-const EditDevice = () => {
+const CreateDevice = () => {
   const { Header, Sider, Content } = Layout;
-  const userId = useParams();
+  const { TextArea } = Input;
   const [form] = Form.useForm();
-  const [deviceProfile, setDeviceProfile] = useState(null);
   const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
+  const [size, setSize] = useState('large');
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axiosInstance.get(`/devices/${userId.id}`);
-        if (response) {
-          setDeviceProfile(response.data.attributes);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUsers();
-  }, [userId]);
-
-  useEffect(() => {
-    form.setFieldsValue({
-      Code: deviceProfile?.code,
-      Name: deviceProfile?.name,
-      Status: deviceProfile?.status ? 'Active' : 'Blocked',
-      Address: deviceProfile?.address,
-
-      //   Status:deviceProfile?.data.attributes.status,
-
-      //   Status:userProfile?.confirmed ? "Blocked" : "Active",
-    });
-  }, [form, deviceProfile]);
   const onFinish = values => {
-    const str = values.Status;
-    const str2 = str.toLowerCase();
+    const moment = require('moment');
+    const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    // console.log('Received values of form: ', values);
+    const formValues = { ...values };
+    console.log(formValues);
+
+    // const Username = {data: us}
+
     const data = {
       data: {
-        name: values.Name,
-        status: str2,
-        address: values.Address,
+        name: formValues.Name,
+        code: formValues.Code,
+        status: formValues.Gender,
+        address: formValues.intro,
       },
     };
+
+    // const datas = { data: data };
+
+    console.log(1111, data);
+
     axiosInstance
-      .put(`/devices/${userId.id}`, data)
+      .post('/devices', data)
       .then(response => {
         if (response != null) {
           message.success('correct');
@@ -87,7 +76,10 @@ const EditDevice = () => {
         console.log(error);
         message.error('error');
       });
-    console.log(data);
+  };
+
+  const onChange = e => {
+    console.log('Change:', e.target.value);
   };
   return (
     <div>
@@ -96,7 +88,7 @@ const EditDevice = () => {
           <Link to="/DeviceManager" className={styles.tittle}>
             All Device
           </Link>
-          <span className={styles.subtitle}>&gt; {deviceProfile?.name}</span>
+          <span className={styles.subtitle}>&gt;Add a new service</span>
         </h2>
       </div>
       <Content
@@ -107,7 +99,7 @@ const EditDevice = () => {
         }}
       >
         <div>
-          <Form name="complex-form" form={form} onFinish={onFinish}>
+          <Form name="complex-form" onFinish={onFinish} form={form}>
             <Row>
               <Col span={8}>
                 <Form.Item
@@ -115,10 +107,18 @@ const EditDevice = () => {
                   name="Code"
                   labelCol={{ span: 24 }}
                   rules={[
-                    { required: true, message: 'Please input your CODE!' },
+                    { required: true, message: 'Please enter device code' },
+                    {
+                      pattern: /^([a-zA-Z]{4})_(0?[1-9]|[1-9][0-9])$/,
+                      message:
+                        'Please enter in format XXXX_YY with YY being the number from 1 to 99',
+                    },
                   ]}
                 >
-                  <Input disabled className={styles.inputc} />
+                  <Input
+                    className={styles.inputc}
+                    placeholder="Enter device code"
+                  />
                 </Form.Item>
               </Col>
 
@@ -131,20 +131,26 @@ const EditDevice = () => {
                     { required: true, message: 'Please input your name!' },
                   ]}
                 >
-                  <Input className={styles.inputc} />
+                  <Input
+                    className={styles.inputc}
+                    placeholder="Enter device name"
+                  />
                 </Form.Item>
               </Col>
 
               <Col span={8}>
                 <Form.Item
                   label={<label className={styles.detail}>Status</label>}
-                  name="Status"
+                  name="Gender"
                   labelCol={{ span: 24 }}
                   rules={[{ required: true, message: 'Select a status!' }]}
                 >
-                  <Select size="large" style={{ fontWeight: 'bold' }}>
-                    <Select.Option value="active">Active</Select.Option>
-                    <Select.Option value="blocked">Blocked</Select.Option>
+                  <Select
+                    style={{ fontWeight: 'bold' }}
+                    placeholder="Select a status"
+                  >
+                    <Select.Option value="active">active</Select.Option>
+                    <Select.Option value="inactive">InActive</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -154,7 +160,7 @@ const EditDevice = () => {
               <Col span={24}>
                 <Form.Item
                   label={<label className={styles.detail}>Address</label>}
-                  name="Address"
+                  name="intro"
                   labelCol={{ span: 24 }}
                   rules={[{ required: true, message: 'Please input Intro' }]}
                 >
@@ -168,17 +174,13 @@ const EditDevice = () => {
                 </Form.Item>
               </Col>
             </Row>
-            <Divider style={{ background: '#DDE4EE', marginBottom: 20 }} />
+            <Divider style={{ background: '#DDE4EE', marginBottom: 20  }} />
             <Form.Item>
               <Button
                 type="primary"
-                htmlType="submit"
                 className={styles.button}
-                style={{
-                  background: '#8767E1',
-                  width: '109px',
-                  color: 'white',
-                }}
+                htmlType="submit"
+                style={{ marginRight: '20px', background: '#8767E1' }}
               >
                 Save
               </Button>
@@ -193,4 +195,4 @@ const EditDevice = () => {
   );
 };
 
-export default EditDevice;
+export default CreateDevice;

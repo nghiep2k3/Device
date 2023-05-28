@@ -30,8 +30,9 @@ import {
   Upload,
 } from 'antd';
 import { axiosInstance } from '../../shared/services/http-client';
+import { imgurl } from '../../shared/constants/index';
 import debounce from 'lodash/debounce';
-
+import styles from '../../assets/styles/index.module.css';
 const { Content } = Layout;
 const DeviceManager = () => {
   const [searchResults, setSearchResults] = useState('');
@@ -89,10 +90,13 @@ const DeviceManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <div>
-            <img
-              style={{ width: '37px', height: '37px', borderRadius: '999px' }}
-              src={`https://edison-device-api.savvycom.xyz${record.attributes.user.data?.attributes.avatar.data?.attributes.url}`}
-            />
+            {record.attributes.user.data?.attributes.avatar.data?.attributes
+              .url ? (
+              <img
+                style={{ width: '37px', height: '37px', borderRadius: '999px' }}
+                src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
+              />
+            ) : null}
           </div>
           {record.attributes.user.data?.attributes.username}
           {/* {record.attributes.user.data?.attributes.avatar.data?.attributes.url} */}
@@ -125,21 +129,24 @@ const DeviceManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/DetailsDevice/${record.id}`}>
-            <EyeOutlined />
+            <EyeOutlined style={{ color: 'blue' }} />
           </Link>
 
           {role === '3' && (
             <Link to={`/EditDevice/${record.id}`}>
-              <EditOutlined />
+              <EditOutlined style={{ color: 'blue' }} />
             </Link>
           )}
 
-          {role === '1' && <EditOutlined />}
+          {role === '1' && <EditOutlined style={{ color: 'blue' }} />}
           {role === '3' && (
-            <DeleteOutlined onClick={() => deleteDevice(record.id)} />
+            <DeleteOutlined
+              style={{ color: 'blue' }}
+              onClick={() => deleteDevice(record.id)}
+            />
           )}
 
-          {role === '1' && <DeleteOutlined />}
+          {role === '1' && <DeleteOutlined style={{ color: 'blue' }} />}
         </Space>
       ),
     },
@@ -200,14 +207,7 @@ const DeviceManager = () => {
 
   return (
     <Layout className="SetupHeight">
-      {/* <Layout className="site-layout"> */}
-      <Content
-        style={{
-          padding: 24,
-          minHeight: 280,
-          background: colorBgContainer,
-        }}
-      >
+      <div className={styles.form}>
         <div
           style={{
             display: 'flex',
@@ -216,14 +216,14 @@ const DeviceManager = () => {
           }}
         >
           <div>
-            <h2>All Devices</h2>
+            <h2 className={styles.tittles}>All Devices</h2>
           </div>
           <div>
             <Link to="/CreateDevice">
               <Button
-                type="primary"
-                size={size}
+                className={styles.button}
                 style={{ background: '#8767E1' }}
+                type="primary"
               >
                 Add Device
               </Button>
@@ -237,16 +237,16 @@ const DeviceManager = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                paddingBottom: 20,
               }}
             >
               <div
                 style={{
-                  margin: '10px 0',
                   display: 'flex',
                   alignItems: 'center',
-                  border: '2px solid #CBCBCB',
-                  width: 'max-content',
-                  borderRadius: '10px',
+                  border: '1px solid #CBCBCB',
+                  width: '493px',
+                  borderRadius: '8px',
                 }}
               >
                 <div>
@@ -254,7 +254,7 @@ const DeviceManager = () => {
                     bordered={false}
                     defaultValue="Name"
                     style={{
-                      width: 120,
+                      width: 200,
                       border: 'none',
                     }}
                     onChange={e => {
@@ -297,8 +297,9 @@ const DeviceManager = () => {
                       </Button>
                     }
                     style={{
-                      width: 200,
+                      width: '222px',
                       marginLeft: '20px',
+                      border: 'none',
                     }}
                   />
                 </div>
@@ -309,7 +310,7 @@ const DeviceManager = () => {
                   <Select
                     defaultValue="Status"
                     style={{
-                      width: 180,
+                      width: 296,
                     }}
                     onChange={e => {
                       console.log(e);
@@ -336,7 +337,7 @@ const DeviceManager = () => {
           </div>
         </div>
         <Table columns={columns} dataSource={searchResults} />
-      </Content>
+      </div>
       {/* </Layout> */}
     </Layout>
   );

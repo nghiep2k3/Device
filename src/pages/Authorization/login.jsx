@@ -1,10 +1,8 @@
 import { axiosInstance } from '../../shared/services/http-client';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Menus from '../Profile/menu.jsx';
-import ListName from '../../components/Viewprofile/ListName/ListName';
+import Menus from '../menu.jsx';
 import styles from '../../assets/styles/index.module.css';
 
 const Login = () => {
@@ -58,6 +56,7 @@ const Login = () => {
     localStorage.setItem('setLoggedIn', 'false');
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('role');
+    localStorage.removeItem('id');
     setIsLoggedIn(false);
   };
 
