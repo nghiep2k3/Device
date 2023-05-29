@@ -66,13 +66,18 @@ const DeviceManager = () => {
       title: '#',
       dataIndex: 'id',
       key: 'id',
+      render: (_, record) => (
+        <>
+          <span className={styles.nameu}>{record.id}</span>
+        </>
+      ),
     },
     {
       title: 'Code',
       dataIndex: 'code',
       key: 'code',
       render: (_, record) => (
-        <Space size="middle">{record.attributes.code}</Space>
+        <span className={styles.nameu}>{record.attributes.code}</span>
       ),
     },
     {
@@ -80,7 +85,7 @@ const DeviceManager = () => {
       dataIndex: 'name',
       key: 'name',
       render: (_, record) => (
-        <Space size="middle">{record.attributes.name}</Space>
+        <span className={styles.nameu}>{record.attributes.name}</span>
       ),
     },
     {
@@ -93,13 +98,14 @@ const DeviceManager = () => {
             {record.attributes.user.data?.attributes.avatar.data?.attributes
               .url ? (
               <img
-                style={{ width: '37px', height: '37px', borderRadius: '999px' }}
+                style={{ width: '32px', height: '32px', borderRadius: '999px' }}
                 src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
               />
             ) : null}
           </div>
-          {record.attributes.user.data?.attributes.username}
-          {/* {record.attributes.user.data?.attributes.avatar.data?.attributes.url} */}
+          <span className={styles.nameu}>
+            {record.attributes.user.data?.attributes.username}
+          </span>
         </Space>
       ),
     },
@@ -108,14 +114,14 @@ const DeviceManager = () => {
       key: 'status',
       dataIndex: 'status',
       render: (_, record) => (
-        <Space size="middle" style={{ textTransform: 'uppercase' }}>
+        <Space size="middle">
           {record.attributes.status === 'active' ? (
-            <Tag color={'geekblue'} key={'active'}>
+            <Tag className={styles.nameu} color={'geekblue'} key={'active'}>
               {' '}
               Active{' '}
             </Tag>
           ) : (
-            <Tag color={'volcano'} key={'active'}>
+            <Tag className={styles.nameu} color={'volcano'} key={'active'}>
               {' '}
               Inactive{' '}
             </Tag>
@@ -129,24 +135,60 @@ const DeviceManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/DetailsDevice/${record.id}`}>
-            <EyeOutlined style={{ color: 'blue' }} />
+            <Button
+              icon={<EyeOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+            />
           </Link>
 
           {role === '3' && (
             <Link to={`/EditDevice/${record.id}`}>
-              <EditOutlined style={{ color: 'blue' }} />
+              <Button
+                icon={<EditOutlined />}
+                style={{
+                  color: '#1D3557',
+                  paddingRight: '10px',
+                  border: 'none',
+                }}
+              />
             </Link>
           )}
 
-          {role === '1' && <EditOutlined style={{ color: 'blue' }} />}
+          {role === '1' && (
+            <Link to={`/EditDevice/${record.id}`}>
+              <Button
+                icon={<EditOutlined />}
+                style={{
+                  color: '#1D3557',
+                  paddingRight: '10px',
+                  border: 'none',
+                }}
+              />
+            </Link>
+          )}
           {role === '3' && (
-            <DeleteOutlined
-              style={{ color: 'blue' }}
+            <Button
+              icon={<DeleteOutlined />}
+              style={{
+                color: '#1D3557',
+                paddingRight: '10px',
+                border: 'none',
+              }}
               onClick={() => deleteDevice(record.id)}
             />
           )}
 
-          {role === '1' && <DeleteOutlined style={{ color: 'blue' }} />}
+          {role === '1' && (
+            <Button
+              icon={<DeleteOutlined />}
+              style={{
+                color: '#1D3557',
+                paddingRight: '10px',
+                border: 'none',
+              }}
+              onClick={() => deleteDevice(record.id)}
+            />
+          )}
         </Space>
       ),
     },
@@ -155,7 +197,6 @@ const DeviceManager = () => {
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
     setSearchKeyword(value.trim());
-    console.log(555, searchKeyword);
 
     axiosInstance
       .get(
@@ -168,10 +209,6 @@ const DeviceManager = () => {
   }, 500);
 
   useEffect(() => {
-    console.log('keyword', searchKeyword.trim());
-    console.log('searchName', searchName);
-    console.log('Status', Status);
-
     if (Status == '') {
       axiosInstance
         .get(
@@ -286,18 +323,17 @@ const DeviceManager = () => {
                     onChange={handleSearchInputChange}
                     enterButton={
                       <Button
-                        // onClick={HanderClick}
                         type="submit"
                         style={{
                           border: 'none',
-                          backgroundColor: '#FFFFFF', // Xóa border của button
+                          backgroundColor: '#FFFFFF',
                         }}
                       >
-                        <SearchOutlined />
+                        <SearchOutlined style={{ fontSize: '18px' }} />
                       </Button>
                     }
                     style={{
-                      width: '222px',
+                      width: '262px',
                       marginLeft: '20px',
                       border: 'none',
                     }}

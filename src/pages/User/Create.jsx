@@ -83,7 +83,7 @@ const Create = () => {
 
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-    console.log(formValues.Role);
+    
     let isFalse = formValues.Status === 'false'; // kiểm tra chuỗi có giống "false" hay không
     let bool = isFalse ? false : true;
     const data = {

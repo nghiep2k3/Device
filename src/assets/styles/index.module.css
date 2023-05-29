@@ -18,6 +18,15 @@
   border: 1px solid #cbcbcb;
   border-radius: 8px;
 }
+.nameu {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+
+  color: #111111;
+}
 .inputs::placeholder {
   font-family: 'Poppins';
   font-style: normal;
@@ -238,6 +247,12 @@
 .button {
   height: 48px;
   font-size: 16px;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
 }
 .inputf::placeholder {
   font-family: 'Poppins';

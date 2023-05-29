@@ -22,12 +22,15 @@ function Details() {
   const userId = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const role = localStorage.getItem('role');
+  const permission =() =>{
+    message.error('You are not allowed to do this');
+  }
   const deleteUser = userId => {
     if (window.confirm('Do you want to delete this user?')) {
       axiosInstance
         .delete(`/users/${userId}`)
         .then(res => {
-          console.log(res);
           message.success('delete complete');
           navigate('/UserManager');
         })
@@ -54,7 +57,6 @@ function Details() {
     fetchUsers();
   }, [userId]);
 
-  console.log(userDevice);
   return (
     <div>
       <div>
@@ -70,11 +72,7 @@ function Details() {
           <Row>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Name
-                  </label>
-                }
+                label={<label className={styles.label}>Name</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -84,11 +82,7 @@ function Details() {
             </Col>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Email
-                  </label>
-                }
+                label={<label className={styles.label}>Email</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -98,11 +92,7 @@ function Details() {
             </Col>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Username
-                  </label>
-                }
+                label={<label className={styles.label}>Username</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -114,9 +104,7 @@ function Details() {
           <Row>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>DOB</label>
-                }
+                label={<label className={styles.label}>DOB</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -126,11 +114,7 @@ function Details() {
             </Col>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Phone number
-                  </label>
-                }
+                label={<label className={styles.label}>Phone number</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -140,11 +124,7 @@ function Details() {
             </Col>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Gender
-                  </label>
-                }
+                label={<label className={styles.label}>Gender</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -156,11 +136,7 @@ function Details() {
           <Row>
             <Col span={8}>
               <Form.Item
-                label={
-                  <label className={styles.label}>
-                    Role
-                  </label>
-                }
+                label={<label className={styles.label}>Role</label>}
                 labelCol={{ span: 24 }}
               >
                 <div>
@@ -178,7 +154,9 @@ function Details() {
                 <div>
                   <div className={styles.left2}>
                     {userDevice?.map(value => (
-                      <p key={value.id} className={styles.device}>{value.code}</p>
+                      <p key={value.id} className={styles.device}>
+                        {value.code}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -195,13 +173,25 @@ function Details() {
             >
               <Link to={`/Edit/${userProfile?.id}`}>Edit</Link>
             </Button>
-            <Button
-              onClick={() => deleteUser(userProfile?.id)}
-              className={styles.button}
-              style={{ marginLeft: 8 }}
-            >
-              Delete
-            </Button>
+            {role === '3' && (
+              <Button
+                onClick={() => deleteUser(userProfile?.id)}
+                className={styles.button}
+                style={{ marginLeft: 8 }}
+              >
+                Delete
+              </Button>
+            )}
+
+            {role === '1' && (
+              <Button
+                onClick={() => permission()}
+                className={styles.button}
+                style={{ marginLeft: 8 }}
+              >
+                Delete
+              </Button>
+            )}
           </Form.Item>
         </Form>
       </div>

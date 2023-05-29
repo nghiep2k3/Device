@@ -87,7 +87,7 @@ const EditDevice = () => {
         console.log(error);
         message.error('error');
       });
-    console.log(data);
+    
   };
   return (
     <div>

@@ -45,9 +45,9 @@ const CreateDevice = () => {
   const onFinish = values => {
     const moment = require('moment');
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    // console.log('Received values of form: ', values);
+    
     const formValues = { ...values };
-    console.log(formValues);
+    
 
     // const Username = {data: us}
 
@@ -62,7 +62,7 @@ const CreateDevice = () => {
 
     // const datas = { data: data };
 
-    console.log(1111, data);
+    
 
     axiosInstance
       .post('/devices', data)
@@ -78,9 +78,7 @@ const CreateDevice = () => {
       });
   };
 
-  const onChange = e => {
-    console.log('Change:', e.target.value);
-  };
+ 
   return (
     <div>
       <div>

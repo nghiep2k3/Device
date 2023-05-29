@@ -129,7 +129,6 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
-  console.log(checkedList);
   const onFinish = values => {
     const moment = require('moment');
 
@@ -342,7 +341,7 @@ const Create = () => {
                                     )
                                   );
                                 }
-                                console.log(checkedList);
+                                
                               }}
                             >
                               {item.label}

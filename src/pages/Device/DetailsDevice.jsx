@@ -41,7 +41,6 @@ const DetailsDevice = () => {
       axiosInstance
         .delete(`/devices/${userId}`)
         .then(res => {
-          console.log(res);
           message.success('delete complete');
           navigate('/DeviceManager');
         })
