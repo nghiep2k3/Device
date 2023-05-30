@@ -8,7 +8,8 @@ import {
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../../shared/services/http-client';
+import { imgurl } from '../../shared/constants/index';
+import { axiosInstance } from '../../shared/services/http-client';
 import {
   Space,
   Button,
@@ -20,25 +21,31 @@ import {
   Select,
 } from 'antd';
 import debounce from 'lodash/debounce';
-import styles from '../../../assets/styles/index.module.css';
-
+import styles from '../../assets/styles/index.module.css';
+const permission = () => {
+  message.error('You are not allowed to do this');
+};
 const UserManager = () => {
   const [searchEmail, setSearchEmail] = useState('username');
   const [searchResults, setSearchResults] = useState('');
   const [Status, setStatus] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const { Search } = Input;
-
+  
   const role = localStorage.getItem('role');
+
   const deleteUser = userId => {
     if (window.confirm('Do you want to delete this user?')) {
       axiosInstance
         .delete(`/users/${userId}`)
         .then(res => {
           message.success('delete complete');
-          axiosInstance.get(`/users?populate=avatar`).then(response => {
-            setSearchResults(response);
-          });
+          const id = localStorage.getItem('id');
+          axiosInstance
+            .get(`/users?populate=avatar&filters[id][$ne]=${id}`)
+            .then(response => {
+              setSearchResults(response);
+            });
         })
         .catch(err => {
           console.log(err);
@@ -51,31 +58,56 @@ const UserManager = () => {
       title: '#',
       dataIndex: 'id',
       key: 'id',
+      render: (_, record) => (
+        <>
+          <span className={styles.nameu}>{record.id}</span>
+        </>
+      ),
     },
     {
       title: 'Name',
       dataIndex: 'username',
       key: 'username',
       render: (_, record) => (
-        <>
-          <img
-            src={`https://edison-device-api.savvycom.xyz${record?.avatar?.url}`}
-            alt={record?.avatar?.url}
-            style={{ width: '32px', height: '32px', borderRadius: '16px' }}
-          />
-          {record.username}
-        </>
+        <Space size="middle">
+          <div>
+            {record?.avatar?.url ? (
+              <img
+                src={`${imgurl}${record.avatar.url}`}
+                alt={record.avatar.url}
+                style={{ width: '32px', height: '32px', borderRadius: '16px' }}
+              />
+            ) : (
+              <img
+                src={`${imgurl}/uploads/avt.png`}
+                alt="Default Avatar"
+                style={{ width: '32px', height: '32px', borderRadius: '16px' }}
+              />
+            )}
+          </div>
+          <span className={styles.nameu}>{record.username}</span>
+        </Space>
       ),
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      render: (_, record) => (
+        <>
+          <span className={styles.nameu}>{record.email}</span>
+        </>
+      ),
     },
     {
       title: 'Phone_Number',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
+      render: (_, record) => (
+        <>
+          <span className={styles.nameu}>{record.phoneNumber}</span>
+        </>
+      ),
     },
     {
       title: 'Status',
@@ -84,9 +116,13 @@ const UserManager = () => {
       render: (_, { blocked }) => (
         <>
           {blocked ? (
-            <Tag color="volcano">Blocked</Tag>
+            <Tag className={styles.nameu} color="volcano">
+              Blocked
+            </Tag>
           ) : (
-            <Tag color="geekblue">Active</Tag>
+            <Tag className={styles.nameu} color="geekblue">
+              Active
+            </Tag>
           )}
         </>
       ),
@@ -97,28 +133,56 @@ const UserManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/Details/${record.id}`}>
-            <EyeOutlined />
+            <Button
+              icon={<EyeOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+            />
           </Link>
           {role === '3' && (
             <Link to={`/Edit/${record.id}`}>
-              <EditOutlined />
+              <Button
+                icon={<EditOutlined />}
+                style={{
+                  color: '#1D3557',
+                  paddingRight: '10px',
+                  border: 'none',
+                }}
+              />
             </Link>
           )}
 
+          {role === '1' && (
+            <Button
+              onClick={() => permission()}
+              icon={<EditOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+            />
+          )}
           {role === '3' && (
-            <DeleteOutlined onClick={() => deleteUser(record.id)} />
+            <Button
+              icon={<DeleteOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+              onClick={() => deleteUser(record.id)}
+            />
           )}
 
-          {role === '1' && <DeleteOutlined />}
+          {role === '1' && (
+            <Button
+              onClick={() => permission()}
+              icon={<DeleteOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+            />
+          )}
         </Space>
       ),
     },
   ];
 
   useEffect(() => {
+    const id = localStorage.getItem('id');
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
       )
       .then(res => {
         setSearchResults(res);
@@ -126,20 +190,21 @@ const UserManager = () => {
   }, [Status, searchKeyword]);
 
   useEffect(() => {
-    axiosInstance.get(`/users?populate=avatar`).then(res => {
-      setSearchResults(res);
-    });
+    const id = localStorage.getItem('id');
+    axiosInstance
+      .get(`/users?populate=avatar&filters[id][$ne]=${id}`)
+      .then(res => {
+        setSearchResults(res);
+      });
   }, []);
 
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
-
+    const id = localStorage.getItem('id');
     setSearchKeyword(value.trim());
-
-
     axiosInstance
       .get(
-        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar`
+        `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
       )
       .then(res => {
         setSearchResults(res);
@@ -176,7 +241,10 @@ const UserManager = () => {
                 className={styles.button}
                 style={{ background: '#8767E1' }}
                 type="primary"
-              >Add User</Button>
+                onClick={() => permission()}
+              >
+                Add User
+              </Button>
             )}
           </div>
         </div>
@@ -243,11 +311,11 @@ const UserManager = () => {
                         backgroundColor: '#FFFFFF', // Xóa border của button
                       }}
                     >
-                      <SearchOutlined />
+                      <SearchOutlined style={{ fontSize: '18px' }} />
                     </Button>
                   }
                   style={{
-                    width: '222px',
+                    width: '262px',
                     marginLeft: '20px',
                     border: 'none'
                   }}

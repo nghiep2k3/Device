@@ -1,10 +1,8 @@
 import { axiosInstance } from '../../shared/services/http-client';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Menus from '../Profile/menu.jsx';
-import ListName from '../../components/Viewprofile/ListName/ListName';
+import Menus from '../menu.jsx';
 import styles from '../../assets/styles/index.module.css';
 
 const Login = () => {
@@ -37,8 +35,8 @@ const Login = () => {
         const { jwt } = response;
         if (jwt != null) {
           key.push(jwt);
-          console.log('complete');
-          message.success('Đăng nhập thành công');
+          
+          message.success('Logged in successfully');
           localStorage.setItem('setIsLoggedIn', true);
           localStorage.setItem('ACCESS_TOKEN', key);
           setIsLoggedIn(true);
@@ -47,17 +45,18 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error);
-        setErrorMessage('Đăng nhập thất bại');
-        message.error('Đăng nhập thất bại');
+        setErrorMessage('Login failed');
+        message.error('Login failed');
         setIsLoggedIn(false);
       });
   };
 
   const onLogout = () => {
-    console.log('log out');
+    
     localStorage.setItem('setLoggedIn', 'false');
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('role');
+    localStorage.removeItem('id');
     setIsLoggedIn(false);
   };
 

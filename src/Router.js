@@ -2,18 +2,19 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import Login from "./pages/Authorization/login";
-import Change from "./pages/Profile/components/ChangePassWord";
-import Menus from "./pages/Profile/menu";
-import ListUser from "./pages/Profile/components/Profile";
-import UserUpdate from "./pages/Profile/components/Update";
-import UserManager from "./pages/Profile/User/UserManager";
-import Details from "./pages/Profile/User/Detail";
-import Create from "./pages/Profile/User/Create";
-import Edit from "./pages/Profile/User/Edit";
-import DeviceManager from './components/DeviceManager/DeviceManager'
-import CreateDevice from "./components/CreateDevice/CreateDevice";
+import Change from "./pages/Profile/ChangePassWord";
+import Menus from "./pages/menu";
+import ListUser from "./pages/Profile/Profile";
+import UserUpdate from "./pages/Profile/Update";
+import UserManager from "./pages/User/UserManager";
+import Details from "./pages/User/Detail";
+import Create from "./pages/User/Create";
+import Edit from "./pages/User/Edit";
+import DeviceManager from './pages/Device/DeviceManager'
+import CreateDevice from "./pages/Device/CreateDevice";
 import EditDevice from "./pages/Device/EditDevice";
 import DetailsDevice from "./pages/Device/DetailsDevice";
+const userRole = localStorage.getItem('role');
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,12 +44,12 @@ const router = createBrowserRouter([
     },
     {
       path: '/Create',
-      element:<Create />,
+      element: userRole === '1' ? <UserManager /> : <Create />,
     },
     {
       
       path: '/Edit/:id',
-      element:<Edit />,
+      element: userRole === '1' ? <UserManager /> : <Edit />,
     },
     {
       path: '/DeviceManager',

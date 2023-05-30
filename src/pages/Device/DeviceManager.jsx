@@ -30,8 +30,9 @@ import {
   Upload,
 } from 'antd';
 import { axiosInstance } from '../../shared/services/http-client';
+import { imgurl } from '../../shared/constants/index';
 import debounce from 'lodash/debounce';
-
+import styles from '../../assets/styles/index.module.css';
 const { Content } = Layout;
 const DeviceManager = () => {
   const [searchResults, setSearchResults] = useState('');
@@ -65,13 +66,18 @@ const DeviceManager = () => {
       title: '#',
       dataIndex: 'id',
       key: 'id',
+      render: (_, record) => (
+        <>
+          <span className={styles.nameu}>{record.id}</span>
+        </>
+      ),
     },
     {
       title: 'Code',
       dataIndex: 'code',
       key: 'code',
       render: (_, record) => (
-        <Space size="middle">{record.attributes.code}</Space>
+        <span className={styles.nameu}>{record.attributes.code}</span>
       ),
     },
     {
@@ -79,7 +85,7 @@ const DeviceManager = () => {
       dataIndex: 'name',
       key: 'name',
       render: (_, record) => (
-        <Space size="middle">{record.attributes.name}</Space>
+        <span className={styles.nameu}>{record.attributes.name}</span>
       ),
     },
     {
@@ -89,13 +95,17 @@ const DeviceManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <div>
-            <img
-              style={{ width: '37px', height: '37px', borderRadius: '999px' }}
-              src={`https://edison-device-api.savvycom.xyz${record.attributes.user.data?.attributes.avatar.data?.attributes.url}`}
-            />
+            {record.attributes.user.data?.attributes.avatar.data?.attributes
+              .url ? (
+              <img
+                style={{ width: '32px', height: '32px', borderRadius: '999px' }}
+                src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
+              />
+            ) : null}
           </div>
-          {record.attributes.user.data?.attributes.username}
-          {/* {record.attributes.user.data?.attributes.avatar.data?.attributes.url} */}
+          <span className={styles.nameu}>
+            {record.attributes.user.data?.attributes.username}
+          </span>
         </Space>
       ),
     },
@@ -104,14 +114,14 @@ const DeviceManager = () => {
       key: 'status',
       dataIndex: 'status',
       render: (_, record) => (
-        <Space size="middle" style={{ textTransform: 'uppercase' }}>
+        <Space size="middle">
           {record.attributes.status === 'active' ? (
-            <Tag color={'geekblue'} key={'active'}>
+            <Tag className={styles.nameu} color={'geekblue'} key={'active'}>
               {' '}
               Active{' '}
             </Tag>
           ) : (
-            <Tag color={'volcano'} key={'active'}>
+            <Tag className={styles.nameu} color={'volcano'} key={'active'}>
               {' '}
               Inactive{' '}
             </Tag>
@@ -125,21 +135,60 @@ const DeviceManager = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/DetailsDevice/${record.id}`}>
-            <EyeOutlined />
+            <Button
+              icon={<EyeOutlined />}
+              style={{ color: '#1D3557', paddingRight: '10px', border: 'none' }}
+            />
           </Link>
 
           {role === '3' && (
             <Link to={`/EditDevice/${record.id}`}>
-              <EditOutlined />
+              <Button
+                icon={<EditOutlined />}
+                style={{
+                  color: '#1D3557',
+                  paddingRight: '10px',
+                  border: 'none',
+                }}
+              />
             </Link>
           )}
 
-          {role === '1' && <EditOutlined />}
+          {role === '1' && (
+            <Link to={`/EditDevice/${record.id}`}>
+              <Button
+                icon={<EditOutlined />}
+                style={{
+                  color: '#1D3557',
+                  paddingRight: '10px',
+                  border: 'none',
+                }}
+              />
+            </Link>
+          )}
           {role === '3' && (
-            <DeleteOutlined onClick={() => deleteDevice(record.id)} />
+            <Button
+              icon={<DeleteOutlined />}
+              style={{
+                color: '#1D3557',
+                paddingRight: '10px',
+                border: 'none',
+              }}
+              onClick={() => deleteDevice(record.id)}
+            />
           )}
 
-          {role === '1' && <DeleteOutlined />}
+          {role === '1' && (
+            <Button
+              icon={<DeleteOutlined />}
+              style={{
+                color: '#1D3557',
+                paddingRight: '10px',
+                border: 'none',
+              }}
+              onClick={() => deleteDevice(record.id)}
+            />
+          )}
         </Space>
       ),
     },
@@ -148,7 +197,6 @@ const DeviceManager = () => {
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
     setSearchKeyword(value.trim());
-    console.log(555, searchKeyword);
 
     axiosInstance
       .get(
@@ -161,10 +209,6 @@ const DeviceManager = () => {
   }, 500);
 
   useEffect(() => {
-    console.log('keyword', searchKeyword.trim());
-    console.log('searchName', searchName);
-    console.log('Status', Status);
-
     if (Status == '') {
       axiosInstance
         .get(
@@ -200,14 +244,7 @@ const DeviceManager = () => {
 
   return (
     <Layout className="SetupHeight">
-      {/* <Layout className="site-layout"> */}
-      <Content
-        style={{
-          padding: 24,
-          minHeight: 280,
-          background: colorBgContainer,
-        }}
-      >
+      <div className={styles.form}>
         <div
           style={{
             display: 'flex',
@@ -216,14 +253,14 @@ const DeviceManager = () => {
           }}
         >
           <div>
-            <h2>All Devices</h2>
+            <h2 className={styles.tittles}>All Devices</h2>
           </div>
           <div>
             <Link to="/CreateDevice">
               <Button
-                type="primary"
-                size={size}
+                className={styles.button}
                 style={{ background: '#8767E1' }}
+                type="primary"
               >
                 Add Device
               </Button>
@@ -237,16 +274,16 @@ const DeviceManager = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                paddingBottom: 20,
               }}
             >
               <div
                 style={{
-                  margin: '10px 0',
                   display: 'flex',
                   alignItems: 'center',
-                  border: '2px solid #CBCBCB',
-                  width: '394px',
-                  borderRadius: '10px',
+                  border: '1px solid #CBCBCB',
+                  width: '493px',
+                  borderRadius: '8px',
                 }}
               >
                 <div>
@@ -254,7 +291,7 @@ const DeviceManager = () => {
                     bordered={false}
                     defaultValue="Name"
                     style={{
-                      width: 120,
+                      width: 200,
                       border: 'none',
                     }}
                     onChange={e => {
@@ -286,19 +323,19 @@ const DeviceManager = () => {
                     onChange={handleSearchInputChange}
                     enterButton={
                       <Button
-                        // onClick={HanderClick}
                         type="submit"
                         style={{
                           border: 'none',
-                          backgroundColor: '#FFFFFF', // Xóa border của button
+                          backgroundColor: '#FFFFFF',
                         }}
                       >
-                        <SearchOutlined />
+                        <SearchOutlined style={{ fontSize: '18px' }} />
                       </Button>
                     }
                     style={{
-                      width: 200,
+                      width: '262px',
                       marginLeft: '20px',
+                      border: 'none',
                     }}
                   />
                 </div>
@@ -309,7 +346,7 @@ const DeviceManager = () => {
                   <Select
                     defaultValue="Status"
                     style={{
-                      width: 180,
+                      width: 296,
                     }}
                     onChange={e => {
                       console.log(e);
@@ -336,7 +373,7 @@ const DeviceManager = () => {
           </div>
         </div>
         <Table columns={columns} dataSource={searchResults} />
-      </Content>
+      </div>
       {/* </Layout> */}
     </Layout>
   );
