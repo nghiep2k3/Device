@@ -4,6 +4,12 @@
   background: #fffffe;
   border: 1px solid #cbcbcb;
   border-radius: 8px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #2f3a4c;
 }
 .inputs {
   width: 90% !important;
@@ -11,6 +17,15 @@
   background: #fffffe;
   border: 1px solid #cbcbcb;
   border-radius: 8px;
+}
+.nameu {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+
+  color: #111111;
 }
 .inputs::placeholder {
   font-family: 'Poppins';
@@ -21,7 +36,22 @@
   color: #111111;
   padding-left: 20px;
 }
-
+.label {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #939393;
+}
+.device {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #805edf;
+}
 .custom-select .ant-select-selector {
   height: 56px;
 }
@@ -96,6 +126,7 @@
 
   color: #111111;
 }
+
 .textf {
   font-family: 'Poppins';
   font-style: normal;
@@ -142,14 +173,13 @@
 }
 .container {
   border-radius: 10px;
-  border: 2px solid gray;
+  border: 1px solid #dde4ee;
   margin-top: 20px;
   padding-top: 20px;
   margin-bottom: 20px;
 }
 .left {
   margin-left: 20px;
-  border-right: 2px solid gray;
 }
 .left2 {
   margin-left: 20px;
@@ -202,10 +232,10 @@
 .detail {
   font-family: 'Poppins';
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px !important;
+  font-weight: 500;
+  font-size: 16px;
   line-height: 24px;
-  color: #939393;
+  color: #111111;
 }
 .form {
   align-items: center;
@@ -217,6 +247,12 @@
 .button {
   height: 48px;
   font-size: 16px;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
 }
 .inputf::placeholder {
   font-family: 'Poppins';

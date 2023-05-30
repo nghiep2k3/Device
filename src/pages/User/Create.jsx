@@ -15,9 +15,9 @@ import {
   Divider,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
-import styles from '../../../assets/styles/index.module.css';
-import { axiosInstance } from '../../../shared/services/http-client.js';
-import { ReactComponent as DeleteIcon } from '../../../assets/icons/Vector.svg';
+import styles from '../../assets/styles/index.module.css';
+import { axiosInstance } from '../../shared/services/http-client.js';
+import { ReactComponent as DeleteIcon } from '../../assets/icons/Vector.svg';
 const Create = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [hasUserInput, setHasUserInput] = useState(false);
@@ -83,7 +83,7 @@ const Create = () => {
 
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-    console.log(formValues.Role);
+    
     let isFalse = formValues.Status === 'false'; // kiểm tra chuỗi có giống "false" hay không
     let bool = isFalse ? false : true;
     const data = {
@@ -114,8 +114,11 @@ const Create = () => {
   };
   return (
     <div>
-      <h2 className={styles.title}>
-        All user <span className={styles.subtitle}>&gt; Add new user</span>
+      <h2>
+        <Link to="/UserManager" className={styles.tittle}>
+          All user
+        </Link>
+        <span className={styles.subtitle}>&gt; Add new user</span>
       </h2>
       <div>
         <div className={styles.form}>

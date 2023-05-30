@@ -15,10 +15,11 @@ import {
   Divider,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
-import styles from '../../../assets/styles/index.module.css';
-import { axiosInstance } from '../../../shared/services/http-client.js';
+import styles from '../../assets/styles/index.module.css';
+import { axiosInstance } from '../../shared/services/http-client.js';
+
 import moment from 'moment';
-import { ReactComponent as DeleteIcon } from '../../../assets/icons/Vector.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/icons/Vector.svg';
 const Create = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [dob, setDob] = useState(null);
@@ -128,7 +129,6 @@ const Create = () => {
     value: device,
   }));
   const valueList = checkedList.map(item => item.value);
-  console.log(checkedList);
   const onFinish = values => {
     const moment = require('moment');
 
@@ -164,8 +164,8 @@ const Create = () => {
   };
   return (
     <div>
-      <h2 className={styles.title}>
-        All user{' '}
+      <h2>
+        <Link to="/UserManager" className={styles.tittle}>All user</Link>
         <span className={styles.subtitle}>&gt; {userProfile?.username}</span>
       </h2>
       <div className={styles.form}>
@@ -341,7 +341,7 @@ const Create = () => {
                                     )
                                   );
                                 }
-                                console.log(checkedList);
+                                
                               }}
                             >
                               {item.label}
