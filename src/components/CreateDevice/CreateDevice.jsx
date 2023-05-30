@@ -123,85 +123,89 @@ const CreateDevice = () => {
               <Form name="complex-form" onFinish={onFinish} form={form}>
                 <Row>
                   <Col span={8}>
-                    <Form.Item
-                      label={<label className={styles.detail}>Code</label>}
-                      name="Code"
-                      labelCol={{ span: 24 }}
-                      rules={[
-                        { required: true, message: 'Please input your code!', },
-                      ]}
-                    >
-                      <Input
-                        className={styles.inputc}
-                        placeholder="Enter device code"
-                      />
-                    </Form.Item>
-                  </Col>
-
-                  <Col span={8}>
-                    <Form.Item
-                      label={<label className={styles.detail}>Name</label>}
-                      name="Name"
-                      labelCol={{ span: 24 }}
-                      rules={[
-                        { required: true, message: 'Please input your name!' },
-                      ]}
-                    >
-                      <Input
-                        className={styles.inputc}
-                        placeholder="Enter device name"
-                      />
-                    </Form.Item>
-                  </Col>
-
-                  <Col span={8}>
-                    <Form.Item
-                      label={<label className={styles.detail}>Status</label>}
-                      name="Gender"
-                      labelCol={{ span: 24 }}
-                      rules={[{ required: true, message: 'Select a status!' }]}
-                    >
-                      <Select
-                        className={styles.inputc}
-                        placeholder="Select a status"
-                      >
-                        <Select.Option value="active">active</Select.Option>
-                        <Select.Option value="inactive">inactive</Select.Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col span={24}>
-                    <Form.Item
-                      label={<label className={styles.detail}>Address</label>}
-                      name="Address"
-                      labelCol={{ span: 24 }}
-                      rules={[
-                        { required: true, message: 'Please input Intro' },
-                      ]}
-                    >
-                      <Input.TextArea
-                        autoSize={{
-                          minRows: 8,
-                          maxRows: 8,
-                        }}
-                        showCount
-                        maxLength={200}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Divider style={{ background: '#DDE4EE' }} />
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    className={styles.button}
-                    htmlType="submit"
-                    style={{ marginRight: '20px', background: '#8767E1' }}
+                    <Form.Item 
+                    label={<label className={styles.detail}>Code</label>}
+                    name="Code"
+                    labelCol={{ span: 24 }}
+                    rules={[
+                      { required: true, message: 'Please input your code!' },
+                      {
+                        min: 3,
+                        message: 'Password must not exceed 3 characters!',
+                      },
+                    ]}
                   >
-                    Save
+                    <Input
+                      className={styles.inputc}
+                      placeholder="Enter device code"
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                  <Form.Item
+                    label={<label className={styles.detail}>Name</label>}
+                    name="Name"
+                    labelCol={{ span: 24 }}
+                    rules={[
+                      { required: true, message: 'Please input your name!' },
+                    ]}
+                  >
+                    <Input
+                      className={styles.inputc}
+                      placeholder="Enter device name"
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                  <Form.Item
+                    label={<label className={styles.detail}>Status</label>}
+                    name="Gender"
+                    labelCol={{ span: 24 }}
+                    rules={[{ required: true, message: 'Select a status!' }]}
+                  >
+                    <Select
+                      className={styles.inputc}
+                      placeholder="Select a status"
+                    >
+                      <Select.Option value="active">active</Select.Option>
+                      <Select.Option value="inactive">inactive</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col span={24}>
+                  <Form.Item
+                    label={<label className={styles.detail}>Intro</label>}
+                    name="intro"
+                    labelCol={{ span: 24 }}
+                    rules={[
+                      { required: true, message: 'Please input Intro' },
+                    ]}
+                  >
+                    <Input.TextArea
+                      autoSize={{
+                        minRows: 8,
+                        maxRows: 8,
+                      }}
+                      showCount
+                      maxLength={200}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Divider style={{ background: '#DDE4EE' }} />
+              <Form.Item>
+                <Button
+                  type="primary"
+                  className={styles.button}
+                  htmlType="submit"
+                  style={{ marginRight: '20px', background: '#8767E1' }}
+                >
+                  Save
                   </Button>
                   <Button className={styles.button} style={{ marginLeft: 8 }}>
                     <Link to="/DeviceManager">Cancel</Link>

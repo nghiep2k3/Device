@@ -103,7 +103,7 @@ const Menus = ({ onLogout }) => {
                 <Row span={24}>
                   <Col span={8}>
                     <img
-                      src={`https://edison-device-api.savvycom.xyz${avatar}`}
+                      src={`http://localhost:1337${avatar}`}
                       alt=""
                       style={{
                         height: '32px',
