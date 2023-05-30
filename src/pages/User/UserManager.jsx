@@ -31,7 +31,7 @@ const UserManager = () => {
   const [Status, setStatus] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const { Search } = Input;
-  const id = localStorage.getItem('id');
+  
   const role = localStorage.getItem('role');
 
   const deleteUser = userId => {
@@ -40,6 +40,7 @@ const UserManager = () => {
         .delete(`/users/${userId}`)
         .then(res => {
           message.success('delete complete');
+          const id = localStorage.getItem('id');
           axiosInstance
             .get(`/users?populate=avatar&filters[id][$ne]=${id}`)
             .then(response => {
@@ -178,6 +179,7 @@ const UserManager = () => {
   ];
 
   useEffect(() => {
+    const id = localStorage.getItem('id');
     axiosInstance
       .get(
         `/users?filters[${searchEmail}][$contains]=${searchKeyword}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
@@ -188,6 +190,7 @@ const UserManager = () => {
   }, [Status, searchKeyword]);
 
   useEffect(() => {
+    const id = localStorage.getItem('id');
     axiosInstance
       .get(`/users?populate=avatar&filters[id][$ne]=${id}`)
       .then(res => {
@@ -197,9 +200,8 @@ const UserManager = () => {
 
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
-
+    const id = localStorage.getItem('id');
     setSearchKeyword(value.trim());
-
     axiosInstance
       .get(
         `/users?filters[${searchEmail}][$contains]=${value.trim()}&filters[blocked][$contains]=${Status}&populate=avatar&filters[id][$ne]=${id}`
