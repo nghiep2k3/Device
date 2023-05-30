@@ -148,7 +148,7 @@ const CreateDevice = () => {
                     placeholder="Select a status"
                   >
                     <Select.Option value="active">active</Select.Option>
-                    <Select.Option value="inactive">InActive</Select.Option>
+                    <Select.Option value="inactive">inActive</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>

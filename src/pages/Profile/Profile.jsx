@@ -79,10 +79,7 @@ function ListUser() {
                   </Col>
                 </Row>
                 <Row span={24}>
-                  <Col span={12}>
-                    <p className="LB">Address</p>
-                    <p className="IF">{data.provider}</p>
-                  </Col>
+                  
                   <Col span={12}>
                     <p className="LB">Role</p>
                     <p className="IF">{role}</p>
