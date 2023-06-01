@@ -63,7 +63,7 @@ const DetailsDevice = () => {
     };
     fetchUsers();
   }, [userId]);
-  console.log(deviceProfile);
+  
   return (
     <div>
       <div>

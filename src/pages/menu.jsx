@@ -4,7 +4,7 @@ import {
   UserOutlined,
   AppstoreOutlined,
 } from '@ant-design/icons';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link,useOutlet } from 'react-router-dom';
 import { Layout, Menu, theme, Button, Dropdown, Row, Col } from 'antd';
 import React, { useState, useEffect } from 'react';
 import '../assets/styles/index.css';
@@ -19,16 +19,15 @@ const Menus = ({ onLogout }) => {
   const [avatar, setAvatar] = useState('');
   const url = window.location.href;
   const deviceId = url.split('/').pop();
-
+  const outlet = useOutlet();
   useEffect(() => {
     axiosInstance.get('/users/me?populate=role,avatar').then(res => {
-      
       setData(res);
       localStorage.setItem('id', res.id);
       localStorage.setItem('role', res.role.id);
       setAvatar(res.avatar.url);
     });
-  }, []);
+  }, [outlet]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
