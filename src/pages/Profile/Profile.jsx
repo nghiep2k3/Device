@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import '../../assets/styles/index.css';
 import { Link } from 'react-router-dom';
-import { Avatar, Space, Row, Col } from 'antd';
+import { Space, Row, Col } from 'antd';
 import { Button } from 'antd';
 import { axiosInstance } from '../../shared/services/http-client';
 import styles from '../../assets/styles/index.module.css';
@@ -13,13 +13,23 @@ function ListUser() {
   const [role, setRole] = useState('');
   const [data, setData] = useState('');
   useEffect(() => {
-    axiosInstance.get('/users/me?populate=role,avatar').then(res => {
-      setData(res);
-      setAvatar(res.avatar.url);
-      setRole(res.role.name);
-    });
-  }, []);
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get(
+          '/users/me?populate=role,avatar'
+        );
+        setAvatar(response.avatar.url);
+        setData(response);
+        setRole(response.role.name);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchUser();
+  }, []);
+  console.log(avatar);
+  console.log(data);
   return (
     <div>
       <p className="MP">My Profile</p>
@@ -51,7 +61,6 @@ function ListUser() {
                         }}
                       />
                     )}
-                   
                   </Space>
                 </Space>
               </div>
