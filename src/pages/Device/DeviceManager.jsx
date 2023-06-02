@@ -101,7 +101,12 @@ const DeviceManager = () => {
                 style={{ width: '32px', height: '32px', borderRadius: '999px' }}
                 src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
               />
-            ) : null}
+            ) : (
+              <img
+                style={{ width: '32px', height: '32px', borderRadius: '999px' }}
+                src={`${imgurl}/uploads/avt.png`}
+              />
+            )}
           </div>
           <span className={styles.nameu}>
             {record.attributes.user.data?.attributes.username}
