@@ -18,18 +18,15 @@ function ListUser() {
         const response = await axiosInstance.get(
           '/users/me?populate=role,avatar'
         );
-        setAvatar(response.avatar.url);
         setData(response);
         setRole(response.role.name);
+        setAvatar(response.avatar.url);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchUser();
   }, []);
-  console.log(avatar);
-  console.log(data);
   return (
     <div>
       <p className="MP">My Profile</p>

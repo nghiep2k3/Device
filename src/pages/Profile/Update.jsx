@@ -30,7 +30,7 @@ function UserUpdate() {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
-  const handleDobChange = (value) => {
+  const handleDobChange = value => {
     setDob(value);
   };
 
@@ -62,7 +62,7 @@ function UserUpdate() {
     });
   }, [form, userProfile]);
 
-  const onFinish = async (values) => {
+  const onFinish = async values => {
     const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
     const data = {
       fullname: formValues.Name,
@@ -89,7 +89,7 @@ function UserUpdate() {
     setShowDeleteButton(false);
   };
 
-  const onChange = async (e) => {
+  const onChange = async e => {
     const file = fileList[0];
     const newFileList = file ? [file] : [];
     setFileList(newFileList);
@@ -111,9 +111,6 @@ function UserUpdate() {
     }
   };
 
-  
-
-
   useEffect(() => {
     if (isButtonClicked) {
       onChange();
@@ -130,41 +127,40 @@ function UserUpdate() {
               <div className="setupimg">
                 <Space direction="vertical" size={16}>
                   <Space wrap size={16}>
-                    <Upload
-                      accept="image/*"
-                      fileList={fileList}
-                      beforeUpload={() => false}
-                      showUploadList={false}
-                      onChange={(e) => {
-                        const file = e.fileList[0]?.originFileObj;
-                        const newFileList = file ? [file] : [];
-                        setFileList(newFileList);
-                        setShowDeleteButton(true);
-                      }}
-                    >
-                      <div className="image-wrapper">
-                        {fileList.length > 0 ? (
-                          <img
-                            src={fileList[0] && URL.createObjectURL(fileList[0])}
-                            alt=""
-                            className="blurred-image"
-                          />
-                        ) : (
-                          <img
-                            src={`${imgurl}${avatar}`}
-                            alt=""
-                            className="blurred-image"
-                          />
+                    <div className="image-wrapper">
+                      <img
+                        src={
+                          fileList.length > 0
+                            ? URL.createObjectURL(fileList[0])
+                            : `${imgurl}${avatar}`
+                        }
+                        alt=""
+                        className="blurred-image"
+                      />
+                      <div className="button-wrapper">
+                        <Upload
+                          accept="image/*"
+                          fileList={fileList}
+                          beforeUpload={() => false}
+                          showUploadList={false}
+                          onChange={e => {
+                            const file = e.fileList[0]?.originFileObj;
+                            const newFileList = file ? [file] : [];
+                            setFileList(newFileList);
+                            setShowDeleteButton(true);
+                          }}
+                        >
+                          <span className="camera-icon">
+                            <CameraOutlined style={{ fontSize: '40px' }} />
+                          </span>
+                        </Upload>
+                        {showDeleteButton && (
+                          <span className="delete-icon" onClick={handleDelete}>
+                            <DeleteOutlined style={{ fontSize: '40px' }} />
+                          </span>
                         )}
-                        <span className="camera-icon">
-                          <CameraOutlined style={{ fontSize: '40px' }} />
-                        </span>
                       </div>
-                    </Upload>
-                    {showDeleteButton && (
-                      <DeleteOutlined style={{ fontSize: '40px' }} onClick={handleDelete}/>
-                    
-                    )}
+                    </div>
                   </Space>
                 </Space>
               </div>
