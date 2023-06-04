@@ -101,7 +101,12 @@ const DeviceManager = () => {
                 style={{ width: '32px', height: '32px', borderRadius: '999px' }}
                 src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
               />
-            ) : null}
+            ) : (
+              <img
+                style={{ width: '32px', height: '32px', borderRadius: '999px' }}
+                src={`${imgurl}/uploads/avt.png`}
+              />
+            )}
           </div>
           <span className={styles.nameu}>
             {record.attributes.user.data?.attributes.username}
@@ -194,49 +199,55 @@ const DeviceManager = () => {
     },
   ];
 
+  useEffect(() => {
+    axiosInstance.get(`devices?populate=user.avatar`).then(res => {
+      setSearchResults(res.data);
+    });
+  }, []);
+
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
-    // setSearchKeyword(value.trim());
+    console.log(444, Status);
+    console.log('33334', searchKeyword);
+    console.log('value', value);
+    
 
-    axiosInstance
-      .get(
-        `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
-      )
-      .then(res => {
-        setSearchResults(res.data);
-        console.log(1111, value);
-        // setSearchKeyword((value = ''));
-      });
+    // axiosInstance
+    //   .get(
+    //     `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
+    //   )
+    //   .then(res => {
+    //     setSearchKeyword(x);
+    //     setSearchResults(res.data);
+    //   });
 
-      console.log(3333,Status);
-
-      if (Status == '') {
+      if(Status == '' && searchKeyword == ''){
         axiosInstance
-          .get(
-            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}`
-          )
-          .then(res => {
-            setSearchResults(res.data);
-          });
-      } else if (Status == 'all') {
-        axiosInstance
-          .get(
-            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=active&filters[status][$eq]=inactive`
-          )
-          .then(res => {
-            setSearchResults(res.data);
-          });
-      } else {
-        axiosInstance
-          .get(
-            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=${Status}`
-          )
-          .then(res => {
-            setSearchResults(res.data);
-          });
+        .get(
+          `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
+        )
+        .then(res => {
+          setSearchResults(res.data);
+          console.log(2222, value);
+          setSearchKeyword(value);
+          console.log('3333', searchKeyword);
+        });
       }
+
+      else if (Status == 'active' || Status == 'inactive' || Status == ''){
+        axiosInstance
+        .get(
+          `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}&filters[status][$eq]=${Status}`
+        )
+        .then(res => {
+          setSearchKeyword(value);
+          setSearchResults(res.data);
+        });
+      }
+      
   }, 500);
 
+  
   useEffect(() => {
     if (Status == '') {
       axiosInstance
@@ -246,7 +257,8 @@ const DeviceManager = () => {
         .then(res => {
           setSearchResults(res.data);
         });
-    } else if (Status == 'all') {
+    } 
+    else if (Status == 'all') {
       axiosInstance
         .get(
           `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=active&filters[status][$eq]=inactive`
@@ -265,12 +277,7 @@ const DeviceManager = () => {
     }
   }, [Status, searchKeyword]);
 
-  useEffect(() => {
-    axiosInstance.get(`devices?populate=user.avatar`).then(res => {
-      setSearchResults(res.data);
-    });
-  }, []);
-
+  
   return (
     <Layout className="SetupHeight">
       <div className={styles.form}>
@@ -387,7 +394,7 @@ const DeviceManager = () => {
                         label: 'Inactive',
                       },
                       {
-                        value: '',
+                        value: 'all',
                         label: 'All',
                       },
                     ]}
