@@ -29,6 +29,7 @@ const Menus = ({ onLogout }) => {
       setAvatar(res.avatar.url);
     });
   }, []);
+  
   const {
     token: { colorBgContainer },
   } = theme.useToken();
