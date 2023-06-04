@@ -116,7 +116,7 @@ const UserManager = () => {
         <>
           {blocked ? (
             <Tag className={styles.nameu} color="volcano">
-              Blocked
+              Inactive
             </Tag>
           ) : (
             <Tag className={styles.nameu} color="geekblue">
