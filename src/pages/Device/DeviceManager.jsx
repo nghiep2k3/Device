@@ -199,20 +199,55 @@ const DeviceManager = () => {
     },
   ];
 
+  useEffect(() => {
+    axiosInstance.get(`devices?populate=user.avatar`).then(res => {
+      setSearchResults(res.data);
+    });
+  }, []);
+
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
-    setSearchKeyword(value.trim());
+    console.log(444, Status);
+    console.log('33334', searchKeyword);
+    console.log('value', value);
+    
 
-    axiosInstance
-      .get(
-        `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
-      )
-      .then(res => {
-        setSearchResults(res.data);
-        setSearchKeyword((value = ''));
-      });
+    // axiosInstance
+    //   .get(
+    //     `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
+    //   )
+    //   .then(res => {
+    //     setSearchKeyword(x);
+    //     setSearchResults(res.data);
+    //   });
+
+      if(Status == '' && searchKeyword == ''){
+        axiosInstance
+        .get(
+          `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}`
+        )
+        .then(res => {
+          setSearchResults(res.data);
+          console.log(2222, value);
+          setSearchKeyword(value);
+          console.log('3333', searchKeyword);
+        });
+      }
+
+      else if (Status == 'active' || Status == 'inactive' || Status == ''){
+        axiosInstance
+        .get(
+          `/devices?populate=user.avatar&filters[${searchName}][$contains]=${value.trim()}&filters[status][$eq]=${Status}`
+        )
+        .then(res => {
+          setSearchKeyword(value);
+          setSearchResults(res.data);
+        });
+      }
+      
   }, 500);
 
+  
   useEffect(() => {
     if (Status == '') {
       axiosInstance
@@ -222,7 +257,8 @@ const DeviceManager = () => {
         .then(res => {
           setSearchResults(res.data);
         });
-    } else if (Status == 'all') {
+    } 
+    else if (Status == 'all') {
       axiosInstance
         .get(
           `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=active&filters[status][$eq]=inactive`
@@ -241,12 +277,7 @@ const DeviceManager = () => {
     }
   }, [Status, searchKeyword]);
 
-  useEffect(() => {
-    axiosInstance.get(`devices?populate=user.avatar`).then(res => {
-      setSearchResults(res.data);
-    });
-  }, []);
-
+  
   return (
     <Layout className="SetupHeight">
       <div className={styles.form}>
@@ -310,11 +341,7 @@ const DeviceManager = () => {
                       {
                         value: 'name',
                         label: 'Name',
-                      },
-                      {
-                        value: 'user',
-                        label: 'User',
-                      },
+                      }
                     ]}
                   />
                 </div>
