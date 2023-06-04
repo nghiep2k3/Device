@@ -1,32 +1,22 @@
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  AppstoreOutlined,
-} from '@ant-design/icons';
-import styles from '../../assets/styles/index.module.css';
 import React, { useState, useEffect } from 'react';
-import '../../assets/styles/index.css';
-import { imgurl } from '../../shared/constants/index';
 import {
-  Avatar,
-  Space,
-  Layout,
-  Menu,
-  theme,
+  Button,
+  Col,
+  DatePicker,
+  Divider,
   Form,
   Input,
-  Divider,
-  DatePicker,
-  Col,
-  Row,
   message,
+  Row,
+  Space,
+  Upload,
 } from 'antd';
-import { Button } from 'antd';
-import { CameraOutlined } from '@ant-design/icons';
+import { CameraOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../shared/services/http-client';
+import { imgurl } from '../../shared/constants/index';
+import styles from '../../assets/styles/index.module.css';
+import '../../assets/styles/index.css';
 import moment from 'moment';
 
 function UserUpdate() {
@@ -37,9 +27,13 @@ function UserUpdate() {
   const userId = useParams();
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+
   const handleDobChange = value => {
     setDob(value);
   };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -56,6 +50,7 @@ function UserUpdate() {
     };
     fetchUsers();
   }, [userId]);
+
   useEffect(() => {
     form.setFieldsValue({
       Name: userProfile?.fullname,
@@ -66,18 +61,37 @@ function UserUpdate() {
       Role: userProfile?.role.name,
     });
   }, [form, userProfile]);
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-  const onChange = async e => {
-    const file = e.target.files[0];
-    const newFileList = [file];
 
+  const onFinish = async values => {
+    const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
+    const data = {
+      fullname: formValues.Name,
+      dob: formValues.DOB,
+      phoneNumber: formValues.Phone_number,
+    };
+
+    try {
+      const response = await axiosInstance.put(`/users/${userId.id}`, data);
+      if (response != null) {
+        message.success('correct');
+        setIsButtonClicked(true);
+        await onChange(); // Gọi hàm onChange
+        navigate('/ListUser');
+      }
+    } catch (error) {
+      console.log(error);
+      message.error('error');
+    }
+  };
+
+  const handleDelete = () => {
+    setFileList([]);
+    setShowDeleteButton(false);
+  };
+
+  const onChange = async e => {
+    const file = fileList[0];
+    const newFileList = file ? [file] : [];
     setFileList(newFileList);
 
     const formData = new FormData();
@@ -92,33 +106,17 @@ function UserUpdate() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      navigate('/ListUser');
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onFinish = values => {
-    const formValues = { ...values, DOB: values.DOB.format('YYYY-MM-DD') };
-    const data = {
-      fullname: formValues.Name,
-      dob: formValues.DOB,
-      phoneNumber: formValues.Phone_number,
-    };
-    axiosInstance
-      .put(`/users/${userId.id}`, data)
-      .then(response => {
-        if (response != null) {
-          message.success('correct');
-          navigate('/ListUser');
-          window.location.reload();
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        message.error('error');
-      });
-  };
+  useEffect(() => {
+    if (isButtonClicked) {
+      onChange();
+    }
+  }, [isButtonClicked]);
+
   return (
     <div>
       <p className="MP">My Profile</p>
@@ -129,34 +127,40 @@ function UserUpdate() {
               <div className="setupimg">
                 <Space direction="vertical" size={16}>
                   <Space wrap size={16}>
-                    <label htmlFor="upload-btn" className="upload-container">
-                      <input
-                        id="upload-btn"
-                        type="file"
-                        accept="image/*"
-                        onChange={onChange}
-                        fileList={fileList}
+                    <div className="image-wrapper">
+                      <img
+                        src={
+                          fileList.length > 0
+                            ? URL.createObjectURL(fileList[0])
+                            : `${imgurl}${avatar}`
+                        }
+                        alt=""
+                        className="blurred-image"
                       />
-                      <div className="image-wrapper">
-                        {avatar ? (
-                          <img
-                            src={`${imgurl}${avatar}`}
-                            alt=""
-                            className="blurred-image"
-                          />
-                        ) : (
-                          <img
-                            src={`${imgurl}/uploads/avt.png`}
-                            alt=""
-                            className="blurred-image"
-                          />
+                      <div className="button-wrapper">
+                        <Upload
+                          accept="image/*"
+                          fileList={fileList}
+                          beforeUpload={() => false}
+                          showUploadList={false}
+                          onChange={e => {
+                            const file = e.fileList[0]?.originFileObj;
+                            const newFileList = file ? [file] : [];
+                            setFileList(newFileList);
+                            setShowDeleteButton(true);
+                          }}
+                        >
+                          <span className="camera-icon">
+                            <CameraOutlined style={{ fontSize: '40px' }} />
+                          </span>
+                        </Upload>
+                        {showDeleteButton && (
+                          <span className="delete-icon" onClick={handleDelete}>
+                            <DeleteOutlined style={{ fontSize: '40px' }} />
+                          </span>
                         )}
-
-                        <span className="camera-icon">
-                          <CameraOutlined style={{ fontSize: '40px' }} />
-                        </span>
                       </div>
-                    </label>
+                    </div>
                   </Space>
                 </Space>
               </div>
@@ -259,12 +263,15 @@ function UserUpdate() {
                 style={{ marginRight: '20px', background: '#8767E1' }}
                 htmlType="submit"
                 form="myForm"
+                onClick={() => setIsButtonClicked(true)}
               >
                 Update Profile
               </Button>
-              <Button className={styles.button}>
-                <Link to="/ListUser">Cancel</Link>
-              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Link to="/ListUser">
+                <Button className={styles.button}>Cancel</Button>
+              </Link>
             </Form.Item>
           </Row>
         </div>
