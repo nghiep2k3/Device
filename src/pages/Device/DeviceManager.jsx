@@ -101,12 +101,7 @@ const DeviceManager = () => {
                 style={{ width: '32px', height: '32px', borderRadius: '999px' }}
                 src={`${imgurl}${record.attributes.user.data.attributes.avatar.data.attributes.url}`}
               />
-            ) : (
-              <img
-                style={{ width: '32px', height: '32px', borderRadius: '999px' }}
-                src={`${imgurl}/uploads/avt.png`}
-              />
-            )}
+            ) : null}
           </div>
           <span className={styles.nameu}>
             {record.attributes.user.data?.attributes.username}
@@ -201,7 +196,7 @@ const DeviceManager = () => {
 
   const handleSearchInputChange = debounce(async event => {
     const { value } = event.target;
-    setSearchKeyword(value.trim());
+    // setSearchKeyword(value.trim());
 
     axiosInstance
       .get(
@@ -209,8 +204,37 @@ const DeviceManager = () => {
       )
       .then(res => {
         setSearchResults(res.data);
-        setSearchKeyword((value = ''));
+        console.log(1111, value);
+        // setSearchKeyword((value = ''));
       });
+
+      console.log(3333,Status);
+
+      if (Status == '') {
+        axiosInstance
+          .get(
+            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}`
+          )
+          .then(res => {
+            setSearchResults(res.data);
+          });
+      } else if (Status == 'all') {
+        axiosInstance
+          .get(
+            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=active&filters[status][$eq]=inactive`
+          )
+          .then(res => {
+            setSearchResults(res.data);
+          });
+      } else {
+        axiosInstance
+          .get(
+            `/devices?populate=user.avatar&filters[${searchName}][$contains]=${searchKeyword.trim()}&filters[status][$eq]=${Status}`
+          )
+          .then(res => {
+            setSearchResults(res.data);
+          });
+      }
   }, 500);
 
   useEffect(() => {
@@ -310,11 +334,7 @@ const DeviceManager = () => {
                       {
                         value: 'name',
                         label: 'Name',
-                      },
-                      {
-                        value: 'user',
-                        label: 'User',
-                      },
+                      }
                     ]}
                   />
                 </div>
@@ -367,7 +387,7 @@ const DeviceManager = () => {
                         label: 'Inactive',
                       },
                       {
-                        value: 'all',
+                        value: '',
                         label: 'All',
                       },
                     ]}
