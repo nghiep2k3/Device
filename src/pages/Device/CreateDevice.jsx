@@ -46,10 +46,9 @@ const CreateDevice = () => {
     const moment = require('moment');
     const currentTime = moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     
-    const formValues = { ...values };
-    
+    const formValues = { ...values }; // tạo bản sao của đối tượng value
+    console.log(formValues);
 
-    // const Username = {data: us}
 
     const data = {
       data: {
@@ -60,7 +59,6 @@ const CreateDevice = () => {
       },
     };
 
-    // const datas = { data: data };
 
     
 
