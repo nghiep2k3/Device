@@ -144,7 +144,7 @@ const EditDevice = () => {
                 >
                   <Select size="large" style={{ fontWeight: 'bold' }}>
                     <Select.Option value="active">Active</Select.Option>
-                    <Select.Option value="blocked">Blocked</Select.Option>
+                    <Select.Option value="inactive">Blocked</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>

@@ -12,12 +12,14 @@ function ListUser() {
   const [avatar, setAvatar] = useState('');
   const [role, setRole] = useState('');
   const [data, setData] = useState('');
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get(
           '/users/me?populate=role,avatar'
         );
+        console.log(333, response);
         setData(response);
         setRole(response.role.name);
         setAvatar(response.avatar.url);
