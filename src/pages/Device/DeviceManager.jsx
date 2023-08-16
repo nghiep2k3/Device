@@ -246,7 +246,7 @@ const DeviceManager = () => {
       }
       
   }, 500);
-
+  
   
   useEffect(() => {
     if (Status == '') {
