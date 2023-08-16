@@ -22,14 +22,13 @@ const Menus = ({ onLogout }) => {
 
   useEffect(() => {
     axiosInstance.get('/users/me?populate=role,avatar').then(res => {
-      
       setData(res);
       localStorage.setItem('id', res.id);
       localStorage.setItem('role', res.role.id);
       setAvatar(res.avatar.url);
     });
   }, []);
-  
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
